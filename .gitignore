@@ -1,0 +1,12 @@
+node_modules/
+
+build/
+
+certs/
+
+.env.*.local
+.env
+
+package-lock.json
+
+logs.log
