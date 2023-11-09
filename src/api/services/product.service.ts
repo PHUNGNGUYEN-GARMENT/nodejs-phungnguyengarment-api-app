@@ -1,13 +1,13 @@
 import ProductSchema, { Product } from '~/models/product.model'
 import logging from '~/utils/logging'
 
+const NAMESPACE = 'Product'
 const PATH = 'services/products'
-const NAMESPACE = 'product'
 
 export const createNew = async (item: Product): Promise<ProductSchema> => {
   try {
     const items = await ProductSchema.findAll()
-    return await ProductSchema.create({ ...items, orderNumber: items.length })
+    return await ProductSchema.create({ ...item, orderNumber: items.length })
   } catch (error) {
     logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
     throw new Error(`Error creating new product :: ${error}`)
@@ -50,24 +50,24 @@ export const updateByID = async (item: Product): Promise<number> => {
       },
       {
         where: {
-          userID: user.userID
+          productID: item.productID
         }
       }
     )
     return affectedRows[0]
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all user :: ${error}`)
-    throw new Error(`Error get all user :: ${error}`)
+    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
+    throw new Error(`Error get all ${NAMESPACE} :: ${error}`)
   }
 }
 
 // Delete
 export const deleteByID = async (id: number): Promise<number> => {
   try {
-    const affectedRows = await UserSchema.destroy({ where: { userID: id } })
+    const affectedRows = await ProductSchema.destroy({ where: { productID: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete user by id :: ${error}`)
-    throw new Error(`Error delete user by id :: ${error}`)
+    logging.error(NAMESPACE, `Error delete ${NAMESPACE} by id :: ${error}`)
+    throw new Error(`Error delete ${NAMESPACE} by id :: ${error}`)
   }
 }

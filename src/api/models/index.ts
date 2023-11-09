@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript'
 import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
 import UserSchema from './user.model'
+import ProductSchema from './product.model'
 
 const NAMESPACE = 'model/index'
 
@@ -27,7 +28,7 @@ class DBConnection {
         acquire: 30000,
         idle: 10000
       },
-      models: [UserSchema]
+      models: [UserSchema, ProductSchema]
     })
 
     await this.sequelize
@@ -36,7 +37,7 @@ class DBConnection {
       .catch((error) => logging.error(NAMESPACE, `Unable to connect to the database: ${error}`))
   }
 
-  private async closeConnection() {
+  async closeConnection() {
     if (this.sequelize) {
       await this.sequelize
         .close()
