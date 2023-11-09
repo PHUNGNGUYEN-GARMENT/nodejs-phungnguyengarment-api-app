@@ -1,15 +1,16 @@
 import UserSchema, { User } from '~/models/user.model'
 import logging from '~/utils/logging'
 
-const NAMESPACE = 'services/users'
+const PATH = 'services/users'
+const NAMESPACE = 'user'
 
 export const createNew = async (user: User): Promise<UserSchema> => {
   try {
     const users = await UserSchema.findAll()
     return await UserSchema.create({ ...user, orderNumber: users.length })
   } catch (error) {
-    logging.error(NAMESPACE, `Error creating new user :: ${error}`)
-    throw new Error(`Error creating new user :: ${error}`)
+    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
+    throw new Error(`Error creating new ${NAMESPACE} :: ${error}`)
   }
 }
 
@@ -19,7 +20,7 @@ export const getByID = async (id: number): Promise<UserSchema | null> => {
     const user = await UserSchema.findOne({ where: { userID: id } })
     return user
   } catch (error) {
-    logging.error(NAMESPACE, `Error get user by id :: ${error}`)
+    logging.error(PATH, `Error get user by id :: ${error}`)
     throw new Error(`Error get user by id :: ${error}`)
   }
 }

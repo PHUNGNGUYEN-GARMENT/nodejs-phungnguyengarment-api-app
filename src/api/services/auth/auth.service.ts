@@ -1,5 +1,7 @@
 /* eslint-disable no-unreachable */
 import * as bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import appConfig from '~/config/app.config'
 import UserSchema, { User } from '~/models/user.model'
 import * as services from '~/services/user.service'
 import logging from '~/utils/logging'
@@ -33,13 +35,22 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
   }
 }
 
-export const loginUser = async (email: string, password: string): Promise<UserSchema | null> => {
+export const loginUser = async (email: string, password: string): Promise<UserSchema | null | any> => {
   try {
     const userFind = await services.getByEmail(email)
     if (userFind) {
       const passwordCompare = bcrypt.compareSync(password, userFind.hashPassword)
       if (passwordCompare) {
-        return userFind
+        // Generate token
+        const token = jwt.sign({ email }, appConfig.secretKey, {
+          expiresIn: 1000000
+        })
+        const userReturned = { ...userFind.toJSON() }
+        delete userReturned.hashPassword
+        return {
+          user: userReturned,
+          token: token
+        }
       } else {
         return null
       }

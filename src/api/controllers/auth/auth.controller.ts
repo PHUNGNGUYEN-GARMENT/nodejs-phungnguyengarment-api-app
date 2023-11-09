@@ -14,7 +14,7 @@ export default class AuthController {
     try {
       const user = await services.loginUser(email, password)
       if (user) {
-        return user
+        return res.formatter.ok({ status: 200, message: 'User login successfully!', data: user })
       } else {
         return res.formatter.badRequest({ status: 401, message: 'Invalid email or password!' })
       }

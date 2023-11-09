@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { body } from 'express-validator'
+import { check } from 'express-validator'
+import { validators } from '~/api/utils/constant'
 import AuthController from '~/controllers/auth/auth.controller'
-import { requestValidationRules } from '~/middleware/request-validator'
 
 class AuthRoute {
   router = Router()
@@ -12,21 +12,36 @@ class AuthRoute {
   }
 
   private initialize() {
+    // Login chanel
     this.router.post(
       '/login',
-      requestValidationRules([
-        body('email').not().isEmpty().withMessage('Email can not be empty').isEmail().withMessage('Email is invalid'),
-        body('password').not().isEmpty().withMessage('Password can not be empty')
-      ]),
+      check('email')
+        .exists()
+        .withMessage(validators.EMAIL_IS_EMPTY)
+        .isEmail()
+        .withMessage(validators.EMAIL_IS_IN_WRONG_FORMAT),
+      check('password')
+        .exists()
+        .withMessage(validators.PASSWORD_IS_EMPTY)
+        .isLength({ min: 8 })
+        .withMessage(validators.PASSWORD_LENGTH_MUST_BE_MORE_THAN_8),
       this.controller.login
     )
+
+    // Register chanel
     this.router.post(
       '/register',
-      requestValidationRules([
-        body('email').not().isEmpty().withMessage('Email can not be empty').isEmail().withMessage('Email is invalid'),
-        body('password').not().isEmpty().withMessage('Password can not be empty'),
-        body('roleID').not().isEmpty().withMessage('Role ID can not be empty')
-      ]),
+      check('email')
+        .exists()
+        .withMessage(validators.EMAIL_IS_EMPTY)
+        .isEmail()
+        .withMessage(validators.EMAIL_IS_IN_WRONG_FORMAT),
+      check('password')
+        .exists()
+        .withMessage(validators.PASSWORD_IS_EMPTY)
+        .isLength({ min: 8 })
+        .withMessage(validators.PASSWORD_LENGTH_MUST_BE_MORE_THAN_8),
+      check('role').exists().withMessage(validators.ROLE_IS_EMPTY).isString().withMessage(validators.ROLE_IS_NOT_VALID),
       this.controller.register
     )
   }

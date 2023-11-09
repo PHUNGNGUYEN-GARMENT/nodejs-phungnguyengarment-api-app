@@ -1,23 +1,23 @@
-import passport from 'passport'
-import passportJWT from 'passport-jwt'
+import { PassportStatic } from 'passport'
+import { ExtractJwt, Strategy } from 'passport-jwt'
+import appConfig from '~/config/app.config'
 import * as userService from '~/services/user.service'
 
-const jwtExtractor = passportJWT.ExtractJwt
-const JWTStrategy = passportJWT.Strategy
-const jwtOptions = {
-  jwtFromRequest: jwtExtractor.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'abc123'
-}
-const strategy = new JWTStrategy(jwtOptions, (jwt_payload, next) => {
-  console.log('payload received', jwt_payload)
-  const user = userService.getByID(jwt_payload.id)
-  if (user) {
-    next(null, user)
-  } else {
-    next(null, false)
+const applyPassportStrategy = (passport: PassportStatic) => {
+  const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: appConfig.secretKey
   }
-})
-// use the strategy
-passport.use(strategy)
+  const strategy = new Strategy(jwtOptions, (payload, done) => {
+    const user = userService.getByEmail(payload.email)
+    if (user) {
+      return done(null, user)
+    } else {
+      return done(null, false)
+    }
+  })
+  // use the strategy
+  passport.use(strategy)
+}
 
-export default passport
+export default applyPassportStrategy
