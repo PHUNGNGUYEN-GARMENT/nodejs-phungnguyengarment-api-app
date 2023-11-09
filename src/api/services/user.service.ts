@@ -52,9 +52,9 @@ export const updateByID = async (user: User): Promise<number> => {
     const affectedRows = await UserSchema.update(
       {
         role: user.role,
-        fullname: user.fullname,
+        fullName: user.fullName,
         email: user.email,
-        password: user.password,
+        hashPassword: user.hashPassword,
         avatar: user.avatar,
         phone: user.phone,
         workLocation: user.workLocation,

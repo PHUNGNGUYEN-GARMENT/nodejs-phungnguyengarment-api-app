@@ -4,13 +4,13 @@ const { INTEGER, BOOLEAN, STRING } = DataType
 
 export interface User {
   userID?: number
-  role: 'user' | 'admin'
-  fullname?: string
+  role?: 'user' | 'admin'
+  fullName?: string
   email: string
-  password: string
+  hashPassword?: string
   avatar?: string
   phone?: string
-  workLocation: string
+  workLocation?: string
   birthday?: string
   orderNumber?: number
   isTemp?: boolean
@@ -22,38 +22,38 @@ export interface User {
   timestamps: true
 })
 export default class UserSchema extends Model<User> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true })
-  declare user_id: number
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'user_id' })
+  declare userID: number
 
-  @Column({ type: STRING })
+  @Column({ type: STRING, field: 'role' })
   declare role: string
 
-  @Column({ type: STRING })
-  declare full_name: string
+  @Column({ type: STRING, field: 'full_name' })
+  declare fullName: string
 
-  @Column({ type: STRING })
+  @Column({ type: STRING, field: 'email' })
   declare email: string
 
-  @Column({ type: STRING })
-  declare hash_password: string
+  @Column({ type: STRING, field: 'hash_password' })
+  declare hashPassword: string
 
-  @Column({ type: STRING })
-  declare avatar: string
+  @Column({ type: STRING, field: 'avatar_url' })
+  declare avatarUrl: string
 
-  @Column({ type: STRING })
-  declare phone: string
+  @Column({ type: STRING, field: 'phone_number' })
+  declare phoneNumber: string
 
-  @Column({ type: STRING })
-  declare working_on: string
+  @Column({ type: STRING, field: 'working_on' })
+  declare workingOn: string
 
-  @Column({ type: STRING })
+  @Column({ type: STRING, field: 'birthday' })
   declare birthday: string
 
-  @Column({ type: INTEGER })
-  declare order_number: number
+  @Column({ type: INTEGER, field: 'order_number' })
+  declare orderNumber: number
 
-  @Column({ type: BOOLEAN })
-  declare is_temp: boolean
+  @Column({ type: BOOLEAN, field: 'is_temp' })
+  declare isTemp: boolean
 
   // @BeforeCreate
   // static hashPasswordBeforeUpdate(user: UserSchema) {

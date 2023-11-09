@@ -10,9 +10,14 @@ export default class AuthController {
 
   // Get by id
   login = async (req: Request, res: Response) => {
-    const { username, email, password } = req.body
+    const { email, password } = req.body
     try {
-      console.log('')
+      const user = await services.loginUser(email, password)
+      if (user) {
+        return user
+      } else {
+        return res.formatter.badRequest({ status: 401, message: 'Invalid email or password!' })
+      }
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -21,9 +26,9 @@ export default class AuthController {
   // Get all
   register = async (req: Request, res: Response) => {
     const userRequest: User = {
-      fullname: req.body.fullname,
+      fullName: req.body.fullName,
       email: req.body.email,
-      password: req.body.password,
+      hashPassword: req.body.password,
       avatar: req.body.avatar,
       phone: req.body.phone,
       workLocation: req.body.workLocation,

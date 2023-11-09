@@ -6,9 +6,9 @@ export default class UserController {
   constructor() {}
   createNewUser = async (req: Request, res: Response) => {
     const userRequest: User = {
-      fullname: req.body.fullname,
+      fullName: req.body.fullName,
       email: req.body.email,
-      password: req.body.password,
+      hashPassword: req.body.password,
       workLocation: req.body.workLocation,
       role: req.body.role
     }
@@ -52,9 +52,9 @@ export default class UserController {
     const { id } = req.params
     const userRequest: User = {
       userID: parseInt(id),
-      fullname: req.body.fullname,
+      fullName: req.body.fullName,
       email: req.body.email,
-      password: req.body.password,
+      hashPassword: req.body.password,
       avatar: req.body.avatar,
       phone: req.body.phone,
       workLocation: req.body.workLocation,
