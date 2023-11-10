@@ -18,7 +18,6 @@ export const createNew = async (item: Product): Promise<ProductSchema> => {
 export const getByID = async (id: number): Promise<ProductSchema | null> => {
   try {
     const item = await ProductSchema.findOne({ where: { productID: id } })
-    console.log('object', item)
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
@@ -57,8 +56,8 @@ export const updateByID = async (item: Product): Promise<number> => {
     )
     return affectedRows[0]
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Error get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
+    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
   }
 }
 
@@ -69,6 +68,6 @@ export const deleteByID = async (id: number): Promise<number> => {
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error delete ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Error delete ${NAMESPACE} by id :: ${error}`)
+    throw new Error(`Delete ${NAMESPACE} by id :: ${error}`)
   }
 }

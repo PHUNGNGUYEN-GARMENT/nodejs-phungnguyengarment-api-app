@@ -3,18 +3,19 @@ import express, { Application } from 'express'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import passport from 'passport'
-import applyPassportStrategy from '~/middleware/auth/passport.middleware'
+import applyPassportStrategy from '~/config/passport.config'
 import { responseEnhancer } from '~/middleware/express-formatter/index'
-import AppRoutes from '~/routes/index'
 import DBConnection from './api/models'
+import AppRoutes from './api/routes'
 
-class App {
+export default class App {
   constructor() {}
 
   public initialize(app: Application) {
     this.config(app)
     this.syncDatabase()
-    new AppRoutes(app)
+    // New app routes
+    new AppRoutes(app, passport)
   }
 
   private config(app: Application) {
@@ -22,10 +23,9 @@ class App {
       origin: 'http://localhost:8001'
     }
     applyPassportStrategy(passport)
-    app.use(passport.initialize())
     // Accept json body request
     app.use(express.json())
-    app.use(express.urlencoded({ extended: false }))
+    app.use(express.urlencoded({ extended: true }))
     // (helmet) helps secure Express apps by setting HTTP response headers.
     app.use(helmet())
     app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }))
@@ -35,6 +35,8 @@ class App {
     app.use(cors(corsOptions))
     // Handle custom formatter response express (middleware)
     app.use(responseEnhancer())
+
+    app.use(passport.initialize())
   }
 
   private syncDatabase() {
@@ -42,5 +44,3 @@ class App {
     dbConnection.sequelize?.sync()
   }
 }
-
-export default App

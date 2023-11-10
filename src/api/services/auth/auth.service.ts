@@ -1,12 +1,11 @@
 /* eslint-disable no-unreachable */
 import * as bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import appConfig from '~/config/app.config'
 import UserSchema, { User } from '~/models/user.model'
 import * as services from '~/services/user.service'
 import logging from '~/utils/logging'
 
-const NAMESPACE = 'services/auth'
+const NAMESPACE = 'Auth'
+const PATH = 'services/auth'
 
 export const registerUser = async (user: User): Promise<UserSchema | null> => {
   try {
@@ -30,8 +29,8 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
       }
     }
   } catch (error) {
-    logging.error(NAMESPACE, `Error register user :: ${error}`)
-    throw new Error(`Error register user :: ${error}`)
+    logging.error(NAMESPACE, `Error register ${NAMESPACE} :: ${error}`)
+    throw new Error(`Register ${NAMESPACE} :: ${error}`)
   }
 }
 
@@ -42,14 +41,10 @@ export const loginUser = async (email: string, password: string): Promise<UserSc
       const passwordCompare = bcrypt.compareSync(password, userFind.hashPassword)
       if (passwordCompare) {
         // Generate token
-        const token = jwt.sign({ email }, appConfig.secretKey, {
-          expiresIn: 1000000
-        })
         const userReturned = { ...userFind.toJSON() }
         delete userReturned.hashPassword
         return {
-          user: userReturned,
-          token: token
+          user: userReturned
         }
       } else {
         return null
@@ -58,7 +53,7 @@ export const loginUser = async (email: string, password: string): Promise<UserSc
       return null
     }
   } catch (error) {
-    logging.error(NAMESPACE, `Error login user :: ${error}`)
-    throw new Error(`Error login user :: ${error}`)
+    logging.error(PATH, `Error login ${NAMESPACE} :: ${error}`)
+    throw new Error(`Login ${NAMESPACE} :: ${error}`)
   }
 }

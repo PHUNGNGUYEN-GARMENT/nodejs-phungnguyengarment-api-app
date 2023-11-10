@@ -33,11 +33,10 @@ export default class ProductController {
     const { id } = req.params
     try {
       const item = await service.getByID(parseInt(id))
-      console.log('>>>', item)
       if (item) {
         return res.formatter.ok({ status: 200, data: item })
       } else {
-        return res.formatter.badRequest({ status: 400 })
+        return res.formatter.notFound({ status: 404 })
       }
     } catch (error) {
       return res.formatter.badRequest({ status: 400, message: `${error}` })
@@ -54,7 +53,6 @@ export default class ProductController {
   }
 
   updateItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
     const itemRequest: Product = {
       productID: req.body.productID,
       productCode: req.body.productCode,

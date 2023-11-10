@@ -8,7 +8,7 @@ const PATH = 'model/index'
 
 const { database, host, username, password } = configuration.development
 
-class DBConnection {
+export default class DBConnection {
   public sequelize: Sequelize | undefined
 
   constructor() {
@@ -46,5 +46,3 @@ class DBConnection {
     }
   }
 }
-
-export default DBConnection

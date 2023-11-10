@@ -2,6 +2,9 @@ import { Request, Response } from 'express'
 import { User } from '~/models/user.model'
 import * as service from '~/services/user.service'
 
+const PATH = 'controllers/user'
+const NAMESPACE = 'User'
+
 export default class UserController {
   constructor() {}
   createNewUser = async (req: Request, res: Response) => {
@@ -18,7 +21,7 @@ export default class UserController {
       if (newUser) {
         return res.formatter.created({ status: 201, data: newUser })
       } else {
-        return res.formatter.badRequest({ status: 404, message: 'User already exists' })
+        return res.formatter.badRequest({ status: 404, message: `${NAMESPACE} already exists` })
       }
     } catch (error) {
       return res.formatter.badRequest({ status: 400, message: `${error}` })
@@ -79,7 +82,7 @@ export default class UserController {
     try {
       const user = await service.deleteByID(parseInt(id))
       if (user) {
-        return res.formatter.ok({ status: 200, message: 'User has been deleted' })
+        return res.formatter.ok({ status: 200, message: `${NAMESPACE} has been deleted` })
       } else {
         return res.formatter.badRequest({ status: 400 })
       }
