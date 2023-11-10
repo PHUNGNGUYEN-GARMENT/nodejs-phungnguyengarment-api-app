@@ -1,9 +1,9 @@
 import express, { Application } from 'express'
-import AppServer from './src/app'
+import App from './src/app'
 import appConfig from './src/config/app.config'
 
 const app: Application = express()
-const appServer: AppServer = new AppServer()
+const appServer: App = new App()
 
 appServer.initialize(app)
 

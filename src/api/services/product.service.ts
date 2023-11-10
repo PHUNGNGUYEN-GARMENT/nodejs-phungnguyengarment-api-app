@@ -10,7 +10,7 @@ export const createNew = async (item: Product): Promise<ProductSchema> => {
     return await ProductSchema.create({ ...item, orderNumber: items.length })
   } catch (error) {
     logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Error creating new product :: ${error}`)
+    throw new Error(`Creating new product :: ${error}`)
   }
 }
 
@@ -18,10 +18,11 @@ export const createNew = async (item: Product): Promise<ProductSchema> => {
 export const getByID = async (id: number): Promise<ProductSchema | null> => {
   try {
     const item = await ProductSchema.findOne({ where: { productID: id } })
+    console.log('object', item)
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Error get ${NAMESPACE} by id :: ${error}`)
+    throw new Error(`Get ${NAMESPACE} by id :: ${error}`)
   }
 }
 
@@ -32,7 +33,7 @@ export const getAll = async (): Promise<ProductSchema[]> => {
     return items
   } catch (error) {
     logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Error get all ${NAMESPACE} :: ${error}`)
+    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
   }
 }
 

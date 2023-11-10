@@ -8,7 +8,7 @@ import { responseEnhancer } from '~/middleware/express-formatter/index'
 import AppRoutes from '~/routes/index'
 import DBConnection from './api/models'
 
-class AppServer {
+class App {
   constructor() {}
 
   public initialize(app: Application) {
@@ -43,4 +43,4 @@ class AppServer {
   }
 }
 
-export default AppServer
+export default App

@@ -7,6 +7,7 @@ const PATH = 'controllers/product'
 
 export default class ProductController {
   constructor() {}
+
   createNewItem = async (req: Request, res: Response) => {
     const userRequest: Product = {
       productCode: req.body.productCode,
@@ -32,6 +33,7 @@ export default class ProductController {
     const { id } = req.params
     try {
       const item = await service.getByID(parseInt(id))
+      console.log('>>>', item)
       if (item) {
         return res.formatter.ok({ status: 200, data: item })
       } else {

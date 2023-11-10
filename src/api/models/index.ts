@@ -1,10 +1,10 @@
 import { Sequelize } from 'sequelize-typescript'
 import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
-import UserSchema from './user.model'
 import ProductSchema from './product.model'
+import UserSchema from './user.model'
 
-const NAMESPACE = 'model/index'
+const PATH = 'model/index'
 
 const { database, host, username, password } = configuration.development
 
@@ -15,7 +15,7 @@ class DBConnection {
     this.createConnection()
   }
 
-  private async createConnection() {
+  async createConnection() {
     this.sequelize = new Sequelize({
       database: database,
       username: username,
@@ -33,16 +33,16 @@ class DBConnection {
 
     await this.sequelize
       .authenticate()
-      .then(() => logging.info(NAMESPACE, 'Connection has been established successfully. 👏'))
-      .catch((error) => logging.error(NAMESPACE, `Unable to connect to the database: ${error}`))
+      .then(() => logging.info(PATH, 'Connection has been established successfully. 👏'))
+      .catch((error) => logging.error(PATH, `Unable to connect to the database: ${error}`))
   }
 
   async closeConnection() {
     if (this.sequelize) {
       await this.sequelize
         .close()
-        .then(() => logging.info(NAMESPACE, 'Connection has been closed'))
-        .catch((error) => logging.error(NAMESPACE, `Unable to close the database: ${error}`))
+        .then(() => logging.info(PATH, 'Connection has been closed'))
+        .catch((error) => logging.error(PATH, `Unable to close the database: ${error}`))
     }
   }
 }
