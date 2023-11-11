@@ -10,7 +10,7 @@ export default class GarmentAccessoryNoteController {
 
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: GarmentAccessoryNote = {
-      accessoriesNoteID: req.body.accessoriesNoteID,
+      accessoryNoteID: req.body.accessoryNoteID,
       title: req.body.title,
       summary: req.body.summary
     }
@@ -51,7 +51,7 @@ export default class GarmentAccessoryNoteController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: GarmentAccessoryNote = {
-      accessoriesNoteID: req.body.accessoriesNoteID,
+      accessoryNoteID: req.body.accessoryNoteID,
       title: req.body.title,
       summary: req.body.summary,
       orderNumber: req.body.orderNumber

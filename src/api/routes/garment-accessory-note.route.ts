@@ -45,7 +45,7 @@ class GarmentAccessoryNoteRoute {
     this.router.put(
       '/',
       requestValidationRules([
-        body('accessoriesNoteID')
+        body('accessoryNoteID')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()

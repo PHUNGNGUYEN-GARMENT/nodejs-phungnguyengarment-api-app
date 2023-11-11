@@ -20,6 +20,6 @@ export default class AppRoutes {
     app.use('/api/product-colors', productColorRoute)
     app.use('/api/groups', groupRoute)
     app.use('/api/product-groups', productGroupRoute)
-    app.use('/api/garment-accessories-notes', garmentAccessoryNoteRoute)
+    app.use('/api/garment-accessory-note', garmentAccessoryNoteRoute)
   }
 }

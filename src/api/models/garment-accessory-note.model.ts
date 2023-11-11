@@ -3,7 +3,7 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript'
 const { INTEGER, STRING } = DataType
 
 export interface GarmentAccessoryNote {
-  accessoriesNoteID?: number
+  accessoryNoteID?: number
   title?: string
   summary?: string
   orderNumber?: number
@@ -11,12 +11,12 @@ export interface GarmentAccessoryNote {
 
 @Table({
   modelName: 'GarmentAccessoryNote',
-  tableName: 'garment_accessories_notes',
+  tableName: 'garment_accessory_note',
   timestamps: true
 })
 export default class GarmentAccessoryNoteSchema extends Model<GarmentAccessoryNote> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'accessories_note_id' })
-  declare accessoriesNoteID: number
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'accessory_note_id' })
+  declare accessoryNoteID: number
 
   @Column({ type: STRING, field: 'title' })
   declare title: string

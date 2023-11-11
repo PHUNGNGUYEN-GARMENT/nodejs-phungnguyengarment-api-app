@@ -15,13 +15,13 @@ export const createNew = async (item: GarmentAccessoryNote): Promise<GarmentAcce
 }
 
 // Get by id
-export const getByID = async (accessoriesNoteID: number): Promise<GarmentAccessoryNoteSchema | null> => {
+export const getByID = async (accessoryNoteID: number): Promise<GarmentAccessoryNoteSchema | null> => {
   try {
-    const item = await GarmentAccessoryNoteSchema.findOne({ where: { accessoriesNoteID: accessoriesNoteID } })
+    const item = await GarmentAccessoryNoteSchema.findOne({ where: { accessoryNoteID: accessoryNoteID } })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by accessoriesNoteID :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by accessoriesNoteID :: ${error}`)
+    logging.error(NAMESPACE, `Error get ${NAMESPACE} by accessoryNoteID :: ${error}`)
+    throw new Error(`Get ${NAMESPACE} by accessoryNoteID :: ${error}`)
   }
 }
 
@@ -41,31 +41,31 @@ export const updateByID = async (item: GarmentAccessoryNote): Promise<number> =>
   try {
     const affectedRows = await GarmentAccessoryNoteSchema.update(
       {
-        accessoriesNoteID: item.accessoriesNoteID,
+        accessoryNoteID: item.accessoryNoteID,
         title: item.title,
         summary: item.summary,
         orderNumber: item.orderNumber
       },
       {
         where: {
-          accessoriesNoteID: item.accessoriesNoteID
+          accessoryNoteID: item.accessoryNoteID
         }
       }
     )
     return affectedRows[0]
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by accessoriesNoteID :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by accessoriesNoteID :: ${error}`)
+    logging.error(NAMESPACE, `Error update ${NAMESPACE} by accessoryNoteID :: ${error}`)
+    throw new Error(`Update ${NAMESPACE} by accessoryNoteID :: ${error}`)
   }
 }
 
 // Delete importedID
-export const deleteByID = async (accessoriesNoteID: number): Promise<number> => {
+export const deleteByID = async (accessoryNoteID: number): Promise<number> => {
   try {
-    const affectedRows = await GarmentAccessoryNoteSchema.destroy({ where: { accessoriesNoteID: accessoriesNoteID } })
+    const affectedRows = await GarmentAccessoryNoteSchema.destroy({ where: { accessoryNoteID: accessoryNoteID } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} accessoriesNoteID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by accessoriesNoteID :: ${error}`)
+    logging.error(NAMESPACE, `Error delete ${NAMESPACE} accessoryNoteID :: ${error}`)
+    throw new Error(`Delete ${NAMESPACE} by accessoryNoteID :: ${error}`)
   }
 }
