@@ -53,9 +53,9 @@ class ProductRoute {
 
     // Update item by id
     this.router.put(
-      '/:id',
+      '/',
       requestValidationRules([
-        param('id')
+        body('productID')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()

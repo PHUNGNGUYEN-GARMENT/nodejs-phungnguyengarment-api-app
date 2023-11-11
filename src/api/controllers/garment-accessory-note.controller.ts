@@ -1,16 +1,18 @@
 import { Request, Response } from 'express'
-import { Group } from '~/models/group.model'
-import * as service from '~/services/group.service'
+import { GarmentAccessoryNote } from '~/models/garment-accessory-note.model'
+import * as service from '~/services/color.service'
 
-const NAMESPACE = 'Group'
-const PATH = 'controllers/group'
+const NAMESPACE = 'GarmentAccessoryNote'
+const PATH = 'controllers/garment-accessory-note'
 
-export default class ColorController {
+export default class GarmentAccessoryNoteController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: Group = {
-      name: req.body.name
+    const itemRequest: GarmentAccessoryNote = {
+      accessoriesNoteID: req.body.accessoriesNoteID,
+      title: req.body.title,
+      summary: req.body.summary
     }
     try {
       const itemNew = await service.createNew(itemRequest)
@@ -48,9 +50,10 @@ export default class ColorController {
   }
 
   updateItemByID = async (req: Request, res: Response) => {
-    const itemRequest: Group = {
-      groupID: req.body.groupID,
-      name: req.body.name,
+    const itemRequest: GarmentAccessoryNote = {
+      accessoriesNoteID: req.body.accessoriesNoteID,
+      title: req.body.title,
+      summary: req.body.summary,
       orderNumber: req.body.orderNumber
     }
     try {

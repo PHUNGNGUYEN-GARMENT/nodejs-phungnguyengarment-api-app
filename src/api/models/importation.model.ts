@@ -4,7 +4,7 @@ import ProductSchema from './product.model'
 const { INTEGER, DATE } = DataType
 
 export interface Importation {
-  importedID?: number
+  importationID?: number
   productID?: number
   dateImported?: number
   orderNumber?: number
@@ -16,8 +16,8 @@ export interface Importation {
   timestamps: true
 })
 export default class ImportationSchema extends Model<Importation> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'imported_id' })
-  declare importedID: number
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'importation_id' })
+  declare importationID: number
 
   @Column({ type: INTEGER, field: 'product_id' })
   @ForeignKey(() => ProductSchema)

@@ -52,9 +52,8 @@ export default class UserController {
   }
 
   updateUserByID = async (req: Request, res: Response) => {
-    const { id } = req.params
     const userRequest: User = {
-      userID: parseInt(id),
+      userID: req.body.userID,
       fullName: req.body.fullName,
       email: req.body.email,
       hashPassword: req.body.password,

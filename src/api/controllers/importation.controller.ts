@@ -50,7 +50,7 @@ export default class ImportedLotController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: Importation = {
-      importedID: parseInt(req.params.id),
+      importationID: req.body.importationID,
       productID: req.body.productID,
       dateImported: req.body.dateImported,
       orderNumber: req.body.orderNumber

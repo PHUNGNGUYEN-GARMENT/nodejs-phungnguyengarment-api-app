@@ -1,5 +1,7 @@
 import { Router } from 'express'
+import { body, param } from 'express-validator'
 import UserController from '~/controllers/user.controller'
+import { requestValidationRules } from '../middleware/response-validator'
 
 class UserRoute {
   router = Router()
@@ -10,10 +12,47 @@ class UserRoute {
   }
 
   private initialize() {
-    this.router.get('/find/:id', this.controller.getUserByID)
+    // Get user by userID
+    this.router.get(
+      '/find/:id',
+      requestValidationRules([
+        param('id')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be string type!')
+      ]),
+      this.controller.getUserByID
+    )
+
+    // Get all users
     this.router.get('/find', this.controller.getAllUsers)
-    this.router.put('/:id', this.controller.updateUserByID)
-    this.router.delete('/:id', this.controller.deleteUserByID)
+
+    // Update user by userID
+    this.router.put(
+      '/',
+      requestValidationRules([
+        body('userID')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be string type!')
+      ]),
+      this.controller.updateUserByID
+    )
+
+    // Delete user by userID
+    this.router.delete(
+      '/:id',
+      requestValidationRules([
+        param('id')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be string type!')
+      ]),
+      this.controller.deleteUserByID
+    )
   }
 }
 

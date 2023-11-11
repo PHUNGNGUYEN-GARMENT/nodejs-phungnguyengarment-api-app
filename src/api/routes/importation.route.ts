@@ -48,9 +48,9 @@ class ImportationRoute {
 
     // Update item by productID and importedID
     this.router.put(
-      '/:id',
+      '/',
       requestValidationRules([
-        param('id')
+        body('importationID')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()

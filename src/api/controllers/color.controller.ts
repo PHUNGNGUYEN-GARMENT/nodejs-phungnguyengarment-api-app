@@ -54,7 +54,7 @@ export default class ColorController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: Color = {
-      colorID: parseInt(req.params.id),
+      colorID: req.body.colorID,
       nameColor: req.body.nameColor,
       rgbColor: req.body.rgbColor,
       cmykColor: req.body.cmykColor,

@@ -15,13 +15,13 @@ export const createNew = async (item: Importation): Promise<ImportationSchema> =
 }
 
 // Get by id
-export const getByID = async (importedID: number): Promise<ImportationSchema | null> => {
+export const getByID = async (importationID: number): Promise<ImportationSchema | null> => {
   try {
-    const item = await ImportationSchema.findOne({ where: { importedID: importedID } })
+    const item = await ImportationSchema.findOne({ where: { importationID: importationID } })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by importedID :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by importedID :: ${error}`)
+    logging.error(NAMESPACE, `Error get ${NAMESPACE} by importationID :: ${error}`)
+    throw new Error(`Get ${NAMESPACE} by importationID :: ${error}`)
   }
 }
 
@@ -57,24 +57,24 @@ export const updateByID = async (item: Importation): Promise<number> => {
       },
       {
         where: {
-          importedID: item.importedID
+          importationID: item.importationID
         }
       }
     )
     return affectedRows[0]
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by importedID :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by importedID :: ${error}`)
+    logging.error(NAMESPACE, `Error update ${NAMESPACE} by importationID :: ${error}`)
+    throw new Error(`Update ${NAMESPACE} by importationID :: ${error}`)
   }
 }
 
 // Delete importedID
-export const deleteByID = async (importedID: number): Promise<number> => {
+export const deleteByID = async (importationID: number): Promise<number> => {
   try {
-    const affectedRows = await ImportationSchema.destroy({ where: { importedID: importedID } })
+    const affectedRows = await ImportationSchema.destroy({ where: { importationID: importationID } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} importedID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by importedID :: ${error}`)
+    logging.error(NAMESPACE, `Error delete ${NAMESPACE} importationID :: ${error}`)
+    throw new Error(`Delete ${NAMESPACE} by importationID :: ${error}`)
   }
 }
