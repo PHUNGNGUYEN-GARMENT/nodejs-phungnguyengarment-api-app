@@ -11,6 +11,7 @@ import ProductColorSchema from './product-color.model'
 import ProductGroupSchema from './product-group.model'
 import ProductSchema from './product.model'
 import UserSchema from './user.model'
+import GarmentAccessorySchema from './garment-accessory.model'
 
 const PATH = 'model/index'
 
@@ -48,7 +49,8 @@ class DBConnection {
       GroupSchema,
       ProductGroupSchema,
       GarmentAccessoryNoteSchema,
-      NotionAccessorySchema
+      NotionAccessorySchema,
+      GarmentAccessorySchema
     ])
 
     await this.sequelize
