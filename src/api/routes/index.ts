@@ -5,6 +5,7 @@ import productRoute from '~/routes/product.route'
 import colorRoute from './color.route'
 import importationRoute from './importation.route'
 import importedLotRoute from './imported-lot.route'
+import productColorRoute from './product-color.route'
 
 export default class AppRoutes {
   constructor(app: Application, passport: PassportStatic) {
@@ -13,5 +14,6 @@ export default class AppRoutes {
     app.use('/api/imported-lots', importedLotRoute)
     app.use('/api/importations', importationRoute)
     app.use('/api/colors', colorRoute)
+    app.use('/api/product-colors', productColorRoute)
   }
 }

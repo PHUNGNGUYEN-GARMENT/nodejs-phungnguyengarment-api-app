@@ -5,7 +5,7 @@ import morgan from 'morgan'
 import passport from 'passport'
 import applyPassportStrategy from '~/config/passport.config'
 import { responseEnhancer } from '~/middleware/express-formatter/index'
-import DBConnection from './api/models'
+import dbConnection from './api/models'
 import AppRoutes from './api/routes'
 
 export default class App {
@@ -40,7 +40,6 @@ export default class App {
   }
 
   private syncDatabase() {
-    const dbConnection = new DBConnection()
     dbConnection.sequelize?.sync()
   }
 }

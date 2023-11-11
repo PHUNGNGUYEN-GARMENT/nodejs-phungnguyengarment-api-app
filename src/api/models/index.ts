@@ -1,17 +1,18 @@
 import { Sequelize } from 'sequelize-typescript'
 import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
+import ColorSchema from './color.model'
 import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
+import ProductColorSchema from './product-color.model'
 import ProductSchema from './product.model'
 import UserSchema from './user.model'
-import ColorSchema from './color.model'
 
 const PATH = 'model/index'
 
 const { database, host, username, password } = configuration.development
 
-export default class DBConnection {
+class DBConnection {
   public sequelize: Sequelize | undefined
 
   constructor() {
@@ -30,9 +31,17 @@ export default class DBConnection {
         min: 0,
         acquire: 30000,
         idle: 10000
-      },
-      models: [UserSchema, ProductSchema, ImportedLotSchema, ImportationSchema, ColorSchema]
+      }
     })
+
+    this.sequelize?.addModels([
+      UserSchema,
+      ProductSchema,
+      ImportedLotSchema,
+      ImportationSchema,
+      ColorSchema,
+      ProductColorSchema
+    ])
 
     await this.sequelize
       .authenticate()
@@ -49,3 +58,5 @@ export default class DBConnection {
     }
   }
 }
+
+export default new DBConnection()

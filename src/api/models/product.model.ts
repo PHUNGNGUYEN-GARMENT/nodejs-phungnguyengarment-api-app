@@ -1,4 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
+import dbConnection from '~/models/index'
 
 const { INTEGER, STRING, DATEONLY, DOUBLE } = DataType
 

@@ -54,18 +54,4 @@ export default class UserSchema extends Model<User> {
 
   @Column({ type: BOOLEAN, field: 'is_temp' })
   declare isTemp: boolean
-
-  // @BeforeCreate
-  // static hashPasswordBeforeUpdate(user: UserSchema) {
-  //   user.hash_password = bcrypt.hashSync(user.hash_password, 10)
-  //   console.log('>>>')
-  // }
 }
-
-// UserSchema.addHook('beforeSave', (self) => {})
-// UserSchema.hasMany(CartSchema, { foreignKey: 'userID' })
-// UserSchema.hasMany(FavoriteSchema, { foreignKey: 'userID' })
-// UserSchema.hasMany(RateSchema, { foreignKey: 'userID' })
-// UserSchema.hasMany(FollowerSchema, { foreignKey: 'userID' })
-// UserSchema.hasMany(TransitionSchema, { foreignKey: 'userID' })
-// UserSchema.hasMany(ReservationSchema, { foreignKey: 'userID' })

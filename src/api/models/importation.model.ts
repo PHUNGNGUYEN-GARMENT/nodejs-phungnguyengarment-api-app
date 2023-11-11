@@ -1,4 +1,5 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript'
+import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import ProductSchema from './product.model'
 
 const { INTEGER, DATE } = DataType
 
@@ -19,6 +20,7 @@ export default class ImportationSchema extends Model<Importation> {
   declare importedID: number
 
   @Column({ type: INTEGER, field: 'product_id' })
+  @ForeignKey(() => ProductSchema)
   declare productID: number
 
   @Column({ type: DATE, field: 'date_imported' })

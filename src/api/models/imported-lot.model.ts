@@ -1,6 +1,8 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript'
-
-const { INTEGER, STRING, DATEONLY, DOUBLE } = DataType
+import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import dbConnection from '~/models/index'
+import ImportationSchema from './importation.model'
+import ProductSchema from './product.model'
+const { INTEGER, STRING, DOUBLE } = DataType
 
 export interface ImportedLot {
   productID?: number
@@ -17,9 +19,11 @@ export interface ImportedLot {
 })
 export default class ImportedLotSchema extends Model<ImportedLot> {
   @Column({ type: INTEGER, field: 'product_id' })
+  @ForeignKey(() => ProductSchema)
   declare productID: number
 
   @Column({ type: INTEGER, field: 'imported_id' })
+  @ForeignKey(() => ImportationSchema)
   declare importedID: number
 
   @Column({ type: DOUBLE, field: 'quantity' })
