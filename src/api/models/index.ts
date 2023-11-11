@@ -1,6 +1,7 @@
 import { Sequelize } from 'sequelize-typescript'
 import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
+import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
 import ProductSchema from './product.model'
 import UserSchema from './user.model'
@@ -29,7 +30,7 @@ export default class DBConnection {
         acquire: 30000,
         idle: 10000
       },
-      models: [UserSchema, ProductSchema, ImportedLotSchema]
+      models: [UserSchema, ProductSchema, ImportedLotSchema, ImportationSchema]
     })
 
     await this.sequelize

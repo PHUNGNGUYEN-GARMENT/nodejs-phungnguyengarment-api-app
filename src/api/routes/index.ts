@@ -2,6 +2,7 @@ import { Application } from 'express'
 import { PassportStatic } from 'passport'
 import authRoute from '~/routes/auth/auth.route'
 import productRoute from '~/routes/product.route'
+import importationRoute from './importation.route'
 import importedLotRoute from './imported-lot.route'
 
 export default class AppRoutes {
@@ -9,5 +10,6 @@ export default class AppRoutes {
     app.use('/api/auth', authRoute)
     app.use('/api/products', productRoute)
     app.use('/api/imported-lots', importedLotRoute)
+    app.use('/api/importations', importationRoute)
   }
 }
