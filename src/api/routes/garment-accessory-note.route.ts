@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
-import ColorController from '~/controllers/color.controller'
+import GarmentAccessoryNoteController from '~/controllers/garment-accessory-note.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
-class ColorRoute {
+class GarmentAccessoryNoteRoute {
   router = Router()
-  controller = new ColorController()
+  controller = new GarmentAccessoryNoteController()
 
   constructor() {
     this.initialize()
@@ -16,7 +16,7 @@ class ColorRoute {
     this.router.post(
       '/',
       requestValidationRules([
-        body('nameColor')
+        body('title')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isString()
@@ -45,7 +45,7 @@ class ColorRoute {
     this.router.put(
       '/',
       requestValidationRules([
-        body('colorID')
+        body('accessoriesNoteID')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()
@@ -69,4 +69,4 @@ class ColorRoute {
   }
 }
 
-export default new ColorRoute().router
+export default new GarmentAccessoryNoteRoute().router

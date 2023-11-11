@@ -3,6 +3,7 @@ import { PassportStatic } from 'passport'
 import authRoute from '~/routes/auth/auth.route'
 import productRoute from '~/routes/product.route'
 import colorRoute from './color.route'
+import garmentAccessoryNoteRoute from './garment-accessory-note.route'
 import groupRoute from './group.route'
 import importationRoute from './importation.route'
 import importedLotRoute from './imported-lot.route'
@@ -19,5 +20,6 @@ export default class AppRoutes {
     app.use('/api/product-colors', productColorRoute)
     app.use('/api/groups', groupRoute)
     app.use('/api/product-groups', productGroupRoute)
+    app.use('/api/garment-accessories-notes', garmentAccessoryNoteRoute)
   }
 }
