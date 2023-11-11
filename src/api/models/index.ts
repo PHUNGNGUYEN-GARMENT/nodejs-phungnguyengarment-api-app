@@ -5,6 +5,7 @@ import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
 import ProductSchema from './product.model'
 import UserSchema from './user.model'
+import ColorSchema from './color.model'
 
 const PATH = 'model/index'
 
@@ -30,7 +31,7 @@ export default class DBConnection {
         acquire: 30000,
         idle: 10000
       },
-      models: [UserSchema, ProductSchema, ImportedLotSchema, ImportationSchema]
+      models: [UserSchema, ProductSchema, ImportedLotSchema, ImportationSchema, ColorSchema]
     })
 
     await this.sequelize
