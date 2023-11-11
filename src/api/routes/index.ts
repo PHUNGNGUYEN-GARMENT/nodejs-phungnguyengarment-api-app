@@ -7,6 +7,7 @@ import garmentAccessoryNoteRoute from './garment-accessory-note.route'
 import groupRoute from './group.route'
 import importationRoute from './importation.route'
 import importedLotRoute from './imported-lot.route'
+import notionAccessoryRoute from './notion-accessory.route'
 import productColorRoute from './product-color.route'
 import productGroupRoute from './product-group.route'
 
@@ -21,5 +22,6 @@ export default class AppRoutes {
     app.use('/api/groups', groupRoute)
     app.use('/api/product-groups', productGroupRoute)
     app.use('/api/garment-accessory-note', garmentAccessoryNoteRoute)
+    app.use('/api/notion-accessories', notionAccessoryRoute)
   }
 }

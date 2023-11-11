@@ -6,6 +6,7 @@ import GarmentAccessoryNoteSchema from './garment-accessory-note.model'
 import GroupSchema from './group.model'
 import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
+import NotionAccessorySchema from './notion-accessory.model'
 import ProductColorSchema from './product-color.model'
 import ProductGroupSchema from './product-group.model'
 import ProductSchema from './product.model'
@@ -46,7 +47,8 @@ class DBConnection {
       ProductColorSchema,
       GroupSchema,
       ProductGroupSchema,
-      GarmentAccessoryNoteSchema
+      GarmentAccessoryNoteSchema,
+      NotionAccessorySchema
     ])
 
     await this.sequelize

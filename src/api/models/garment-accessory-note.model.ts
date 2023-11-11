@@ -11,7 +11,7 @@ export interface GarmentAccessoryNote {
 
 @Table({
   modelName: 'GarmentAccessoryNote',
-  tableName: 'garment_accessory_note',
+  tableName: 'garment_accessories_notes',
   timestamps: true
 })
 export default class GarmentAccessoryNoteSchema extends Model<GarmentAccessoryNote> {
