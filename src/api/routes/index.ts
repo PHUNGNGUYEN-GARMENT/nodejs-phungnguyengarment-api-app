@@ -7,6 +7,7 @@ import groupRoute from './group.route'
 import importationRoute from './importation.route'
 import importedLotRoute from './imported-lot.route'
 import productColorRoute from './product-color.route'
+import productGroupRoute from './product-group.route'
 
 export default class AppRoutes {
   constructor(app: Application, passport: PassportStatic) {
@@ -17,5 +18,6 @@ export default class AppRoutes {
     app.use('/api/colors', colorRoute)
     app.use('/api/product-colors', productColorRoute)
     app.use('/api/groups', groupRoute)
+    app.use('/api/product-groups', productGroupRoute)
   }
 }

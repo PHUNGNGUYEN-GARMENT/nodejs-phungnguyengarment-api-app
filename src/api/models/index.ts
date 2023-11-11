@@ -6,6 +6,7 @@ import GroupSchema from './group.model'
 import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
 import ProductColorSchema from './product-color.model'
+import ProductGroupSchema from './product-group.model'
 import ProductSchema from './product.model'
 import UserSchema from './user.model'
 
@@ -42,7 +43,8 @@ class DBConnection {
       ImportationSchema,
       ColorSchema,
       ProductColorSchema,
-      GroupSchema
+      GroupSchema,
+      ProductGroupSchema
     ])
 
     await this.sequelize
