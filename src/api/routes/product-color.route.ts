@@ -43,9 +43,14 @@ class ProductColorRoute {
 
     // Update item by productID and importedID
     this.router.put(
-      '/:id',
+      '/',
       requestValidationRules([
-        param('id')
+        body('colorID')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!'),
+        body('productID')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()

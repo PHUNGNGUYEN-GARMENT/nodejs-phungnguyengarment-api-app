@@ -58,9 +58,14 @@ class ImportedLotRoute {
 
     // Update item by productID and importedID
     this.router.put(
-      '/:id',
+      '/',
       requestValidationRules([
-        param('id')
+        body('productID')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!'),
+        body('importedID')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()

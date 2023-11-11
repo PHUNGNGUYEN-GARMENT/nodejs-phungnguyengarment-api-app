@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { ProductColor } from '~/models/product-color.model'
-import * as service from '~/services/color.service'
+import * as service from '~/services/product-color.service'
 
 const NAMESPACE = 'ProductColor'
 const PATH = 'controllers/product-color'
@@ -34,9 +34,13 @@ export default class ProductColorController {
   getItemByID = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-      const item = await service.getByID(parseInt(id))
-      if (item) {
-        return res.formatter.ok({ status: 200, data: item })
+      const item1 = await service.getByColorID(parseInt(id))
+      const item2 = await service.getByProductID(parseInt(id))
+      if (item1) {
+        return res.formatter.ok({ status: 200, data: item1 })
+      }
+      if (item2) {
+        return res.formatter.ok({ status: 200, data: item2 })
       }
       return res.formatter.notFound({ status: 404 })
     } catch (error) {
@@ -55,7 +59,7 @@ export default class ProductColorController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: ProductColor = {
-      colorID: parseInt(req.params.id),
+      colorID: req.body.colorID,
       productID: req.body.productID,
       nameColor: req.body.nameColor,
       rgbColor: req.body.rgbColor,
@@ -66,9 +70,13 @@ export default class ProductColorController {
       orderNumber: req.body.orderNumber
     }
     try {
-      const itemUpdated = await service.updateByID(itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ status: 200, data: itemUpdated })
+      const itemUpdated1 = await service.updateByColorID(itemRequest)
+      if (itemUpdated1) {
+        return res.formatter.ok({ status: 200, data: itemUpdated1 })
+      }
+      const itemUpdated2 = await service.updateByProductID(itemRequest)
+      if (itemUpdated2) {
+        return res.formatter.ok({ status: 200, data: itemUpdated2 })
       }
       return res.formatter.badRequest({ status: 400 })
     } catch (error) {
@@ -79,8 +87,12 @@ export default class ProductColorController {
   deleteItemByID = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-      const item = await service.deleteByID(parseInt(id))
-      if (item) {
+      const item1 = await service.deleteByColorID(parseInt(id))
+      if (item1) {
+        return res.formatter.ok({ status: 200, message: `${NAMESPACE} has been deleted` })
+      }
+      const item2 = await service.deleteByProductID(parseInt(id))
+      if (item2) {
         return res.formatter.ok({ status: 200, message: `${NAMESPACE} has been deleted` })
       }
       return res.formatter.notFound({ status: 404 })
