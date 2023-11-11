@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript'
 import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
 import ColorSchema from './color.model'
+import GroupSchema from './group.model'
 import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
 import ProductColorSchema from './product-color.model'
@@ -40,7 +41,8 @@ class DBConnection {
       ImportedLotSchema,
       ImportationSchema,
       ColorSchema,
-      ProductColorSchema
+      ProductColorSchema,
+      GroupSchema
     ])
 
     await this.sequelize
