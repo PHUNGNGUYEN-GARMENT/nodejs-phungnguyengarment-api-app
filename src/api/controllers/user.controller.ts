@@ -19,12 +19,12 @@ export default class UserController {
       const newUser = await service.createNew(userRequest)
 
       if (newUser) {
-        return res.formatter.created({ status: 201, data: newUser })
+        return res.formatter.created({ data: newUser })
       } else {
-        return res.formatter.badRequest({ status: 404, message: `${NAMESPACE} already exists` })
+        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -33,21 +33,21 @@ export default class UserController {
     try {
       const user = await service.getByID(parseInt(id))
       if (user) {
-        return res.formatter.ok({ status: 200, data: user })
+        return res.formatter.ok({ data: user })
       } else {
-        return res.formatter.badRequest({ status: 400 })
+        return res.formatter.badRequest({})
       }
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
   getAllUsers = async (req: Request, res: Response) => {
     try {
       const users = await service.getAll()
-      return res.formatter.ok({ status: 200, data: users })
+      return res.formatter.ok({ data: users })
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -67,12 +67,12 @@ export default class UserController {
     try {
       const userUpdated = await service.updateByID(userRequest)
       if (userUpdated) {
-        return res.formatter.ok({ status: 200, data: userUpdated })
+        return res.formatter.ok({ data: userUpdated })
       } else {
-        return res.formatter.badRequest({ status: 400 })
+        return res.formatter.badRequest({})
       }
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -81,12 +81,12 @@ export default class UserController {
     try {
       const user = await service.deleteByID(parseInt(id))
       if (user) {
-        return res.formatter.ok({ status: 200, message: `${NAMESPACE} has been deleted` })
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       } else {
-        return res.formatter.badRequest({ status: 400 })
+        return res.formatter.badRequest({})
       }
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 }

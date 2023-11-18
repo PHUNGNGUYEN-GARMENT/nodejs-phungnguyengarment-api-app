@@ -10,7 +10,7 @@ export const requestValidationRules = (validationRules: ValidationChain[]) => {
 
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        status: 400,
+        isSuccess: false,
         message: 'Error validate request',
         data: null,
         meta: {
@@ -36,7 +36,7 @@ export const requestValidationFields = (
 
     if (!errors.isEmpty()) {
       return res.status(400).json({
-        status: 400,
+        isSuccess: false,
         message: 'Error validate request',
         data: null,
         meta: {

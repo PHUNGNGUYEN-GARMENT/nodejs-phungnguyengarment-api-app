@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { NextFunction, Request, Response } from 'express'
-import methods, { Method, MethodStatus, MethodType } from './methods'
+import methods, { Method, MethodType } from './methods'
 
 export interface ResponseStory {
-  status?: MethodStatus
+  isSuccess?: boolean
   message?: string
   data?: any
   meta?: any
@@ -33,30 +33,12 @@ const _generateFormatters = (res: Response) => {
 
   methods.map((method: Method) => {
     formatter[method.type] = (response: ResponseStory) => {
-      if (method.type === 'dynamicFind') {
-        const foundMethod = methods.find((m) => m.status === response.status)
-        if (foundMethod) {
-          res.status(foundMethod.status).json({
-            status: foundMethod.status,
-            message: response.message ? response.message : foundMethod.message,
-            data: response.data,
-            meta: response.meta
-          })
-        } else {
-          res.status(500).json({
-            status: 500,
-            message: 'Can not find the request status method!',
-            meta: res.statusCode
-          })
-        }
-      } else {
-        res.status(method.status).json({
-          status: method.status,
-          message: response.message ? response.message : method.message,
-          data: response.data,
-          meta: response.meta
-        })
-      }
+      res.status(method.status).json({
+        isSuccess: method.status < 400,
+        message: response.message ? response.message : method.message,
+        data: response.data,
+        meta: response.meta
+      })
     }
   })
 

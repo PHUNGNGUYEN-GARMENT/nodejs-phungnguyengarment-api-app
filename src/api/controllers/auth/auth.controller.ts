@@ -15,9 +15,9 @@ export default class AuthController {
     try {
       const user = await services.loginUser(email, password)
       if (user) {
-        return res.formatter.ok({ status: 200, message: `${NAMESPACE} login successfully!`, data: user })
+        return res.formatter.ok({ message: `${NAMESPACE} login successfully!`, data: user })
       } else {
-        return res.formatter.badRequest({ status: 401, message: `Invalid email and password!` })
+        return res.formatter.badRequest({ message: `Invalid email and password!` })
       }
     } catch (error) {
       logging.error(PATH, `${NAMESPACE} login failed with error: ${error}`)
@@ -42,12 +42,11 @@ export default class AuthController {
       const userRegistered = await services.registerUser(userRequest)
       if (userRegistered) {
         return res.formatter.created({
-          status: 201,
           message: `${NAMESPACE} registered successfully!`,
           data: userRegistered
         })
       } else {
-        return res.formatter.badRequest({ status: 400, message: `${NAMESPACE} already exist` })
+        return res.formatter.badRequest({ message: `${NAMESPACE} already exist` })
       }
     } catch (error) {
       logging.error(PATH, `${NAMESPACE} register failed with error: ${error}`)

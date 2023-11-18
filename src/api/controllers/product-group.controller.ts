@@ -17,12 +17,12 @@ export default class ProductGroupController {
       const itemNew = await service.createNew(itemRequest)
       console.log('sa', itemNew)
       if (itemNew) {
-        return res.formatter.created({ status: 201, data: itemNew })
+        return res.formatter.created({ data: itemNew })
       } else {
-        return res.formatter.badRequest({ status: 400, message: `${NAMESPACE} already exists` })
+        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -32,23 +32,23 @@ export default class ProductGroupController {
       const item1 = await service.getByGroupID(parseInt(id))
       const item2 = await service.getByProductID(parseInt(id))
       if (item1) {
-        return res.formatter.ok({ status: 200, data: item1 })
+        return res.formatter.ok({ data: item1 })
       }
       if (item2) {
-        return res.formatter.ok({ status: 200, data: item2 })
+        return res.formatter.ok({ data: item2 })
       }
-      return res.formatter.notFound({ status: 404 })
+      return res.formatter.notFound({})
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
   getAllItems = async (req: Request, res: Response) => {
     try {
       const items = await service.getAll()
-      return res.formatter.ok({ status: 200, data: items })
+      return res.formatter.ok({ data: items })
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -62,14 +62,14 @@ export default class ProductGroupController {
       const itemUpdated1 = await service.updateByGroupID(itemRequest)
       const itemUpdated2 = await service.updateByProductID(itemRequest)
       if (itemUpdated1) {
-        return res.formatter.ok({ status: 200, data: itemUpdated1 })
+        return res.formatter.ok({ data: itemUpdated1 })
       }
       if (itemUpdated2) {
-        return res.formatter.ok({ status: 200, data: itemUpdated2 })
+        return res.formatter.ok({ data: itemUpdated2 })
       }
-      return res.formatter.badRequest({ status: 400 })
+      return res.formatter.badRequest({})
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -79,14 +79,14 @@ export default class ProductGroupController {
       const item1 = await service.deleteByGroupID(parseInt(id))
       const item2 = await service.deleteByProductID(parseInt(id))
       if (item1) {
-        return res.formatter.ok({ status: 200, message: `${NAMESPACE} has been deleted` })
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
       if (item2) {
-        return res.formatter.ok({ status: 200, message: `${NAMESPACE} has been deleted` })
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
-      return res.formatter.notFound({ status: 404 })
+      return res.formatter.notFound({})
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 }

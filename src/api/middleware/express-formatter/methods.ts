@@ -4,6 +4,7 @@ export type MethodType =
   | 'ok'
   | 'created'
   | 'accepted'
+  | 'partialInformation'
   | 'noContent'
   | 'badRequest'
   | 'unauthorized'
@@ -18,12 +19,12 @@ export type MethodType =
   | 'badGateway'
   | 'serviceUnavailable'
   | 'gatewayTimeout'
-  | 'dynamicFind'
 
 export type MethodStatus =
   | 200
   | 201
   | 202
+  | 203
   | 204
   | 400
   | 401
@@ -38,7 +39,6 @@ export type MethodStatus =
   | 502
   | 503
   | 504
-  | number
 
 export interface Method {
   status: MethodStatus
@@ -61,6 +61,11 @@ const methods: Method[] = [
     type: 'accepted',
     status: 202,
     message: 'Accepted'
+  },
+  {
+    type: 'partialInformation',
+    status: 203,
+    message: 'Partial Information'
   },
   {
     type: 'noContent',
@@ -131,11 +136,6 @@ const methods: Method[] = [
     type: 'gatewayTimeout',
     status: 504,
     message: 'Gateway Timeout'
-  },
-  {
-    type: 'dynamicFind',
-    status: 0,
-    message: 'Dynamic find'
   }
 ]
 
