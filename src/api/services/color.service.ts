@@ -42,11 +42,7 @@ export const updateByID = async (item: Color): Promise<number> => {
     const affectedRows = await ColorSchema.update(
       {
         nameColor: item.nameColor,
-        rgbColor: item.rgbColor,
         hexColor: item.hexColor,
-        cmykColor: item.cmykColor,
-        hslColor: item.hslColor,
-        hsvColor: item.hsvColor,
         orderNumber: item.orderNumber
       },
       {

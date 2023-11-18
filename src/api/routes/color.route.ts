@@ -20,6 +20,11 @@ class ColorRoute {
           .notEmpty()
           .withMessage('This field can not empty!')
           .isString()
+          .withMessage('This field must be String type!'),
+        body('hexColor')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isString()
           .withMessage('This field must be String type!')
       ]),
       this.controller.createNewItem

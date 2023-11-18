@@ -11,11 +11,7 @@ export default class ColorController {
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: Color = {
       nameColor: req.body.nameColor,
-      rgbColor: req.body.rgbColor,
-      hexColor: req.body.hexColor,
-      cmykColor: req.body.cmykColor,
-      hsvColor: req.body.hexColor,
-      hslColor: req.body.hexColor
+      hexColor: req.body.hexColor
     }
     try {
       const itemNew = await service.createNew(itemRequest)
@@ -26,7 +22,7 @@ export default class ColorController {
         return res.formatter.badRequest({ status: 404, message: `${NAMESPACE} already exists` })
       }
     } catch (error) {
-      return res.formatter.badRequest({ status: 400, message: `${error}` })
+      return res.formatter.badRequest({ status: 400, message: `>>> ${error}` })
     }
   }
 
@@ -56,11 +52,7 @@ export default class ColorController {
     const itemRequest: Color = {
       colorID: req.body.colorID,
       nameColor: req.body.nameColor,
-      rgbColor: req.body.rgbColor,
-      cmykColor: req.body.cmykColor,
       hexColor: req.body.hexColor,
-      hslColor: req.body.hslColor,
-      hsvColor: req.body.hsvColor,
       orderNumber: req.body.orderNumber
     }
     try {
