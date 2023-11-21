@@ -50,9 +50,11 @@ export default class ColorController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: Color = {
-      colorID: req.body.colorID,
+      colorID: req.body.colorID, // Using for find item (not update)
       nameColor: req.body.nameColor,
       hexColor: req.body.hexColor,
+      createdAt: req.body.createdAt,
+      updatedAt: req.body.updatedAt,
       orderNumber: req.body.orderNumber
     }
     try {

@@ -43,6 +43,8 @@ export const updateByID = async (item: Color): Promise<number> => {
       {
         nameColor: item.nameColor,
         hexColor: item.hexColor,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
         orderNumber: item.orderNumber
       },
       {

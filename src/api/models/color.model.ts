@@ -6,6 +6,8 @@ export interface Color {
   colorID?: number
   nameColor?: string
   hexColor?: string
+  createdAt?: string
+  updatedAt?: string
   orderNumber?: number
 }
 
