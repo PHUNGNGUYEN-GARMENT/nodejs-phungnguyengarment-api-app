@@ -1,22 +1,19 @@
 import { Request, Response } from 'express'
-import { Product } from '~/models/product.model'
-import * as service from '~/services/product.service'
+import { SewingLineDelivery } from '~/models/sewing-line-delivery.model'
+import * as service from '~/services/sewing-line-delivery.service'
 
-const NAMESPACE = 'Product'
-const PATH = 'controllers/product'
+const NAMESPACE = 'SewingLineDelivery'
+const PATH = 'controllers/sewing-line-delivery'
 
-export default class ProductController {
+export default class SewingLineDeliveryController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const userRequest: Product = {
-      productCode: req.body.productCode,
-      quantityPO: req.body.quantityPO,
-      dateInputNPL: req.body.dateInputNPL,
-      dateOutPutFCR: req.body.dateOutPutFCR
+    const itemRequest: SewingLineDelivery = {
+      sewingLine: req.body.sewingLine
     }
     try {
-      const itemNew = await service.createNew(userRequest)
+      const itemNew = await service.createNew(itemRequest)
 
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
@@ -34,9 +31,8 @@ export default class ProductController {
       const item = await service.getByID(parseInt(id))
       if (item) {
         return res.formatter.ok({ data: item })
-      } else {
-        return res.formatter.notFound({})
       }
+      return res.formatter.notFound({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -52,20 +48,17 @@ export default class ProductController {
   }
 
   updateItemByID = async (req: Request, res: Response) => {
-    const itemRequest: Product = {
-      productID: req.body.productID,
-      productCode: req.body.productCode,
-      quantityPO: req.body.quantityPO,
-      dateInputNPL: req.body.dateInputNPL,
-      dateOutPutFCR: req.body.dateOutPutFCR
+    const itemRequest: SewingLineDelivery = {
+      sewingLineDeliveryID: parseInt(req.params.id),
+      sewingLine: req.body.sewingLine,
+      orderNumber: req.body.orderNumber
     }
     try {
       const itemUpdated = await service.updateByID(itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
-      } else {
-        return res.formatter.badRequest({})
       }
+      return res.formatter.badRequest({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -77,9 +70,8 @@ export default class ProductController {
       const item = await service.deleteByID(parseInt(id))
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
-      } else {
-        return res.formatter.badRequest({})
       }
+      return res.formatter.notFound({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

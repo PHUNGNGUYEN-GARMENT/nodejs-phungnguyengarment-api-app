@@ -1,11 +1,11 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
-import ProductController from '~/controllers/product.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import PrintablePlaceController from '../controllers/printable-place.controller'
 
-class ProductRoute {
+class PrintablePlaceRoute {
   router = Router()
-  controller = new ProductController()
+  controller = new PrintablePlaceController()
 
   constructor() {
     this.initialize()
@@ -16,26 +16,26 @@ class ProductRoute {
     this.router.post(
       '/',
       requestValidationRules([
-        body('productCode')
-          .exists()
+        body('printID')
+          .notEmpty()
           .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be string type!'),
-        body('quantityPO')
-          .exists()
+          .isInt()
+          .withMessage('This field must be Integer type!'),
+        body('productID')
+          .notEmpty()
           .withMessage('This field can not empty!')
-          .isFloat()
-          .withMessage('This field must be number type!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
       ]),
       this.controller.createNewItem
     )
 
-    // Get item
+    // Get item by productID and importedID
     this.router.get(
       '/:id',
       requestValidationRules([
         param('id')
-          .exists()
+          .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
@@ -46,10 +46,15 @@ class ProductRoute {
     // Get all items
     this.router.post('/find', this.controller.getAllItems)
 
-    // Update item by id
+    // Update item by productID and importedID
     this.router.put(
       '/',
       requestValidationRules([
+        body('printID')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!'),
         body('productID')
           .notEmpty()
           .withMessage('This field can not empty!')
@@ -59,7 +64,7 @@ class ProductRoute {
       this.controller.updateItemByID
     )
 
-    // Delete item
+    // Delete item by productID
     this.router.delete(
       '/:id',
       requestValidationRules([
@@ -74,4 +79,4 @@ class ProductRoute {
   }
 }
 
-export default new ProductRoute().router
+export default new PrintablePlaceRoute().router

@@ -9,7 +9,6 @@ export interface Product {
   quantityPO?: number
   dateInputNPL?: string
   dateOutPutFCR?: string
-  placePrintIn?: string
   orderNumber?: number
 }
 
@@ -33,9 +32,6 @@ export default class ProductSchema extends Model<Product> {
 
   @Column({ type: DATEONLY, field: 'date_output_fcr' })
   declare dateOutPutFCR: string
-
-  @Column({ type: STRING, field: 'place_print_in' })
-  declare placePrintIn: string
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number

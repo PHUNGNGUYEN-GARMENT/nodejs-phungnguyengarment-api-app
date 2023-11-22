@@ -1,16 +1,17 @@
 import { Request, Response } from 'express'
-import { Group } from '~/models/group.model'
-import * as service from '~/services/group.service'
+import { PrintablePlace } from '~/models/printable-place.model'
+import * as service from '~/services/printable-place.service'
 
-const NAMESPACE = 'Group'
-const PATH = 'controllers/group'
+const NAMESPACE = 'PrintablePlace'
+const PATH = 'controllers/printable-place'
 
-export default class ColorController {
+export default class PrintablePlaceController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: Group = {
-      name: req.body.name
+    const itemRequest: PrintablePlace = {
+      printID: req.body.printID,
+      productID: req.body.productID
     }
     try {
       const itemNew = await service.createNew(itemRequest)
@@ -28,9 +29,13 @@ export default class ColorController {
   getItemByID = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-      const item = await service.getByID(parseInt(id))
-      if (item) {
-        return res.formatter.ok({ data: item })
+      const item1 = await service.getByPrintID(parseInt(id))
+      if (item1) {
+        return res.formatter.ok({ data: item1 })
+      }
+      const item2 = await service.getByProductID(parseInt(id))
+      if (item2) {
+        return res.formatter.ok({ data: item2 })
       }
       return res.formatter.notFound({})
     } catch (error) {
@@ -48,15 +53,19 @@ export default class ColorController {
   }
 
   updateItemByID = async (req: Request, res: Response) => {
-    const itemRequest: Group = {
-      groupID: parseInt(req.params.id),
-      name: req.body.name,
+    const itemRequest: PrintablePlace = {
+      printID: req.body.printID,
+      productID: req.body.productID,
       orderNumber: req.body.orderNumber
     }
     try {
-      const itemUpdated = await service.updateByID(itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const itemUpdated1 = await service.updateByPrintID(itemRequest)
+      if (itemUpdated1) {
+        return res.formatter.ok({ data: itemUpdated1 })
+      }
+      const itemUpdated2 = await service.updateByPrintID(itemRequest)
+      if (itemUpdated2) {
+        return res.formatter.ok({ data: itemUpdated2 })
       }
       return res.formatter.badRequest({})
     } catch (error) {
@@ -67,8 +76,12 @@ export default class ColorController {
   deleteItemByID = async (req: Request, res: Response) => {
     const { id } = req.params
     try {
-      const item = await service.deleteByID(parseInt(id))
-      if (item) {
+      const item1 = await service.deleteByPrintID(parseInt(id))
+      if (item1) {
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      }
+      const item2 = await service.deleteByProductID(parseInt(id))
+      if (item2) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
       return res.formatter.notFound({})

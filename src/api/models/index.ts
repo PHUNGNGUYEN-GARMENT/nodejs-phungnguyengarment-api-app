@@ -3,15 +3,17 @@ import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
 import ColorSchema from './color.model'
 import GarmentAccessoryNoteSchema from './garment-accessory-note.model'
+import GarmentAccessorySchema from './garment-accessory.model'
 import GroupSchema from './group.model'
 import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
 import NotionAccessorySchema from './notion-accessory.model'
+import PrintSchema from './print.model'
 import ProductColorSchema from './product-color.model'
 import ProductGroupSchema from './product-group.model'
 import ProductSchema from './product.model'
+import SewingLineDeliverySchema from './sewing-line-delivery.model'
 import UserSchema from './user.model'
-import GarmentAccessorySchema from './garment-accessory.model'
 
 const PATH = 'model/index'
 
@@ -50,7 +52,9 @@ class DBConnection {
       ProductGroupSchema,
       GarmentAccessoryNoteSchema,
       NotionAccessorySchema,
-      GarmentAccessorySchema
+      GarmentAccessorySchema,
+      PrintSchema,
+      SewingLineDeliverySchema
     ])
 
     await this.sequelize
