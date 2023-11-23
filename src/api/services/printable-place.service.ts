@@ -38,8 +38,22 @@ export const getByProductID = async (productID: number): Promise<PrintablePlaceS
 // Get all
 export const getAll = async (): Promise<PrintablePlaceSchema[]> => {
   try {
-    const items = await PrintablePlaceSchema.findAll()
-    return items
+    // if (item.printID) {
+    //   return PrintablePlaceSchema.findAll({
+    //     where: {
+    //       printID: item.printID
+    //     }
+    //   })
+    // }
+
+    // if (item.productID) {
+    //   return await PrintablePlaceSchema.findAll({
+    //     where: {
+    //       productID: item.productID
+    //     }
+    //   })
+    // }
+    return await PrintablePlaceSchema.findAll()
   } catch (error) {
     logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
     throw new Error(`Get all ${NAMESPACE} :: ${error}`)
@@ -52,6 +66,7 @@ export const updateByPrintID = async (item: PrintablePlace): Promise<number> => 
     const affectedRows = await PrintablePlaceSchema.update(
       {
         productID: item.productID,
+        name: item.name,
         orderNumber: item.orderNumber
       },
       {
@@ -72,6 +87,7 @@ export const updateByProductID = async (item: PrintablePlace): Promise<number> =
     const affectedRows = await PrintablePlaceSchema.update(
       {
         printID: item.printID,
+        name: item.name,
         orderNumber: item.orderNumber
       },
       {

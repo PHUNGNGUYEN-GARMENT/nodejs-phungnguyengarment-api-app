@@ -7,7 +7,7 @@ export interface Product {
   productCode?: string
   quantityPO?: number
   dateInputNPL?: Date
-  dateOutPutFCR?: Date
+  dateOutputFCR?: Date
   orderNumber?: number
 }
 
@@ -30,7 +30,7 @@ export default class ProductSchema extends Model<Product> {
   declare dateInputNPL: Date
 
   @Column({ type: DATE, field: 'date_output_fcr' })
-  declare dateOutPutFCR: Date
+  declare dateOutputFCR: Date
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number

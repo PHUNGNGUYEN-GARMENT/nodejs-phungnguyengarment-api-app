@@ -44,7 +44,7 @@ export const updateByID = async (item: Product): Promise<number> => {
         productCode: item.productCode,
         quantityPO: item.quantityPO,
         dateInputNPL: item.dateInputNPL,
-        dateOutPutFCR: item.dateOutPutFCR,
+        dateOutputFCR: item.dateOutputFCR,
         orderNumber: item.orderNumber
       },
       {

@@ -13,7 +13,7 @@ export default class ProductController {
       productCode: req.body.productCode,
       quantityPO: req.body.quantityPO,
       dateInputNPL: req.body.dateInputNPL,
-      dateOutPutFCR: req.body.dateOutPutFCR
+      dateOutputFCR: req.body.dateOutputFCR
     }
     try {
       const itemNew = await service.createNew(userRequest)
@@ -57,7 +57,7 @@ export default class ProductController {
       productCode: req.body.productCode,
       quantityPO: req.body.quantityPO,
       dateInputNPL: req.body.dateInputNPL,
-      dateOutPutFCR: req.body.dateOutPutFCR
+      dateOutputFCR: req.body.dateOutputFCR
     }
     try {
       const itemUpdated = await service.updateByID(itemRequest)
