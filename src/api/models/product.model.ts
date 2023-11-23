@@ -1,14 +1,13 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
-import dbConnection from '~/models/index'
 
-const { INTEGER, STRING, DATEONLY, DOUBLE } = DataType
+const { INTEGER, STRING, DATE, DOUBLE } = DataType
 
 export interface Product {
   productID?: number
   productCode?: string
   quantityPO?: number
-  dateInputNPL?: string
-  dateOutPutFCR?: string
+  dateInputNPL?: Date
+  dateOutPutFCR?: Date
   orderNumber?: number
 }
 
@@ -27,11 +26,11 @@ export default class ProductSchema extends Model<Product> {
   @Column({ type: DOUBLE, field: 'quantity_po' })
   declare quantityPO: number
 
-  @Column({ type: DATEONLY, field: 'date_input_npl' })
-  declare dateInputNPL: string
+  @Column({ type: DATE, field: 'date_input_npl' })
+  declare dateInputNPL: Date
 
-  @Column({ type: DATEONLY, field: 'date_output_fcr' })
-  declare dateOutPutFCR: string
+  @Column({ type: DATE, field: 'date_output_fcr' })
+  declare dateOutPutFCR: Date
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number
