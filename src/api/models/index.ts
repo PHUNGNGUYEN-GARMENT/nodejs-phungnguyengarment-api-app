@@ -9,6 +9,7 @@ import ImportationSchema from './importation.model'
 import ImportedLotSchema from './imported-lot.model'
 import NotionAccessorySchema from './notion-accessory.model'
 import PrintSchema from './print.model'
+import PrintablePlaceSchema from './printable-place.model'
 import ProductColorSchema from './product-color.model'
 import ProductGroupSchema from './product-group.model'
 import ProductSchema from './product.model'
@@ -54,7 +55,8 @@ class DBConnection {
       NotionAccessorySchema,
       GarmentAccessorySchema,
       PrintSchema,
-      SewingLineDeliverySchema
+      SewingLineDeliverySchema,
+      PrintablePlaceSchema
     ])
 
     await this.sequelize

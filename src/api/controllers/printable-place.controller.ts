@@ -11,7 +11,8 @@ export default class PrintablePlaceController {
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: PrintablePlace = {
       printID: req.body.printID,
-      productID: req.body.productID
+      productID: req.body.productID,
+      name: req.body.name
     }
     try {
       const itemNew = await service.createNew(itemRequest)
@@ -44,6 +45,10 @@ export default class PrintablePlaceController {
   }
 
   getAllItems = async (req: Request, res: Response) => {
+    // const itemRequest: PrintablePlace = {
+    //   printID: req.body.printID,
+    //   productID: req.body.productID
+    // }
     try {
       const items = await service.getAll()
       return res.formatter.ok({ data: items })
@@ -56,6 +61,7 @@ export default class PrintablePlaceController {
     const itemRequest: PrintablePlace = {
       printID: req.body.printID,
       productID: req.body.productID,
+      name: req.body.name,
       orderNumber: req.body.orderNumber
     }
     try {
