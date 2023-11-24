@@ -4,10 +4,19 @@ import logging from '~/utils/logging'
 const NAMESPACE = 'PrintablePlace'
 const PATH = 'services/printable-place'
 
-export const createNew = async (item: PrintablePlace): Promise<PrintablePlaceSchema> => {
+export const createNew = async (items: PrintablePlace[]): Promise<PrintablePlaceSchema[]> => {
   try {
-    const items = await PrintablePlaceSchema.findAll()
-    return await PrintablePlaceSchema.create({ ...item, orderNumber: items.length })
+    const list = await PrintablePlaceSchema.findAll()
+    const data = items.map((item) => {
+      return {
+        printID: item.printID,
+        productID: item.productID,
+        name: item.name,
+        orderNumber: list.length
+      }
+    })
+    const createdList = await PrintablePlaceSchema.bulkCreate(data)
+    return createdList
   } catch (error) {
     logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
     throw new Error(`Creating new ${NAMESPACE} :: ${error}`)

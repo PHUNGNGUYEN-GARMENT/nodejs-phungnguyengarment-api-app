@@ -16,16 +16,11 @@ class PrintablePlaceRoute {
     this.router.post(
       '/',
       requestValidationRules([
-        body('printID')
+        body('items')
           .notEmpty()
           .withMessage('This field can not empty!')
-          .isInt()
-          .withMessage('This field must be Integer type!'),
-        body('productID')
-          .notEmpty()
-          .withMessage('This field can not empty!')
-          .isInt()
-          .withMessage('This field must be Integer type!')
+          .isArray()
+          .withMessage('This field must be Array type!')
       ]),
       this.controller.createNewItem
     )

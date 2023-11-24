@@ -9,13 +9,9 @@ export default class PrintablePlaceController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: PrintablePlace = {
-      printID: req.body.printID,
-      productID: req.body.productID,
-      name: req.body.name
-    }
+    const { items } = req.body
     try {
-      const itemNew = await service.createNew(itemRequest)
+      const itemNew = await service.createNew(items)
 
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
