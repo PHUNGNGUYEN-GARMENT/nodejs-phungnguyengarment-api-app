@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import ProductController from '~/controllers/product.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
@@ -31,20 +31,35 @@ class ProductRoute {
     )
 
     // Get item
+    // this.router.get(
+    //   '/:id',
+    //   requestValidationRules([
+    //     param('id')
+    //       .exists()
+    //       .withMessage('This field can not empty!')
+    //       .isInt()
+    //       .withMessage('This field must be Integer type!')
+    //   ]),
+    //   this.controller.getItemByID
+    // )
+
+    // Get all items
     this.router.get(
-      '/:id',
+      '/find',
       requestValidationRules([
-        param('id')
+        query('current')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!'),
+        query('pageSize')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.getItemByID
+      this.controller.getAllItems
     )
-
-    // Get all items
-    this.router.post('/find', this.controller.getAllItems)
 
     // Update item by id
     this.router.put(

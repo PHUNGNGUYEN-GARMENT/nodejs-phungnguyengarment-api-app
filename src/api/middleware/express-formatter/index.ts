@@ -3,10 +3,12 @@ import { NextFunction, Request, Response } from 'express'
 import methods, { Method, MethodType } from './methods'
 
 export interface ResponseStory {
-  isSuccess?: boolean
+  success?: boolean
   message?: string
   data?: any
   meta?: any
+  page?: number
+  total?: number
 }
 
 type ResponseFunction = {
@@ -34,10 +36,12 @@ const _generateFormatters = (res: Response) => {
   methods.map((method: Method) => {
     formatter[method.type] = (response: ResponseStory) => {
       res.status(method.status).json({
-        isSuccess: method.status < 400,
+        success: method.status < 400,
         message: response.message ? response.message : method.message,
         data: response.data,
-        meta: response.meta
+        meta: response.meta,
+        page: response.page,
+        total: response.total
       })
     }
   })

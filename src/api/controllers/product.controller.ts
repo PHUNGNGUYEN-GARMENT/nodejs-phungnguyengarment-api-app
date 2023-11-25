@@ -43,9 +43,29 @@ export default class ProductController {
   }
 
   getAllItems = async (req: Request, res: Response) => {
+    const { current = 1, pageSize = 10 } = req.query
+    const offset = (Number(current) - 1) * Number(pageSize)
     try {
-      const items = await service.getAll()
-      return res.formatter.ok({ data: items })
+      const items = await service.getAll(Number(pageSize), Number(offset))
+      const total = await service.getTotalCount()
+      console.log('>>> ', total)
+      const convertItem = items.rows.map((item) => {
+        return {
+          ...item.dataValues,
+          progress: [
+            { sewing: 'todo', type: 'normal' },
+            { iron: 'progressing', type: 'warn' },
+            { check: 'progressing', type: 'error' },
+            { pack: 'done', type: 'success' }
+          ],
+          state: 'progressing'
+        }
+      })
+      return res.formatter.ok({
+        data: convertItem,
+        page: Number(current),
+        total: total
+      })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

@@ -26,10 +26,22 @@ export const getByID = async (id: number): Promise<ProductSchema | null> => {
 }
 
 // Get all
-export const getAll = async (): Promise<ProductSchema[]> => {
+export const getAll = async (pageSize: number, offset: number): Promise<{ count: number; rows: ProductSchema[] }> => {
   try {
-    const items = await ProductSchema.findAll()
+    const items = await ProductSchema.findAndCountAll({
+      offset: offset,
+      limit: pageSize
+    })
     return items
+  } catch (error) {
+    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
+    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+  }
+}
+
+export const getTotalCount = async (): Promise<number> => {
+  try {
+    return await ProductSchema.count()
   } catch (error) {
     logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
     throw new Error(`Get all ${NAMESPACE} :: ${error}`)
