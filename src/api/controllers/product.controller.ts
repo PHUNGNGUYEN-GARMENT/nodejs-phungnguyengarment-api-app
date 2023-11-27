@@ -52,13 +52,12 @@ export default class ProductController {
       const convertItem = items.rows.map((item) => {
         return {
           ...item.dataValues,
-          progress: [
-            { sewing: 'todo', type: 'normal' },
-            { iron: 'progressing', type: 'warn' },
-            { check: 'progressing', type: 'error' },
-            { pack: 'done', type: 'success' }
-          ],
-          state: 'progressing'
+          status: [
+            { name: 'Sewing', type: 'normal' },
+            { name: 'Iron', type: 'warn' },
+            { name: 'Check', type: 'error' },
+            { name: 'Pack', type: 'success' }
+          ]
         }
       })
       return res.formatter.ok({
@@ -73,7 +72,7 @@ export default class ProductController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: Product = {
-      productID: req.body.productID,
+      id: req.body.id,
       productCode: req.body.productCode,
       quantityPO: req.body.quantityPO,
       dateInputNPL: req.body.dateInputNPL,

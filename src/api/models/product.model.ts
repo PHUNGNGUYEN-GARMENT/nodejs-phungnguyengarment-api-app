@@ -3,7 +3,7 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript'
 const { INTEGER, STRING, DATE, DOUBLE } = DataType
 
 export interface Product {
-  productID?: number
+  id?: number
   productCode?: string
   quantityPO?: number
   dateInputNPL?: string
@@ -17,8 +17,8 @@ export interface Product {
   timestamps: true
 })
 export default class ProductSchema extends Model<Product> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'product_id' })
-  declare productID: number
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
+  declare id: number
 
   @Column({ type: STRING, field: 'product_code' })
   declare productCode: string

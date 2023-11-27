@@ -17,7 +17,7 @@ export const createNew = async (item: Product): Promise<ProductSchema> => {
 // Get by id
 export const getByID = async (id: number): Promise<ProductSchema | null> => {
   try {
-    const item = await ProductSchema.findOne({ where: { productID: id } })
+    const item = await ProductSchema.findOne({ where: { id: id } })
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
@@ -61,7 +61,7 @@ export const updateByID = async (item: Product): Promise<number> => {
       },
       {
         where: {
-          productID: item.productID
+          id: item.id
         }
       }
     )
@@ -75,7 +75,7 @@ export const updateByID = async (item: Product): Promise<number> => {
 // Delete
 export const deleteByID = async (id: number): Promise<number> => {
   try {
-    const affectedRows = await ProductSchema.destroy({ where: { productID: id } })
+    const affectedRows = await ProductSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error delete ${NAMESPACE} by id :: ${error}`)
