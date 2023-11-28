@@ -53,10 +53,10 @@ export default class ProductController {
         return {
           ...item.dataValues,
           status: [
-            { name: 'Sewing', type: 'normal' },
-            { name: 'Iron', type: 'warn' },
-            { name: 'Check', type: 'error' },
-            { name: 'Pack', type: 'success' }
+            { name: 'sewing', type: 'normal' },
+            { name: 'iron', type: 'warn' },
+            { name: 'check', type: 'error' },
+            { name: 'pack', type: 'success' }
           ]
         }
       })
