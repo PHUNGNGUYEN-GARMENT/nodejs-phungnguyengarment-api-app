@@ -31,17 +31,17 @@ class ProductRoute {
     )
 
     // Get item
-    // this.router.get(
-    //   '/:id',
-    //   requestValidationRules([
-    //     param('id')
-    //       .exists()
-    //       .withMessage('This field can not empty!')
-    //       .isInt()
-    //       .withMessage('This field must be Integer type!')
-    //   ]),
-    //   this.controller.getItemByID
-    // )
+    this.router.get(
+      '/',
+      requestValidationRules([
+        query('id')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
+      ]),
+      this.controller.getItemByID
+    )
 
     // Get all items
     this.router.get(
@@ -63,9 +63,9 @@ class ProductRoute {
 
     // Update item by id
     this.router.put(
-      '/',
+      '/:id',
       requestValidationRules([
-        body('productID')
+        param('id')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()

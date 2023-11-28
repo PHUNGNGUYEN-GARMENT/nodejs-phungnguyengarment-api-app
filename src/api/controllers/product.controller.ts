@@ -29,9 +29,9 @@ export default class ProductController {
   }
 
   getItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { id } = req.query
     try {
-      const item = await service.getByID(parseInt(id))
+      const item = await service.getByID(Number(id))
       if (item) {
         return res.formatter.ok({ data: item })
       } else {
@@ -48,7 +48,6 @@ export default class ProductController {
     try {
       const items = await service.getAll(Number(pageSize), Number(offset))
       const total = await service.getTotalCount()
-      console.log('>>> ', total)
       const convertItem = items.rows.map((item) => {
         return {
           ...item.dataValues,
@@ -72,7 +71,7 @@ export default class ProductController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: Product = {
-      id: req.body.id,
+      id: parseInt(req.params.id),
       productCode: req.body.productCode,
       quantityPO: req.body.quantityPO,
       dateInputNPL: req.body.dateInputNPL,
