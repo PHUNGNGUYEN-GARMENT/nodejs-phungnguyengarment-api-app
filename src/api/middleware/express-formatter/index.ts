@@ -7,6 +7,7 @@ export interface ResponseStory {
   message?: string
   data?: any
   meta?: any
+  count?: number
   page?: number
   total?: number
 }
@@ -40,6 +41,7 @@ const _generateFormatters = (res: Response) => {
         message: response.message ? response.message : method.message,
         data: response.data,
         meta: response.meta,
+        count: response.count,
         page: response.page,
         total: response.total
       })

@@ -59,6 +59,7 @@ export default class ProductController {
       })
       return res.formatter.ok({
         data: convertItem,
+        count: convertItem.length,
         page: Number(current),
         total: total
       })
