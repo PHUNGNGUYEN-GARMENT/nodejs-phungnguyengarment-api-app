@@ -51,12 +51,10 @@ export default class ProductController {
       const convertItem = items.rows.map((item) => {
         return {
           ...item.dataValues,
-          status: [
-            { name: 'sewing', type: 'normal' },
-            { name: 'iron', type: 'warn' },
-            { name: 'check', type: 'error' },
-            { name: 'pack', type: 'success' }
-          ]
+          sewing: 'normal',
+          iron: 'warn',
+          check: 'error',
+          pack: 'success'
         }
       })
       return res.formatter.ok({
