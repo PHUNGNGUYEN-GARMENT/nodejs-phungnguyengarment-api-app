@@ -29,14 +29,18 @@ export default class ProductController {
   }
 
   getItemByID = async (req: Request, res: Response) => {
-    const { id } = req.query
+    const { id, code } = req.query
     try {
-      const item = await service.getByID(Number(id))
-      if (item) {
-        return res.formatter.ok({ data: item })
-      } else {
-        return res.formatter.notFound({})
+      const item2 = await service.getByCode(String(code))
+      if (item2) {
+        return res.formatter.ok({ data: item2 })
       }
+      const item1 = await service.getByID(Number(id))
+      if (item1) {
+        return res.formatter.ok({ data: item1 })
+      }
+
+      return res.formatter.notFound({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

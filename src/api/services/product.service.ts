@@ -15,6 +15,17 @@ export const createNew = async (item: Product): Promise<ProductSchema> => {
 }
 
 // Get by id
+export const getByCode = async (code: string): Promise<ProductSchema | null> => {
+  try {
+    const item = await ProductSchema.findOne({ where: { productCode: code } })
+    return item
+  } catch (error) {
+    logging.error(NAMESPACE, `Error get ${NAMESPACE} by code :: ${error}`)
+    throw new Error(`Get ${NAMESPACE} by code :: ${error}`)
+  }
+}
+
+// Get by id
 export const getByID = async (id: number): Promise<ProductSchema | null> => {
   try {
     const item = await ProductSchema.findOne({ where: { id: id } })

@@ -20,7 +20,7 @@ export default class App {
 
   private config(app: Application) {
     const corsOptions: CorsOptions = {
-      origin: ['http://localhost:5173']
+      origin: '*'
     }
     applyPassportStrategy(passport)
     // Accept json body request

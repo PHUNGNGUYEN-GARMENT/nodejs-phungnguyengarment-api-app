@@ -31,17 +31,7 @@ class ProductRoute {
     )
 
     // Get item
-    this.router.get(
-      '/',
-      requestValidationRules([
-        query('id')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isInt()
-          .withMessage('This field must be Integer type!')
-      ]),
-      this.controller.getItemByID
-    )
+    this.router.get('/', this.controller.getItemByID)
 
     // Get all items
     this.router.get(
