@@ -33,11 +33,27 @@ export default class ProductController {
     try {
       const item2 = await service.getByCode(String(code))
       if (item2) {
-        return res.formatter.ok({ data: item2 })
+        return res.formatter.ok({
+          data: {
+            ...item2.dataValues,
+            sewing: 1500,
+            iron: 1000,
+            check: 500,
+            pack: 200
+          }
+        })
       }
       const item1 = await service.getByID(Number(id))
       if (item1) {
-        return res.formatter.ok({ data: item1 })
+        return res.formatter.ok({
+          data: {
+            ...item1.dataValues,
+            sewing: 1500,
+            iron: 1000,
+            check: 500,
+            pack: 200
+          }
+        })
       }
 
       return res.formatter.notFound({})
