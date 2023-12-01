@@ -74,13 +74,14 @@ export default class ProductController {
 
   updateItemByID = async (req: Request, res: Response) => {
     const itemRequest: Product = {
-      id: parseInt(req.params.id),
+      id: Number(req.params.id),
       productCode: req.body.productCode,
       quantityPO: req.body.quantityPO,
       dateInputNPL: req.body.dateInputNPL,
       dateOutputFCR: req.body.dateOutputFCR
     }
     try {
+      console.log(itemRequest)
       const itemUpdated = await service.updateByID(itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
