@@ -27,9 +27,9 @@ export default class ColorController {
   }
 
   getItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+    const { id } = req.query
     try {
-      const item = await service.getByID(parseInt(id))
+      const item = await service.getByID(Number(id))
       if (item) {
         return res.formatter.ok({ data: item })
       }
