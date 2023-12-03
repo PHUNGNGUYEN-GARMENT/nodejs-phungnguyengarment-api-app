@@ -1,10 +1,12 @@
+import { Op, WhereOptions } from 'sequelize'
 import ProductSchema, { Product } from '~/models/product.model'
+import { RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 
 const NAMESPACE = 'Product'
 const PATH = 'services/products'
 
-export const createNew = async (item: Product): Promise<ProductSchema> => {
+export const createNewItem = async (item: Product): Promise<ProductSchema> => {
   try {
     const items = await ProductSchema.findAll()
     return await ProductSchema.create({ ...item, orderNumber: items.length })
@@ -15,20 +17,9 @@ export const createNew = async (item: Product): Promise<ProductSchema> => {
 }
 
 // Get by id
-export const getByCode = async (code: string): Promise<ProductSchema | null> => {
+export const getItemByID = async (product: Product): Promise<ProductSchema | null> => {
   try {
-    const item = await ProductSchema.findOne({ where: { productCode: code } })
-    return item
-  } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by code :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by code :: ${error}`)
-  }
-}
-
-// Get by id
-export const getByID = async (id: number): Promise<ProductSchema | null> => {
-  try {
-    const item = await ProductSchema.findOne({ where: { id: id } })
+    const item = await ProductSchema.findOne({ where: { ...product } })
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
@@ -37,11 +28,30 @@ export const getByID = async (id: number): Promise<ProductSchema | null> => {
 }
 
 // Get all
-export const getAll = async (pageSize: number, offset: number): Promise<{ count: number; rows: ProductSchema[] }> => {
+export const getItems = async (
+  code: string,
+  body: RequestBodyType
+): Promise<{ count: number; rows: ProductSchema[] }> => {
   try {
+    const queryData: WhereOptions<Product> | undefined = body.filter.items.includes(-1)
+      ? {
+          status: body.filter.status
+        }
+      : code.length > 0
+      ? {
+          status: body.filter.status,
+          id: body.filter.items,
+          productCode: code
+        }
+      : {
+          status: body.filter.status,
+          id: body.filter.items
+        }
     const items = await ProductSchema.findAndCountAll({
-      offset: offset,
-      limit: pageSize
+      offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
+      limit: body.paginator.pageSize,
+      order: [[body.sorting.column, body.sorting.direction]],
+      where: queryData
     })
     return items
   } catch (error) {
@@ -50,7 +60,7 @@ export const getAll = async (pageSize: number, offset: number): Promise<{ count:
   }
 }
 
-export const getTotalCount = async (): Promise<number> => {
+export const getItemsCount = async (): Promise<number> => {
   try {
     return await ProductSchema.count()
   } catch (error) {
@@ -60,19 +70,15 @@ export const getTotalCount = async (): Promise<number> => {
 }
 
 // Update
-export const updateByID = async (item: Product): Promise<number> => {
+export const updateItemByID = async (id: number, itemToUpdate: Product): Promise<number> => {
   try {
     const affectedRows = await ProductSchema.update(
       {
-        productCode: item.productCode,
-        quantityPO: item.quantityPO,
-        dateInputNPL: item.dateInputNPL,
-        dateOutputFCR: item.dateOutputFCR,
-        orderNumber: item.orderNumber
+        ...itemToUpdate
       },
       {
         where: {
-          id: item.id
+          id: id
         }
       }
     )
@@ -84,7 +90,7 @@ export const updateByID = async (item: Product): Promise<number> => {
 }
 
 // Delete
-export const deleteByID = async (id: number): Promise<number> => {
+export const deleteItemByID = async (id: number): Promise<number> => {
   try {
     const affectedRows = await ProductSchema.destroy({ where: { id: id } })
     return affectedRows

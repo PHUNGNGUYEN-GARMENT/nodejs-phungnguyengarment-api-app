@@ -1,4 +1,5 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
+import { ItemStatusType } from '~/type'
 
 const { INTEGER, STRING, DATE, DOUBLE } = DataType
 
@@ -6,6 +7,7 @@ export interface Product {
   id?: number
   productCode?: string
   quantityPO?: number
+  status?: ItemStatusType
   dateInputNPL?: string
   dateOutputFCR?: string
   orderNumber?: number
@@ -25,6 +27,9 @@ export default class ProductSchema extends Model<Product> {
 
   @Column({ type: DOUBLE, field: 'quantity_po' })
   declare quantityPO: number
+
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
 
   @Column({ type: DATE, field: 'date_input_npl' })
   declare dateInputNPL: string
