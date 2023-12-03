@@ -57,59 +57,34 @@ export default class ProductController {
     }
   }
 
-  // getAllItems = async (req: Request, res: Response) => {
-  //   const { current = 1, pageSize = 10 } = req.query
-  //   const offset = (Number(current) - 1) * Number(pageSize)
-  //   try {
-  //     const items = await service.getAll(Number(pageSize), Number(offset))
-  //     const total = await service.getTotalCount()
-  //     const convertItem = items.rows.map((item) => {
-  //       return {
-  //         ...item.dataValues,
-  //         sewing: 1500,
-  //         iron: 1000,
-  //         check: 500,
-  //         pack: 200
-  //       }
-  //     })
-  //     return res.formatter.ok({
-  //       data: convertItem,
-  //       count: convertItem.length,
-  //       page: Number(current),
-  //       total: total
-  //     })
-  //   } catch (error) {
-  //     return res.formatter.badRequest({ message: `${error}` })
-  //   }
-  // }
-
   updateItemByID = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     const itemRequest: Product = {
       productCode: req.body.productCode,
       quantityPO: req.body.quantityPO,
+      status: req.body.status,
       dateInputNPL: req.body.dateInputNPL,
       dateOutputFCR: req.body.dateOutputFCR
     }
     try {
-      console.log(itemRequest)
-      const itemUpdated = await service.updateItemByID(Number(req.params.id), itemRequest)
+      const itemUpdated = await service.updateItemByID(id, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.notFound({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
   deleteItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+    const id = Number(req.params.id)
     try {
-      const item = await service.deleteItemByID(parseInt(id))
+      const item = await service.deleteItemByID(id)
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.notFound({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

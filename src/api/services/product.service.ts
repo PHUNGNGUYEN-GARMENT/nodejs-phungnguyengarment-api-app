@@ -70,7 +70,7 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update
-export const updateItemByID = async (id: number, itemToUpdate: Product): Promise<number> => {
+export const updateItemByID = async (id: number, itemToUpdate: Product): Promise<Product | undefined> => {
   try {
     const affectedRows = await ProductSchema.update(
       {
@@ -82,7 +82,7 @@ export const updateItemByID = async (id: number, itemToUpdate: Product): Promise
         }
       }
     )
-    return affectedRows[0]
+    return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
     throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
