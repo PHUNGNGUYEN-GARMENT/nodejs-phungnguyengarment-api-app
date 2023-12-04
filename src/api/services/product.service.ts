@@ -17,7 +17,7 @@ export const createNewItem = async (item: Product): Promise<ProductSchema> => {
 }
 
 // Get by id
-export const getItemByID = async (product: Product): Promise<ProductSchema | null> => {
+export const getItemBy = async (product: Product): Promise<ProductSchema | null> => {
   try {
     const item = await ProductSchema.findOne({ where: { ...product } })
     return item
@@ -33,25 +33,27 @@ export const getItems = async (
   body: RequestBodyType
 ): Promise<{ count: number; rows: ProductSchema[] }> => {
   try {
-    const queryData: WhereOptions<Product> | undefined = body.filter.items.includes(-1)
-      ? {
-          status: body.filter.status
-        }
-      : code.length > 0
-      ? {
-          status: body.filter.status,
-          id: body.filter.items,
-          productCode: code
-        }
-      : {
-          status: body.filter.status,
-          id: body.filter.items
-        }
+    const buildDynamicQuery = (params: RequestBodyType): WhereOptions<Product> | undefined => {
+      let conditions: WhereOptions<Product> = {}
+
+      // Kiểm tra và thêm điều kiện cho mỗi tham số cần truy vấn
+      if (params.filter.items.includes(-1)) {
+        conditions = { ...conditions, status: params.filter.status }
+      } else if (params.filter.items.length > 0) {
+        conditions = { ...conditions, id: { [Op.in]: params.filter.items } }
+      }
+
+      if (params.searchTerm.length > 0) {
+        conditions = { ...conditions, productCode: { [Op.like]: params.searchTerm } }
+      }
+
+      return Object.keys(conditions).length > 0 ? conditions : undefined
+    }
     const items = await ProductSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
-      where: queryData
+      where: buildDynamicQuery(body)
     })
     return items
   } catch (error) {

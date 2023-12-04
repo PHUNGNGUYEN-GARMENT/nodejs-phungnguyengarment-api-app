@@ -1,8 +1,7 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import ProductController from '~/controllers/product.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
-import { defaultRequestBodyValidator } from '../middleware/request-validator'
 
 class ProductRoute {
   router = Router()
@@ -47,14 +46,64 @@ class ProductRoute {
     )
 
     // Get item
-    this.router.post('/find', defaultRequestBodyValidator(), this.controller.getItems)
+    this.router.get(
+      '/id',
+      requestValidationRules([
+        query('id')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
+      ]),
+      this.controller.getItemByID
+    )
+
+    this.router.get(
+      '/code',
+      requestValidationRules([
+        query('code')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be String type!')
+      ]),
+      this.controller.getItemByCode
+    )
+
+    // Get items
+    this.router.post(
+      '/find',
+      requestValidationRules([
+        body('filter')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('paginator')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('searchTerm')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be string type!'),
+        body('sorting')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!')
+      ]),
+      this.controller.getItems
+    )
 
     // Update item by id
     this.router.put(
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
@@ -67,7 +116,7 @@ class ProductRoute {
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')

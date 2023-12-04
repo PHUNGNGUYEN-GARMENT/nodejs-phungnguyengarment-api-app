@@ -29,6 +29,54 @@ export default class ProductController {
     }
   }
 
+  getItemByID = async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.query.id)
+      const item = await service.getItemBy({ id: id })
+
+      if (item) {
+        return res.formatter.ok({
+          data: {
+            ...item.dataValues,
+            progress: {
+              sewing: 1500,
+              iron: 1000,
+              check: 500,
+              pack: 200
+            }
+          }
+        })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItemByCode = async (req: Request, res: Response) => {
+    try {
+      const code = String(req.query.code)
+      const item = await service.getItemBy({ productCode: code })
+
+      if (item) {
+        return res.formatter.ok({
+          data: {
+            ...item.dataValues,
+            progress: {
+              sewing: 1500,
+              iron: 1000,
+              check: 500,
+              pack: 200
+            }
+          }
+        })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
   getItems = async (req: Request, res: Response) => {
     try {
       const { code } = req.params
@@ -40,10 +88,12 @@ export default class ProductController {
       const convertData = items.rows.map((item) => {
         return {
           ...item.dataValues,
-          sewing: 1500,
-          iron: 1000,
-          check: 500,
-          pack: 200
+          progress: {
+            sewing: 1500,
+            iron: 1000,
+            check: 500,
+            pack: 200
+          }
         }
       })
       return res.formatter.ok({
