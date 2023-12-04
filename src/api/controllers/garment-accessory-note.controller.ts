@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { GarmentAccessoryNote } from '~/models/garment-accessory-note.model'
-import * as service from '~/services/color.service'
+import * as service from '~/services/garment-accessory-note.service'
 
 const NAMESPACE = 'GarmentAccessoryNote'
 const PATH = 'controllers/garment-accessory-note'

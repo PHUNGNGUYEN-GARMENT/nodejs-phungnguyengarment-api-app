@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Color } from '~/models/color.model'
 import * as service from '~/services/color.service'
+import { RequestBodyType } from '~/type'
 
 const NAMESPACE = 'Color'
 const PATH = 'controllers/color'
@@ -27,9 +28,9 @@ export default class ColorController {
   }
 
   getItemByID = async (req: Request, res: Response) => {
-    const { id } = req.query
+    const id = Number(req.query.id)
     try {
-      const item = await service.getByID(Number(id))
+      const item = await service.getItemBy({ id: id })
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -39,26 +40,53 @@ export default class ColorController {
     }
   }
 
-  getAllItems = async (req: Request, res: Response) => {
+  getItemByHexCode = async (req: Request, res: Response) => {
+    const hex = String(req.query.hex)
     try {
-      const items = await service.getAll()
-      return res.formatter.ok({ data: items })
+      const item = await service.getItemBy({ hexColor: hex })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItems = async (req: Request, res: Response) => {
+    try {
+      const bodyRequest: RequestBodyType = {
+        ...req.body
+      }
+      const items = await service.getItems(bodyRequest)
+      const total = await service.getItemsWithStatus(bodyRequest.filter.status)
+      console.log({
+        items,
+        total
+      })
+      return res.formatter.ok({
+        data: items.rows,
+        length: items.rows.length,
+        page: Number(bodyRequest.paginator.page),
+        total: total.length
+      })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
   updateItemByID = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     const itemRequest: Color = {
-      colorID: req.body.colorID, // Using for find item (not update)
       nameColor: req.body.nameColor,
       hexColor: req.body.hexColor,
+      status: req.body.status,
       createdAt: req.body.createdAt,
       updatedAt: req.body.updatedAt,
       orderNumber: req.body.orderNumber
     }
     try {
-      const itemUpdated = await service.updateByID(itemRequest)
+      const itemUpdated = await service.updateByID(id, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
@@ -69,9 +97,9 @@ export default class ColorController {
   }
 
   deleteItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+    const id = Number(req.params.id)
     try {
-      const item = await service.deleteByID(parseInt(id))
+      const item = await service.deleteByID(id)
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }

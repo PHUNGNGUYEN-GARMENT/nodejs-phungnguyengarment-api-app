@@ -84,11 +84,11 @@ class ProductRoute {
           .withMessage('This field can not empty!')
           .isObject()
           .withMessage('This field must be object type!'),
-        body('searchTerm')
+        body('search')
           .exists()
           .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be string type!'),
+          .isObject()
+          .withMessage('This field must be object type!'),
         body('sorting')
           .exists()
           .withMessage('This field can not empty!')

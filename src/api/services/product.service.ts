@@ -1,15 +1,15 @@
-import { Op, WhereOptions } from 'sequelize'
 import ProductSchema, { Product } from '~/models/product.model'
-import { RequestBodyType } from '~/type'
+import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
+import { buildDynamicQuery } from '../helpers/query'
 
 const NAMESPACE = 'Product'
 const PATH = 'services/products'
 
 export const createNewItem = async (item: Product): Promise<ProductSchema> => {
   try {
-    const items = await ProductSchema.findAll()
-    return await ProductSchema.create({ ...item, orderNumber: items.length })
+    const length = await ProductSchema.count()
+    return await ProductSchema.create({ ...item, orderNumber: length })
   } catch (error) {
     logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
     throw new Error(`Creating new product :: ${error}`)
@@ -28,32 +28,28 @@ export const getItemBy = async (product: Product): Promise<ProductSchema | null>
 }
 
 // Get all
-export const getItems = async (
-  code: string,
-  body: RequestBodyType
-): Promise<{ count: number; rows: ProductSchema[] }> => {
+export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ProductSchema[] }> => {
   try {
-    const buildDynamicQuery = (params: RequestBodyType): WhereOptions<Product> | undefined => {
-      let conditions: WhereOptions<Product> = {}
-
-      // Kiểm tra và thêm điều kiện cho mỗi tham số cần truy vấn
-      if (params.filter.items.includes(-1)) {
-        conditions = { ...conditions, status: params.filter.status }
-      } else if (params.filter.items.length > 0) {
-        conditions = { ...conditions, id: { [Op.in]: params.filter.items } }
-      }
-
-      if (params.searchTerm.length > 0) {
-        conditions = { ...conditions, productCode: { [Op.like]: params.searchTerm } }
-      }
-
-      return Object.keys(conditions).length > 0 ? conditions : undefined
-    }
+    console.log(buildDynamicQuery<Product>(body))
     const items = await ProductSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
-      where: buildDynamicQuery(body)
+      where: buildDynamicQuery<Product>(body)
+    })
+    return items
+  } catch (error) {
+    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
+    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+  }
+}
+
+export const getItemsWithStatus = async (status: ItemStatusType): Promise<ProductSchema[]> => {
+  try {
+    const items = await ProductSchema.findAll({
+      where: {
+        status: status
+      }
     })
     return items
   } catch (error) {

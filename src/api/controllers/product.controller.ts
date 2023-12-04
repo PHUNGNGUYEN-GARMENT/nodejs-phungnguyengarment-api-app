@@ -79,11 +79,11 @@ export default class ProductController {
 
   getItems = async (req: Request, res: Response) => {
     try {
-      const { code } = req.params
       const bodyRequest: RequestBodyType = {
         ...req.body
       }
-      const items = await service.getItems(String(code), bodyRequest)
+      const items = await service.getItems(bodyRequest)
+      const total = await service.getItemsWithStatus(bodyRequest.filter.status)
       const convertData = items.rows.map((item) => {
         return {
           ...item.dataValues,
@@ -99,7 +99,7 @@ export default class ProductController {
         data: convertData,
         length: convertData.length,
         page: Number(bodyRequest.paginator.page),
-        total: items.count
+        total: total.length
       })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
@@ -120,7 +120,7 @@ export default class ProductController {
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
-      return res.formatter.notFound({})
+      return res.formatter.badRequest({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
