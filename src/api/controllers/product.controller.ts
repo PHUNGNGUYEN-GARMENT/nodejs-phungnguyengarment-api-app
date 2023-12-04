@@ -84,7 +84,6 @@ export default class ProductController {
         ...req.body
       }
       const items = await service.getItems(String(code), bodyRequest)
-      const total = await service.getItemsCount()
       const convertData = items.rows.map((item) => {
         return {
           ...item.dataValues,
@@ -98,9 +97,9 @@ export default class ProductController {
       })
       return res.formatter.ok({
         data: convertData,
-        count: convertData.length,
+        length: convertData.length,
         page: Number(bodyRequest.paginator.page),
-        total: total
+        total: items.count
       })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
