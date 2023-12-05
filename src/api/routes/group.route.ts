@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import GroupController from '~/controllers/group.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
@@ -20,17 +20,22 @@ class GroupRoute {
           .notEmpty()
           .withMessage('This field can not empty!')
           .isString()
+          .withMessage('This field must be String type!'),
+        body('status')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isString()
           .withMessage('This field must be String type!')
       ]),
       this.controller.createNewItem
     )
 
-    // Get item by productID and importedID
+    // Get item
     this.router.get(
-      '/:id',
+      '/id',
       requestValidationRules([
-        param('id')
-          .notEmpty()
+        query('id')
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
@@ -38,15 +43,53 @@ class GroupRoute {
       this.controller.getItemByID
     )
 
+    // Get item
+    this.router.get(
+      '/name',
+      requestValidationRules([
+        query('name')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be String type!')
+      ]),
+      this.controller.getItemByName
+    )
+
     // Get all items
-    this.router.post('/find', this.controller.getAllItems)
+    this.router.post(
+      '/find',
+      requestValidationRules([
+        body('filter')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('paginator')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('search')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('sorting')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!')
+      ]),
+      this.controller.getItems
+    )
 
     // Update item by productID and importedID
     this.router.put(
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
@@ -59,7 +102,7 @@ class GroupRoute {
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')

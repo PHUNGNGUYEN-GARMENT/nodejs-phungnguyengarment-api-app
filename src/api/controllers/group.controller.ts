@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Group } from '~/models/group.model'
 import * as service from '~/services/group.service'
+import { RequestBodyType } from '~/type'
 
 const NAMESPACE = 'Group'
 const PATH = 'controllers/group'
@@ -10,7 +11,8 @@ export default class ColorController {
 
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: Group = {
-      name: req.body.name
+      name: req.body.name,
+      status: req.body.status
     }
     try {
       const itemNew = await service.createNew(itemRequest)
@@ -21,14 +23,14 @@ export default class ColorController {
         return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: `>>> ${error}` })
     }
   }
 
   getItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+    const id = Number(req.query.id)
     try {
-      const item = await service.getByID(parseInt(id))
+      const item = await service.getItemBy({ id: id })
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -38,23 +40,46 @@ export default class ColorController {
     }
   }
 
-  getAllItems = async (req: Request, res: Response) => {
+  getItemByName = async (req: Request, res: Response) => {
+    const name = String(req.query.name)
     try {
-      const items = await service.getAll()
-      return res.formatter.ok({ data: items })
+      const item = await service.getItemBy({ name: name })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItems = async (req: Request, res: Response) => {
+    try {
+      const bodyRequest: RequestBodyType = {
+        ...req.body
+      }
+      const items = await service.getItems(bodyRequest)
+      const total = await service.getItemsWithStatus(bodyRequest.filter.status)
+      return res.formatter.ok({
+        data: items.rows,
+        length: items.rows.length,
+        page: Number(bodyRequest.paginator.page),
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+      })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
   updateItemByID = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     const itemRequest: Group = {
-      groupID: parseInt(req.params.id),
       name: req.body.name,
+      status: req.body.status,
       orderNumber: req.body.orderNumber
     }
     try {
-      const itemUpdated = await service.updateByID(itemRequest)
+      const itemUpdated = await service.updateByID(id, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
@@ -65,9 +90,9 @@ export default class ColorController {
   }
 
   deleteItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+    const id = Number(req.params.id)
     try {
-      const item = await service.deleteByID(parseInt(id))
+      const item = await service.deleteByID(id)
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
