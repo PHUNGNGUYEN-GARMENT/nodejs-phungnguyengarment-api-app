@@ -12,7 +12,8 @@ export default class ColorController {
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: Color = {
       nameColor: req.body.nameColor,
-      hexColor: req.body.hexColor
+      hexColor: req.body.hexColor,
+      status: req.body.status
     }
     try {
       const itemNew = await service.createNew(itemRequest)
@@ -60,15 +61,11 @@ export default class ColorController {
       }
       const items = await service.getItems(bodyRequest)
       const total = await service.getItemsWithStatus(bodyRequest.filter.status)
-      console.log({
-        items,
-        total
-      })
       return res.formatter.ok({
         data: items.rows,
         length: items.rows.length,
         page: Number(bodyRequest.paginator.page),
-        total: total.length
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length
       })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })

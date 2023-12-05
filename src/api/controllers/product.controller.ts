@@ -83,6 +83,7 @@ export default class ProductController {
         ...req.body
       }
       const items = await service.getItems(bodyRequest)
+      console.log('>>>', items)
       const total = await service.getItemsWithStatus(bodyRequest.filter.status)
       const convertData = items.rows.map((item) => {
         return {
@@ -99,7 +100,7 @@ export default class ProductController {
         data: convertData,
         length: convertData.length,
         page: Number(bodyRequest.paginator.page),
-        total: total.length
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length
       })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })

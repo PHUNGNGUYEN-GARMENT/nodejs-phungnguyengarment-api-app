@@ -22,8 +22,8 @@ export const getItemBy = async (color: Color): Promise<ColorSchema | null> => {
     const item = await ColorSchema.findOne({ where: { ...color } })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by colorID :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by colorID :: ${error}`)
+    logging.error(NAMESPACE, `Error get ${NAMESPACE} by color :: ${error}`)
+    throw new Error(`Get ${NAMESPACE} by color :: ${error}`)
   }
 }
 
@@ -87,8 +87,8 @@ export const updateByID = async (id: number, item: Color): Promise<Color | undef
     )
     return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by colorID :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by colorID :: ${error}`)
+    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
+    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
   }
 }
 
@@ -98,7 +98,7 @@ export const deleteByID = async (id: number): Promise<number> => {
     const affectedRows = await ColorSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} colorID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by colorID :: ${error}`)
+    logging.error(NAMESPACE, `Error delete ${NAMESPACE} id :: ${error}`)
+    throw new Error(`Delete ${NAMESPACE} by id :: ${error}`)
   }
 }
