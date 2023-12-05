@@ -1,10 +1,12 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
+import { ItemStatusType } from '~/type'
 
 const { INTEGER, STRING } = DataType
 
 export interface Print {
-  printID?: number
+  id?: number
   name?: string
+  status?: ItemStatusType
   orderNumber?: number
 }
 
@@ -14,11 +16,14 @@ export interface Print {
   timestamps: true
 })
 export default class PrintSchema extends Model<Print> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'print_id' })
-  declare printID: number
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
+  declare id: number
 
   @Column({ type: STRING, field: 'name' })
   declare name: string
+
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number
