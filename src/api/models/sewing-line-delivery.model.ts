@@ -1,10 +1,12 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
+import { ItemStatusType } from '~/type'
 
 const { INTEGER, STRING } = DataType
 
 export interface SewingLineDelivery {
-  sewingLineDeliveryID?: number
-  sewingLine?: string
+  id?: number
+  name?: string
+  status?: ItemStatusType
   orderNumber?: number
 }
 
@@ -14,11 +16,14 @@ export interface SewingLineDelivery {
   timestamps: true
 })
 export default class SewingLineDeliverySchema extends Model<SewingLineDelivery> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'sewing_line_delivery_id' })
-  declare sewingLineDeliveryID: number
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
+  declare id: number
 
-  @Column({ type: STRING, field: 'sewing_line' })
-  declare sewingLine: string
+  @Column({ type: STRING, field: 'name' })
+  declare name: string
+
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number

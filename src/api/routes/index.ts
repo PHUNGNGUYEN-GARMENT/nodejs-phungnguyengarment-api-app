@@ -18,13 +18,13 @@ import sewingLineDeliveryRoute from './sewing-line-delivery.route'
 export default class AppRoutes {
   constructor(app: Application, passport: PassportStatic) {
     app.use('/api/auth', authRoute)
-    app.use('/api/products', productRoute)
+    app.use('/api/products', productRoute) // Done
     app.use('/api/imported-lots', importedLotRoute)
     app.use('/api/importations', importationRoute)
-    app.use('/api/colors', colorRoute)
+    app.use('/api/colors', colorRoute) // Done
     app.use('/api/product-colors', productColorRoute)
-    app.use('/api/groups', groupRoute)
-    app.use('/api/prints', printRoute)
+    app.use('/api/groups', groupRoute) // Done
+    app.use('/api/prints', printRoute) // Done
     app.use('/api/printable-places', printablePlaceRoute)
     app.use('/api/sewing-line-deliveries', sewingLineDeliveryRoute)
     app.use('/api/product-groups', productGroupRoute)
