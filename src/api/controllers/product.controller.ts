@@ -17,9 +17,10 @@ export default class ProductController {
       dateInputNPL: req.body.dateInputNPL,
       dateOutputFCR: req.body.dateOutputFCR
     }
+    const colorID = Number(req.body.colorID)
     try {
       const itemNew = await service.createNewItem(dataRequest)
-
+      const itemProductColorNew = await service
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
       }

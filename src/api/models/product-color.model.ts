@@ -1,17 +1,15 @@
-import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { ItemStatusType } from '~/type'
+import ColorSchema from './color.model'
 import ProductSchema from './product.model'
 
 const { INTEGER, STRING } = DataType
 
 export interface ProductColor {
+  id?: number
   colorID?: number
   productID?: number
-  nameColor?: string
-  rgbColor?: string
-  hexColor?: string
-  cmykColor?: string
-  hsvColor?: string
-  hslColor?: string
+  status?: ItemStatusType
   orderNumber?: number
 }
 
@@ -21,31 +19,26 @@ export interface ProductColor {
   timestamps: true
 })
 export default class ProductColorSchema extends Model<ProductColor> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'color_id' })
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
+  declare id: number
+
+  @Column({ type: INTEGER, field: 'color_id' })
+  @ForeignKey(() => ColorSchema)
   declare colorID: number
 
-  @Column({ type: STRING, field: 'product_id' })
+  @Column({ type: INTEGER, field: 'product_id' })
   @ForeignKey(() => ProductSchema)
-  declare productID: string
+  declare productID: number
 
-  @Column({ type: STRING, field: 'name_color' })
-  declare nameColor: string
-
-  @Column({ type: STRING, field: 'rgb_color' })
-  declare rgbColor: string
-
-  @Column({ type: STRING, field: 'hex_color' })
-  declare hexColor: string
-
-  @Column({ type: STRING, field: 'cmyk_color' })
-  declare cmykColor: string
-
-  @Column({ type: STRING, field: 'hsv_color' })
-  declare hsvColor: string
-
-  @Column({ type: STRING, field: 'hsl_color' })
-  declare hslColor: string
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number
+
+  @BelongsTo(() => ProductSchema)
+  declare product: ProductSchema
+
+  @BelongsTo(() => ColorSchema)
+  declare color: ColorSchema
 }

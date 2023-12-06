@@ -1,5 +1,6 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, Model, Table } from 'sequelize-typescript'
 import { ItemStatusType } from '~/type'
+import ProductSchema from './product.model'
 
 const { INTEGER, STRING } = DataType
 
@@ -33,4 +34,5 @@ export default class ColorSchema extends Model<Color> {
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number
+
 }
