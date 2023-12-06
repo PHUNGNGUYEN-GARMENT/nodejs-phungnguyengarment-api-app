@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
 import { Product } from '~/models/product.model'
+import * as colorService from '~/services/color.service'
+import * as productColorService from '~/services/product-color.service'
 import * as service from '~/services/product.service'
 import { RequestBodyType } from '~/type'
+import { ProductColor } from '../models/product-color.model'
 
 const NAMESPACE = 'Product'
 const PATH = 'controllers/product'
@@ -20,9 +23,15 @@ export default class ProductController {
     const colorID = Number(req.body.colorID)
     try {
       const itemNew = await service.createNewItem(dataRequest)
-      const itemProductColorNew = await service
       if (itemNew) {
-        return res.formatter.created({ data: itemNew })
+        const itemProductColorNew = await productColorService.createNewItem({
+          colorID: colorID,
+          productID: itemNew.id,
+          status: 'active'
+        })
+        if (itemProductColorNew) {
+          return res.formatter.created({ data: itemNew, meta: itemProductColorNew })
+        }
       }
       return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
     } catch (error) {
@@ -84,11 +93,16 @@ export default class ProductController {
         ...req.body
       }
       const items = await service.getItems(bodyRequest)
-      console.log('>>>', items)
       const total = await service.getItemsWithStatus(bodyRequest.filter.status)
+      const colorItems = await colorService.getItems(bodyRequest)
+
       const convertData = items.rows.map((item) => {
+        const getColor = colorItems.rows.find(
+          (color) => color.id === (item.productColor as unknown as ProductColor[])[0].colorID ?? -1
+        )
         return {
           ...item.dataValues,
+          productColor: getColor ? getColor : null,
           progress: {
             sewing: 1500,
             iron: 1000,

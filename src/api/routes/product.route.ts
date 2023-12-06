@@ -40,7 +40,12 @@ class ProductRoute {
           .exists()
           .withMessage('This field can not empty!')
           .isString()
-          .withMessage('This field must be string type!')
+          .withMessage('This field must be string type!'),
+        body('colorID')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
       ]),
       this.controller.createNewItem
     )

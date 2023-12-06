@@ -17,6 +17,16 @@ export const createNew = async (item: Color): Promise<ColorSchema> => {
 }
 
 // Get by id
+export const getItemByPk = async (id: number): Promise<ColorSchema | null> => {
+  try {
+    const item = await ColorSchema.findByPk(id)
+    return item
+  } catch (error) {
+    logging.error(NAMESPACE, `Error get ${NAMESPACE} by color :: ${error}`)
+    throw new Error(`Get ${NAMESPACE} by color :: ${error}`)
+  }
+}
+
 export const getItemBy = async (color: Color): Promise<ColorSchema | null> => {
   try {
     const item = await ColorSchema.findOne({ where: { ...color } })

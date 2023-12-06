@@ -13,7 +13,7 @@ export default class ProductColorController {
     const itemRequest: ProductColor = {
       productID: req.body.productID,
       colorID: req.body.colorID,
-      status: 'active'
+      status: req.body.status
     }
     try {
       const itemNew = await service.createNewItem(itemRequest)
@@ -27,16 +27,38 @@ export default class ProductColorController {
     }
   }
 
-  getItemBy = async (req: Request, res: Response) => {
-    const { productID, colorID } = req.params
+  getItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.query.id)
     try {
-      const item1 = await service.getItemBy({ productID: Number(productID) })
-      if (item1) {
-        return res.formatter.ok({ data: item1 })
+      const item = await service.getItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ data: item })
       }
-      const item2 = await service.getItemBy({ colorID: Number(colorID) })
-      if (item2) {
-        return res.formatter.ok({ data: item2 })
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.query.productID)
+    try {
+      const item = await service.getItemBy({ productID: productID })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItemByColorID = async (req: Request, res: Response) => {
+    const colorID = Number(req.query.colorID)
+    try {
+      const item = await service.getItemBy({ colorID: colorID })
+      if (item) {
+        return res.formatter.ok({ data: item })
       }
       return res.formatter.notFound({})
     } catch (error) {
@@ -50,9 +72,7 @@ export default class ProductColorController {
         ...req.body
       }
       const items = await service.getItems(bodyRequest)
-      console.log('>>>', items)
       const total = await service.getItemsWithStatus(bodyRequest.filter.status)
-
       return res.formatter.ok({
         data: items.rows,
         length: items.count,
@@ -66,8 +86,6 @@ export default class ProductColorController {
 
   updateItemBy = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const colorID = Number(req.params.colorID)
-    const productID = Number(req.params.productID)
     const itemRequest: ProductColor = {
       colorID: req.body.colorID,
       productID: req.body.productID,
@@ -75,17 +93,9 @@ export default class ProductColorController {
       orderNumber: req.body.orderNumber
     }
     try {
-      const itemUpdated1 = await service.updateItemByID(id, itemRequest)
-      if (itemUpdated1) {
-        return res.formatter.ok({ data: itemUpdated1 })
-      }
-      const itemUpdated2 = await service.updateItemByColorID(colorID, itemRequest)
-      if (itemUpdated2) {
-        return res.formatter.ok({ data: itemUpdated2 })
-      }
-      const itemUpdated3 = await service.updateItemByProductID(productID, itemRequest)
-      if (itemUpdated3) {
-        return res.formatter.ok({ data: itemUpdated3 })
+      const itemUpdated = await service.updateItemByID(id, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {
@@ -95,20 +105,10 @@ export default class ProductColorController {
 
   deleteItemBy = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const colorID = Number(req.params.colorID)
-    const productID = Number(req.params.productID)
     try {
-      const itemUpdated1 = await service.deleteItemByID(id)
-      if (itemUpdated1) {
-        return res.formatter.ok({ data: itemUpdated1 })
-      }
-      const itemUpdated2 = await service.deleteItemByColorID(colorID)
-      if (itemUpdated2) {
-        return res.formatter.ok({ data: itemUpdated2 })
-      }
-      const itemUpdated3 = await service.deleteItemByProductID(productID)
-      if (itemUpdated3) {
-        return res.formatter.ok({ data: itemUpdated3 })
+      const itemUpdated = await service.deleteItemByID(id)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {

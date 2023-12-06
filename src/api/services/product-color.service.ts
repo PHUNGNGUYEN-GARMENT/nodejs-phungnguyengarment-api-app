@@ -19,6 +19,22 @@ export const createNewItem = async (item: ProductColor): Promise<ProductColorSch
 }
 
 // Get by id
+export const getItemByPk = async (id: number): Promise<ProductColorSchema | null> => {
+  try {
+    const item = await ProductColorSchema.findByPk(id, {
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: ColorSchema, as: 'color' }
+      ]
+    })
+    return item
+  } catch (error) {
+    logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
+    throw new Error(`Get ${NAMESPACE} by id :: ${error}`)
+  }
+}
+
+// Get by id
 export const getItemBy = async (product: ProductColor): Promise<ProductColorSchema | null> => {
   try {
     const item = await ProductColorSchema.findOne({
@@ -38,7 +54,7 @@ export const getItemBy = async (product: ProductColor): Promise<ProductColorSche
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ProductColorSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<ProductColor>(body))
+    // console.log(`${NAMESPACE}>>>`, buildDynamicQuery<ProductColor>(body))
     const items = await ProductColorSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,

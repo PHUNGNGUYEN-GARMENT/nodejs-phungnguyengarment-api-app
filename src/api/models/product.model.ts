@@ -1,6 +1,7 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript'
 import { ItemStatusType } from '~/type'
 import ImportationSchema from './importation.model'
+import ProductColorSchema from './product-color.model'
 
 const { INTEGER, STRING, DATE, DOUBLE } = DataType
 
@@ -43,4 +44,7 @@ export default class ProductSchema extends Model<Product> {
 
   @HasMany(() => ImportationSchema)
   declare importations: ImportationSchema[]
+
+  @HasMany(() => ProductColorSchema)
+  declare productColor: ProductColorSchema
 }

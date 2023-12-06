@@ -2,7 +2,7 @@ import ProductSchema, { Product } from '~/models/product.model'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
-import ColorSchema from '../models/color.model'
+import ProductColorSchema from '../models/product-color.model'
 
 const NAMESPACE = 'Product'
 const PATH = 'services/products'
@@ -20,7 +20,7 @@ export const createNewItem = async (item: Product): Promise<ProductSchema> => {
 // Get by id
 export const getItemBy = async (product: Product): Promise<ProductSchema | null> => {
   try {
-    const item = await ProductSchema.findOne({ where: { ...product }, include: [{ model: ColorSchema, as: 'colors' }] })
+    const item = await ProductSchema.findOne({ where: { ...product } })
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
@@ -31,13 +31,12 @@ export const getItemBy = async (product: Product): Promise<ProductSchema | null>
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ProductSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<Product>(body))
     const items = await ProductSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
       where: buildDynamicQuery<Product>(body),
-      include: [{ model: ColorSchema, as: 'colors' }]
+      include: [{ model: ProductColorSchema, as: 'productColor' }]
     })
     return items
   } catch (error) {
