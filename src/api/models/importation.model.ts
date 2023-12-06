@@ -1,12 +1,15 @@
-import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { ItemStatusType } from '~/type'
 import ProductSchema from './product.model'
 
-const { INTEGER, DATE } = DataType
+const { INTEGER, STRING, DOUBLE, DATE } = DataType
 
 export interface Importation {
-  importationID?: number
+  id?: number
   productID?: number
-  dateImported?: number
+  status?: ItemStatusType
+  quantity?: number
+  dateImported?: Date
   orderNumber?: number
 }
 
@@ -16,16 +19,25 @@ export interface Importation {
   timestamps: true
 })
 export default class ImportationSchema extends Model<Importation> {
-  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'importation_id' })
-  declare importationID: number
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
+  declare id: number
 
   @Column({ type: INTEGER, field: 'product_id' })
   @ForeignKey(() => ProductSchema)
   declare productID: number
 
-  @Column({ type: DATE, field: 'date_imported' })
-  declare dateImported: number
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
 
-  @Column({ type: INTEGER, field: 'order_number' })
+  @Column({ type: DOUBLE, field: 'quantity' })
+  declare quantity: number
+
+  @Column({ type: DATE, field: 'date_imported' })
+  declare dateImported: Date
+
+  @Column({ type: INTEGER, field: 'order_number', defaultValue: 0 })
   declare orderNumber: number
+
+  @BelongsTo(() => ProductSchema)
+  declare product: ProductSchema
 }

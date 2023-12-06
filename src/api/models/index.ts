@@ -6,7 +6,6 @@ import GarmentAccessoryNoteSchema from './garment-accessory-note.model'
 import GarmentAccessorySchema from './garment-accessory.model'
 import GroupSchema from './group.model'
 import ImportationSchema from './importation.model'
-import ImportedLotSchema from './imported-lot.model'
 import NotionAccessorySchema from './notion-accessory.model'
 import PrintSchema from './print.model'
 import PrintablePlaceSchema from './printable-place.model'
@@ -45,7 +44,6 @@ class DBConnection {
     this.sequelize?.addModels([
       UserSchema,
       ProductSchema,
-      ImportedLotSchema,
       ImportationSchema,
       ColorSchema,
       ProductColorSchema,

@@ -7,7 +7,6 @@ import garmentAccessoryNoteRoute from './garment-accessory-note.route'
 import garmentAccessoryRoute from './garment-accessory.route'
 import groupRoute from './group.route'
 import importationRoute from './importation.route'
-import importedLotRoute from './imported-lot.route'
 import notionAccessoryRoute from './notion-accessory.route'
 import printRoute from './print.route'
 import printablePlaceRoute from './printable-place.route'
@@ -19,7 +18,6 @@ export default class AppRoutes {
   constructor(app: Application, passport: PassportStatic) {
     app.use('/api/auth', authRoute)
     app.use('/api/products', productRoute) // Done
-    app.use('/api/imported-lots', importedLotRoute)
     app.use('/api/importations', importationRoute)
     app.use('/api/colors', colorRoute) // Done
     app.use('/api/product-colors', productColorRoute)

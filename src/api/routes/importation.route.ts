@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import ImportationController from '~/controllers/importation.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
@@ -16,42 +16,90 @@ class ImportationRoute {
     this.router.post(
       '/',
       requestValidationRules([
+        body('dateImported')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be String type!'),
         body('productID')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!'),
-        body('dateImported')
+        body('status')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isString()
-          .withMessage('This field must be Date type!')
+          .withMessage('This field must be String type!'),
+        body('quantity')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isFloat()
+          .withMessage('This field must be Float type!')
       ]),
       this.controller.createNewItem
     )
 
-    // Get item by productID and importedID
+    // Get item
     this.router.get(
-      '/:id',
+      '/id',
       requestValidationRules([
-        param('id')
-          .notEmpty()
+        query('id')
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.getItemByID
+      this.controller.getItemByPk
+    )
+
+    // Get item
+    this.router.get(
+      '/productID',
+      requestValidationRules([
+        query('productID')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
+      ]),
+      this.controller.getItemByFk
     )
 
     // Get all items
-    this.router.post('/find', this.controller.getAllItems)
+    this.router.post(
+      '/find',
+      requestValidationRules([
+        body('filter')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('paginator')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('search')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!'),
+        body('sorting')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isObject()
+          .withMessage('This field must be object type!')
+      ]),
+      this.controller.getItems
+    )
 
     // Update item by productID and importedID
     this.router.put(
-      '/',
+      '/:id',
       requestValidationRules([
-        body('importationID')
-          .notEmpty()
+        param('id')
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
@@ -64,7 +112,7 @@ class ImportationRoute {
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
