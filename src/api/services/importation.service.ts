@@ -18,9 +18,9 @@ export const createNew = async (item: Importation): Promise<ImportationSchema> =
 }
 
 // Get by id
-export const getItemByFk = async (data: Importation): Promise<ImportationSchema | null> => {
+export const getItemByProductID = async (productID: number): Promise<ImportationSchema | null> => {
   try {
-    const item = await ImportationSchema.findOne({ where: { ...data } })
+    const item = await ImportationSchema.findOne({ where: { productID: productID } })
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error get ${NAMESPACE} by getItemBy :: ${error}`)
@@ -86,6 +86,7 @@ export const updateByID = async (id: number, item: Importation): Promise<Importa
   try {
     const affectedRows = await ImportationSchema.update(
       {
+        quantity: item.quantity,
         dateImported: item.dateImported,
         status: item.status,
         orderNumber: item.orderNumber
@@ -93,6 +94,28 @@ export const updateByID = async (id: number, item: Importation): Promise<Importa
       {
         where: {
           id: id
+        }
+      }
+    )
+    return affectedRows[0] === 1 ? item : undefined
+  } catch (error) {
+    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
+    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+  }
+}
+
+export const updateByProductID = async (productID: number, item: Importation): Promise<Importation | undefined> => {
+  try {
+    const affectedRows = await ImportationSchema.update(
+      {
+        quantity: item.quantity,
+        dateImported: item.dateImported,
+        status: item.status,
+        orderNumber: item.orderNumber
+      },
+      {
+        where: {
+          productID: productID
         }
       }
     )

@@ -55,15 +55,15 @@ class ImportationRoute {
 
     // Get item
     this.router.get(
-      '/productID',
+      '/productID/:productID',
       requestValidationRules([
-        query('productID')
+        param('productID')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.getItemByFk
+      this.controller.getItemByProductID
     )
 
     // Get all items
@@ -96,7 +96,7 @@ class ImportationRoute {
 
     // Update item by productID and importedID
     this.router.put(
-      '/:id',
+      '/id/:id',
       requestValidationRules([
         param('id')
           .exists()
@@ -105,6 +105,19 @@ class ImportationRoute {
           .withMessage('This field must be Integer type!')
       ]),
       this.controller.updateItemByID
+    )
+
+    // Update item by productID and importedID
+    this.router.put(
+      '/productID/:id',
+      requestValidationRules([
+        param('id')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
+      ]),
+      this.controller.updateItemByProductID
     )
 
     // Delete item by productID

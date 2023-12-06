@@ -41,10 +41,10 @@ export default class ImportationController {
     }
   }
 
-  getItemByFk = async (req: Request, res: Response) => {
-    const productID = Number(req.query.productID)
+  getItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
     try {
-      const item = await service.getItemByFk({ productID: productID })
+      const item = await service.getItemByProductID(productID)
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -80,8 +80,29 @@ export default class ImportationController {
       quantity: req.body.quantity,
       orderNumber: req.body.orderNumber
     }
+    console.log('>>>', itemRequest)
     try {
       const itemUpdated = await service.updateByID(id, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByProductID = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    const itemRequest: Importation = {
+      dateImported: req.body.dateImported,
+      status: req.body.status,
+      quantity: req.body.quantity,
+      orderNumber: req.body.orderNumber
+    }
+    console.log('>>>', itemRequest)
+    try {
+      const itemUpdated = await service.updateByProductID(id, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
