@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import { Product } from '~/models/product.model'
-import * as colorService from '~/services/color.service'
 import * as productColorService from '~/services/product-color.service'
 import * as service from '~/services/product.service'
 import { RequestBodyType } from '~/type'
+import ColorSchema from '../models/color.model'
 import { ProductColor } from '../models/product-color.model'
 
 const NAMESPACE = 'Product'
@@ -94,10 +94,9 @@ export default class ProductController {
       }
       const items = await service.getItems(bodyRequest)
       const total = await service.getItemsWithStatus(bodyRequest.filter.status)
-      const colorItems = await colorService.getItems(bodyRequest)
-
+      const colorItems = await ColorSchema.findAll()
       const convertData = items.rows.map((item) => {
-        const getColor = colorItems.rows.find(
+        const getColor = colorItems.find(
           (color) => color.id === (item.productColor as unknown as ProductColor[])[0].colorID ?? -1
         )
         return {
