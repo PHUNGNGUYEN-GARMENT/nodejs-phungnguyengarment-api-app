@@ -1,7 +1,8 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param } from 'express-validator'
 import GroupController from '~/controllers/group.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import { validators } from '../utils/constant'
 
 class GroupRoute {
   router = Router()
@@ -18,14 +19,14 @@ class GroupRoute {
       requestValidationRules([
         body('name')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('status')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createNewItem
     )
@@ -34,24 +35,24 @@ class GroupRoute {
     this.router.get(
       '/id',
       requestValidationRules([
-        query('id')
+        param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.getItemByID
+      this.controller.getItemByPk
     )
 
     // Get item
     this.router.get(
-      '/name',
+      '/name/:name',
       requestValidationRules([
-        query('name')
+        param('name')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.getItemByName
     )
@@ -62,24 +63,24 @@ class GroupRoute {
       requestValidationRules([
         body('filter')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('paginator')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('search')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('sorting')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!')
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
       ]),
       this.controller.getItems
     )
@@ -90,11 +91,11 @@ class GroupRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.updateItemByID
+      this.controller.updateItemByPk
     )
 
     // Delete item by productID
@@ -103,11 +104,11 @@ class GroupRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.deleteItemByID
+      this.controller.deleteItemByPk
     )
   }
 }

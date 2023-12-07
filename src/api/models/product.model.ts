@@ -12,7 +12,6 @@ export type Product = {
   status?: ItemStatusType
   dateInputNPL?: Date
   dateOutputFCR?: Date
-  orderNumber?: number
 }
 
 @Table({
@@ -38,9 +37,6 @@ export default class ProductSchema extends Model<Product> {
 
   @Column({ type: DATE, field: 'date_output_fcr' })
   declare dateOutputFCR: Date
-
-  @Column({ type: INTEGER, field: 'order_number', defaultValue: 0 })
-  declare orderNumber: number
 
   @HasMany(() => ImportationSchema)
   declare importations: ImportationSchema[]

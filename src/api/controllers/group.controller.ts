@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
 import { Group } from '~/models/group.model'
 import * as service from '~/services/group.service'
+import * as productGroupService from '~/services/product-group.service'
 import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'Group'
-const PATH = 'controllers/group'
+const NAMESPACE = 'controllers/group'
 
-export default class ColorController {
+export default class GroupController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
@@ -15,22 +15,21 @@ export default class ColorController {
       status: req.body.status
     }
     try {
-      const itemNew = await service.createNew(itemRequest)
+      const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
-      } else {
-        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
+      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
     } catch (error) {
       return res.formatter.badRequest({ message: `>>> ${error}` })
     }
   }
 
-  getItemByID = async (req: Request, res: Response) => {
-    const id = Number(req.query.id)
+  getItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     try {
-      const item = await service.getItemBy({ id: id })
+      const item = await service.getItemByPk(id)
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -41,7 +40,7 @@ export default class ColorController {
   }
 
   getItemByName = async (req: Request, res: Response) => {
-    const name = String(req.query.name)
+    const name = String(req.params.name)
     try {
       const item = await service.getItemBy({ name: name })
       if (item) {
@@ -71,17 +70,23 @@ export default class ColorController {
     }
   }
 
-  updateItemByID = async (req: Request, res: Response) => {
+  updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: Group = {
       name: req.body.name,
-      status: req.body.status,
-      orderNumber: req.body.orderNumber
+      status: req.body.status
     }
     try {
-      const itemUpdated = await service.updateByID(id, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const groupUpdated = await service.updateItemByPk(id, itemRequest)
+      if (groupUpdated) {
+        const productGroupUpdated = await productGroupService.updateItemByGroupID(groupUpdated.id!, {
+          name: groupUpdated.name
+        })
+        if (productGroupUpdated) {
+          return res.formatter.ok({ data: groupUpdated })
+        } else {
+          return res.formatter.badRequest({})
+        }
       }
       return res.formatter.badRequest({})
     } catch (error) {
@@ -89,10 +94,10 @@ export default class ColorController {
     }
   }
 
-  deleteItemByID = async (req: Request, res: Response) => {
+  deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
-      const item = await service.deleteByID(id)
+      const item = await service.deleteItemByPk(id)
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }

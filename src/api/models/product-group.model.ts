@@ -1,13 +1,16 @@
 import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { ItemStatusType } from '~/type'
 import GroupSchema from './group.model'
 import ProductSchema from './product.model'
 
 const { INTEGER, STRING } = DataType
 
 export interface ProductGroup {
+  id?: number
   groupID?: number
   productID?: number
-  orderNumber?: number
+  name?: string
+  status?: ItemStatusType
 }
 
 @Table({
@@ -16,6 +19,9 @@ export interface ProductGroup {
   timestamps: true
 })
 export default class ProductGroupSchema extends Model<ProductGroup> {
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
+  declare id: number
+
   @Column({ type: INTEGER, field: 'group_id' })
   @ForeignKey(() => GroupSchema)
   declare groupID: number
@@ -24,6 +30,9 @@ export default class ProductGroupSchema extends Model<ProductGroup> {
   @ForeignKey(() => ProductSchema)
   declare productID: string
 
-  @Column({ type: INTEGER, field: 'order_number' })
-  declare orderNumber: number
+  @Column({ type: STRING, field: 'name' })
+  declare name: string
+
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
 }

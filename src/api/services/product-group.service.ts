@@ -1,109 +1,151 @@
 import ProductGroupSchema, { ProductGroup } from '~/models/product-group.model'
+import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
+import { buildDynamicQuery } from '../helpers/query'
 
-const NAMESPACE = 'ProductGroup'
-const PATH = 'services/product-group'
+const NAMESPACE = 'services/product-group'
 
-export const createNew = async (item: ProductGroup): Promise<ProductGroupSchema> => {
+export const createNewItem = async (item: ProductGroup): Promise<ProductGroupSchema> => {
   try {
-    const items = await ProductGroupSchema.findAll()
-    return await ProductGroupSchema.create({ ...item, orderNumber: items.length })
+    return await ProductGroupSchema.create({ ...item })
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Creating new ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
   }
 }
 
 // Get by id
-export const getByGroupID = async (groupID: number): Promise<ProductGroupSchema | null> => {
+export const getItemByPk = async (id: number): Promise<ProductGroupSchema | null> => {
   try {
-    const item = await ProductGroupSchema.findOne({ where: { groupID: groupID } })
+    const item = await ProductGroupSchema.findByPk(id)
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by groupID :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by groupID :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
   }
 }
 
-export const getByProductID = async (productID: number): Promise<ProductGroupSchema | null> => {
+export const getItemBy = async (productGroup: ProductGroup): Promise<ProductGroupSchema | null> => {
   try {
-    const item = await ProductGroupSchema.findOne({ where: { productID: productID } })
+    const item = await ProductGroupSchema.findOne({ where: { ...productGroup } })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by productID :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by productID :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
   }
 }
 
 // Get all
-export const getAll = async (): Promise<ProductGroupSchema[]> => {
+export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ProductGroupSchema[] }> => {
   try {
-    const items = await ProductGroupSchema.findAll()
+    console.log(buildDynamicQuery<ProductGroup>(body))
+    const items = await ProductGroupSchema.findAndCountAll({
+      offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
+      limit: body.paginator.pageSize,
+      order: [[body.sorting.column, body.sorting.direction]],
+      where: buildDynamicQuery<ProductGroup>(body)
+    })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItems :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
+  }
+}
+
+export const getItemsWithStatus = async (status: ItemStatusType): Promise<ProductGroupSchema[]> => {
+  try {
+    const items = await ProductGroupSchema.findAll({
+      where: {
+        status: status
+      }
+    })
+    return items
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+  }
+}
+
+export const getItemsCount = async (): Promise<number> => {
+  try {
+    return await ProductGroupSchema.count()
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
   }
 }
 
 // Update by productID
-export const updateByGroupID = async (item: ProductGroup): Promise<number> => {
+export const updateItemByPk = async (id: number, item: ProductGroup): Promise<ProductGroup | undefined> => {
   try {
     const affectedRows = await ProductGroupSchema.update(
       {
-        productID: item.productID,
-        orderNumber: item.orderNumber
+        name: item.name,
+        status: item.status
       },
       {
         where: {
-          groupID: item.groupID
+          id: id
         }
       }
     )
-    return affectedRows[0]
+    return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by groupID :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by groupID :: ${error}`)
+    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
   }
 }
 
-export const updateByProductID = async (item: ProductGroup): Promise<number> => {
+export const updateItemByProductID = async (
+  productID: number,
+  item: ProductGroup
+): Promise<ProductGroup | undefined> => {
   try {
     const affectedRows = await ProductGroupSchema.update(
       {
-        groupID: item.groupID,
-        orderNumber: item.orderNumber
+        name: item.name,
+        status: item.status
       },
       {
         where: {
-          productID: item.productID
+          productID: productID
         }
       }
     )
-    return affectedRows[0]
+    return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by productID :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by productID :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
   }
 }
 
-// Delete groupID
-export const deleteByGroupID = async (groupID: number): Promise<number> => {
+export const updateItemByGroupID = async (groupID: number, item: ProductGroup): Promise<ProductGroup | undefined> => {
   try {
-    const affectedRows = await ProductGroupSchema.destroy({ where: { groupID: groupID } })
-    return affectedRows
+    const affectedRows = await ProductGroupSchema.update(
+      {
+        name: item.name,
+        status: item.status
+      },
+      {
+        where: {
+          groupID: groupID
+        }
+      }
+    )
+    return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} groupID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by groupID :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByGroupID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByGroupID :: ${error}`)
   }
 }
 
-export const deleteByProductID = async (productID: number): Promise<number> => {
+// Delete importedID
+export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
-    const affectedRows = await ProductGroupSchema.destroy({ where: { productID: productID } })
+    const affectedRows = await ProductGroupSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} productID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by productID :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
   }
 }

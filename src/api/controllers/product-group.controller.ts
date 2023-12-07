@@ -1,41 +1,38 @@
 import { Request, Response } from 'express'
 import { ProductGroup } from '~/models/product-group.model'
 import * as service from '~/services/product-group.service'
+import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'ProductGroup'
-const PATH = 'controllers/product-group'
+const NAMESPACE = 'controllers/product-group'
 
 export default class ProductGroupController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: ProductGroup = {
+      productID: req.body.productID,
       groupID: req.body.groupID,
-      productID: req.body.productID
+      name: req.body.name,
+      status: req.body.status
     }
     try {
-      const itemNew = await service.createNew(itemRequest)
-      console.log('sa', itemNew)
+      const itemNew = await service.createNewItem(itemRequest)
+
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
-      } else {
-        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
+      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: `>>> ${error}` })
     }
   }
 
-  getItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+  getItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     try {
-      const item1 = await service.getByGroupID(parseInt(id))
-      const item2 = await service.getByProductID(parseInt(id))
-      if (item1) {
-        return res.formatter.ok({ data: item1 })
-      }
-      if (item2) {
-        return res.formatter.ok({ data: item2 })
+      const item = await service.getItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ data: item })
       }
       return res.formatter.notFound({})
     } catch (error) {
@@ -43,29 +40,60 @@ export default class ProductGroupController {
     }
   }
 
-  getAllItems = async (req: Request, res: Response) => {
+  getItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
     try {
-      const items = await service.getAll()
-      return res.formatter.ok({ data: items })
+      const item = await service.getItemBy({ productID: productID })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  updateItemByID = async (req: Request, res: Response) => {
+  getItemByGroupID = async (req: Request, res: Response) => {
+    const groupID = Number(req.params.groupID)
+    try {
+      const item = await service.getItemBy({ groupID: groupID })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItems = async (req: Request, res: Response) => {
+    try {
+      const bodyRequest: RequestBodyType = {
+        ...req.body
+      }
+      const items = await service.getItems(bodyRequest)
+      const total = await service.getItemsWithStatus(bodyRequest.filter.status)
+      return res.formatter.ok({
+        data: items.rows,
+        length: items.rows.length,
+        page: Number(bodyRequest.paginator.page),
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+      })
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     const itemRequest: ProductGroup = {
-      groupID: req.body.groupID,
-      productID: req.body.productID,
-      orderNumber: req.body.orderNumber
+      name: req.body.name,
+      status: req.body.status
     }
     try {
-      const itemUpdated1 = await service.updateByGroupID(itemRequest)
-      const itemUpdated2 = await service.updateByProductID(itemRequest)
-      if (itemUpdated1) {
-        return res.formatter.ok({ data: itemUpdated1 })
-      }
-      if (itemUpdated2) {
-        return res.formatter.ok({ data: itemUpdated2 })
+      const itemUpdated = await service.updateItemByPk(id, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {
@@ -73,15 +101,47 @@ export default class ProductGroupController {
     }
   }
 
-  deleteItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+  updateItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
+    const itemRequest: ProductGroup = {
+      groupID: req.body.groupID,
+      name: req.body.name,
+      status: req.body.status
+    }
     try {
-      const item1 = await service.deleteByGroupID(parseInt(id))
-      const item2 = await service.deleteByProductID(parseInt(id))
-      if (item1) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
       }
-      if (item2) {
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByGroupID = async (req: Request, res: Response) => {
+    const groupID = Number(req.params.groupID)
+    const itemRequest: ProductGroup = {
+      productID: req.body.productID,
+      name: req.body.name,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.updateItemByGroupID(groupID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    try {
+      const item = await service.deleteItemByPk(id)
+      if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
       return res.formatter.notFound({})

@@ -82,9 +82,7 @@ export const updateItemByPk = async (id: number, item: Color): Promise<Color | u
       {
         nameColor: item.nameColor,
         hexColor: item.hexColor,
-        status: item.status,
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt
+        status: item.status
       },
       {
         where: {

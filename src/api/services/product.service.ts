@@ -8,7 +8,7 @@ const NAMESPACE = 'services/products'
 
 export const createNewItem = async (item: Product): Promise<ProductSchema> => {
   try {
-    return await ProductSchema.create({ ...item, orderNumber: 0 })
+    return await ProductSchema.create({ ...item })
   } catch (error) {
     logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
     throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
