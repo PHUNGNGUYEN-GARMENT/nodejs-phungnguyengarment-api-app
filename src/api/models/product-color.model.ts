@@ -13,7 +13,6 @@ export type ProductColor = {
   nameColor?: string
   hexColor?: string
   status?: ItemStatusType
-  orderNumber?: number
 }
 
 @Table({

@@ -5,16 +5,14 @@ import ProductSchema from '~/models/product.model'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 
-const NAMESPACE = 'ProductColor'
-const PATH = 'services/product-color'
+const NAMESPACE = 'services/product-color'
 
 export const createNewItem = async (item: ProductColor): Promise<ProductColorSchema> => {
   try {
-    const length = await ProductColorSchema.count()
-    return await ProductColorSchema.create({ ...item, orderNumber: length })
+    return await ProductColorSchema.create({ ...item })
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Creating new :: ${error}`)
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
   }
 }
 
@@ -29,8 +27,8 @@ export const getItemByPk = async (id: number): Promise<ProductColorSchema | null
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
   }
 }
 
@@ -46,8 +44,8 @@ export const getItemBy = async (product: ProductColor): Promise<ProductColorSche
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} getItemBy :: ${error}`)
   }
 }
 
@@ -67,9 +65,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: 
-    ${error}`)
+    logging.error(NAMESPACE, `Error getItems :: ${error}`)
+    throw new Error(`${NAMESPACE} getItems :: ${error}`)
   }
 }
 
@@ -82,8 +79,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Produc
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
   }
 }
 
@@ -91,8 +88,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ProductSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
+    throw new Error(`${NAMESPACE} getItemsCount :: ${error}`)
   }
 }
 
@@ -111,8 +108,8 @@ export const updateItemByPk = async (id: number, itemToUpdate: ProductColor): Pr
     )
     return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
   }
 }
 
@@ -133,8 +130,8 @@ export const updateItemByProductID = async (
     )
     return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
   }
 }
 
@@ -155,19 +152,19 @@ export const updateItemByColorID = async (
     )
     return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByColorID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByColorID :: ${error}`)
   }
 }
 
 // Delete
-export const deleteItemByID = async (id: number): Promise<number> => {
+export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
     const affectedRows = await ProductColorSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
   }
 }
 
@@ -176,8 +173,8 @@ export const deleteItemByColorID = async (colorID: number): Promise<number> => {
     const affectedRows = await ProductColorSchema.destroy({ where: { colorID: colorID } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} by colorID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by colorID :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemByColorID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByColorID :: ${error}`)
   }
 }
 
@@ -186,7 +183,7 @@ export const deleteItemByProductID = async (productID: number): Promise<number> 
     const affectedRows = await ProductColorSchema.destroy({ where: { productID: productID } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} by productID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by productID :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByProductID :: ${error}`)
   }
 }

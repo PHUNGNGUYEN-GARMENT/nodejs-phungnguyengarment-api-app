@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param } from 'express-validator'
 import ProductColorController from '~/controllers/product-color.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
@@ -16,27 +16,27 @@ class ProductColorRoute {
     this.router.post(
       '/',
       requestValidationRules([
+        body('productID')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!'),
         body('colorID')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!'),
+        body('productCode')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be String type!'),
         body('nameColor')
           .exists()
           .withMessage('This field can not empty!')
           .isString()
           .withMessage('This field must be String type!'),
         body('hexColor')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be String type!'),
-        body('productID')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isInt()
-          .withMessage('This field must be Integer type!'),
-        body('productCode')
           .exists()
           .withMessage('This field can not empty!')
           .isString()
@@ -52,9 +52,9 @@ class ProductColorRoute {
 
     // Get item
     this.router.get(
-      '/id',
+      '/:id',
       requestValidationRules([
-        query('id')
+        param('id')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
@@ -64,9 +64,9 @@ class ProductColorRoute {
     )
 
     this.router.get(
-      '/productID',
+      '/productID/:productID',
       requestValidationRules([
-        query('productID')
+        param('productID')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
@@ -76,9 +76,9 @@ class ProductColorRoute {
     )
 
     this.router.get(
-      '/colorID',
+      '/colorID/:colorID',
       requestValidationRules([
-        query('colorID')
+        param('colorID')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
@@ -116,11 +116,11 @@ class ProductColorRoute {
     )
 
     // Update item by id
-    this.router.put('/', this.controller.updateItemByPk)
+    this.router.put('/:id', this.controller.updateItemByPk)
 
-    this.router.put('/product', this.controller.updateItemByProductID)
+    this.router.put('/productID/:productID', this.controller.updateItemByProductID)
 
-    this.router.put('/color', this.controller.updateItemByColorID)
+    this.router.put('/colorID/:colorID', this.controller.updateItemByColorID)
 
     // Delete item
     this.router.delete(
@@ -132,11 +132,11 @@ class ProductColorRoute {
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.deleteItemBy
+      this.controller.deleteItemByPk
     )
 
     this.router.delete(
-      '/:productID',
+      '/productID/:productID',
       requestValidationRules([
         param('productID')
           .exists()
@@ -144,11 +144,11 @@ class ProductColorRoute {
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.deleteItemBy
+      this.controller.deleteItemByProductID
     )
 
     this.router.delete(
-      '/:colorID',
+      '/colorID/:colorID',
       requestValidationRules([
         param('colorID')
           .exists()
@@ -156,7 +156,7 @@ class ProductColorRoute {
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.deleteItemBy
+      this.controller.deleteItemByColorID
     )
   }
 }
