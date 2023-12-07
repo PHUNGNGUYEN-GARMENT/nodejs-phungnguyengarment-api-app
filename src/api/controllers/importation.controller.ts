@@ -3,8 +3,7 @@ import { Importation } from '~/models/importation.model'
 import * as service from '~/services/importation.service'
 import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'Importation'
-const PATH = 'controllers/importation'
+const NAMESPACE = 'controllers/importation'
 
 export default class ImportationController {
   constructor() {}
@@ -17,12 +16,12 @@ export default class ImportationController {
       productID: req.body.productID
     }
     try {
-      const itemNew = await service.createNew(itemRequest)
+      const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
       }
-      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
+      return res.formatter.badRequest({})
     } catch (error) {
       return res.formatter.badRequest({ message: `>>> ${error}` })
     }
@@ -72,17 +71,15 @@ export default class ImportationController {
     }
   }
 
-  updateItemByID = async (req: Request, res: Response) => {
+  updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: Importation = {
       dateImported: req.body.dateImported,
       status: req.body.status,
-      quantity: req.body.quantity,
-      orderNumber: req.body.orderNumber
+      quantity: req.body.quantity
     }
-    console.log('>>>', itemRequest)
     try {
-      const itemUpdated = await service.updateByID(id, itemRequest)
+      const itemUpdated = await service.updateItemByPk(id, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
@@ -97,12 +94,10 @@ export default class ImportationController {
     const itemRequest: Importation = {
       dateImported: req.body.dateImported,
       status: req.body.status,
-      quantity: req.body.quantity,
-      orderNumber: req.body.orderNumber
+      quantity: req.body.quantity
     }
-    console.log('>>>', itemRequest)
     try {
-      const itemUpdated = await service.updateByProductID(id, itemRequest)
+      const itemUpdated = await service.updateItemByProductID(id, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
@@ -112,12 +107,12 @@ export default class ImportationController {
     }
   }
 
-  deleteItemByID = async (req: Request, res: Response) => {
+  deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
-      const item = await service.deleteByID(id)
+      const item = await service.deleteItemByPk(id)
       if (item) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+        return res.formatter.ok({ message: `${NAMESPACE}` })
       }
       return res.formatter.notFound({})
     } catch (error) {

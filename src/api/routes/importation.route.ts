@@ -1,7 +1,8 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param } from 'express-validator'
 import ImportationController from '~/controllers/importation.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import { validators } from '../utils/constant'
 
 class ImportationRoute {
   router = Router()
@@ -16,39 +17,39 @@ class ImportationRoute {
     this.router.post(
       '/',
       requestValidationRules([
-        body('dateImported')
-          .notEmpty()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be String type!'),
         body('productID')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!'),
-        body('status')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('dateImported')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('quantity')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isFloat()
-          .withMessage('This field must be Float type!')
+          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
+        body('status')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createNewItem
     )
 
     // Get item
     this.router.get(
-      '/id',
+      '/:id',
       requestValidationRules([
-        query('id')
+        param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.getItemByPk
     )
@@ -59,9 +60,9 @@ class ImportationRoute {
       requestValidationRules([
         param('productID')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.getItemByProductID
     )
@@ -72,50 +73,50 @@ class ImportationRoute {
       requestValidationRules([
         body('filter')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('paginator')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('search')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('sorting')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!')
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
       ]),
       this.controller.getItems
     )
 
     // Update item by productID and importedID
     this.router.put(
-      '/id/:id',
+      '/:id',
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.updateItemByID
+      this.controller.updateItemByPk
     )
 
     // Update item by productID and importedID
     this.router.put(
-      '/productID/:id',
+      '/productID/:productID',
       requestValidationRules([
-        param('id')
+        param('productID')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.updateItemByProductID
     )
@@ -126,11 +127,11 @@ class ImportationRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.deleteItemByID
+      this.controller.deleteItemByPk
     )
   }
 }

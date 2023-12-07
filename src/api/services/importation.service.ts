@@ -4,27 +4,14 @@ import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
 import ProductSchema from '../models/product.model'
 
-const NAMESPACE = 'Importation'
-const PATH = 'services/importation'
+const NAMESPACE = 'services/importation'
 
-export const createNew = async (item: Importation): Promise<ImportationSchema> => {
+export const createNewItem = async (item: Importation): Promise<ImportationSchema> => {
   try {
-    const length = await ImportationSchema.count()
-    return await ImportationSchema.create({ ...item, orderNumber: length })
+    return await ImportationSchema.create({ ...item })
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Creating new ${NAMESPACE} :: ${error}`)
-  }
-}
-
-// Get by id
-export const getItemByProductID = async (productID: number): Promise<ImportationSchema | null> => {
-  try {
-    const item = await ImportationSchema.findOne({ where: { productID: productID } })
-    return item
-  } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by getItemBy :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
   }
 }
 
@@ -35,15 +22,25 @@ export const getItemByPk = async (id: number): Promise<ImportationSchema | null>
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by getItemBy :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+  }
+}
+
+// Get by id
+export const getItemByProductID = async (productID: number): Promise<ImportationSchema | null> => {
+  try {
+    const item = await ImportationSchema.findOne({ where: { productID: productID } })
+    return item
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByProductID :: ${error}`)
   }
 }
 
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ImportationSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<Importation>(body))
     const items = await ImportationSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -53,8 +50,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItems :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
   }
 }
 
@@ -67,8 +64,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Import
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
   }
 }
 
@@ -76,20 +73,19 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ImportationSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
   }
 }
 
 // Update by productID
-export const updateByID = async (id: number, item: Importation): Promise<Importation | undefined> => {
+export const updateItemByPk = async (id: number, item: Importation): Promise<Importation | undefined> => {
   try {
     const affectedRows = await ImportationSchema.update(
       {
         quantity: item.quantity,
         dateImported: item.dateImported,
-        status: item.status,
-        orderNumber: item.orderNumber
+        status: item.status
       },
       {
         where: {
@@ -99,19 +95,18 @@ export const updateByID = async (id: number, item: Importation): Promise<Importa
     )
     return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
   }
 }
 
-export const updateByProductID = async (productID: number, item: Importation): Promise<Importation | undefined> => {
+export const updateItemByProductID = async (productID: number, item: Importation): Promise<Importation | undefined> => {
   try {
     const affectedRows = await ImportationSchema.update(
       {
         quantity: item.quantity,
         dateImported: item.dateImported,
-        status: item.status,
-        orderNumber: item.orderNumber
+        status: item.status
       },
       {
         where: {
@@ -121,18 +116,18 @@ export const updateByProductID = async (productID: number, item: Importation): P
     )
     return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateByProductID :: ${error}`)
   }
 }
 
 // Delete importedID
-export const deleteByID = async (id: number): Promise<number> => {
+export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
     const affectedRows = await ImportationSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} id :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
   }
 }

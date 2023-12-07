@@ -4,13 +4,12 @@ import ProductSchema from './product.model'
 
 const { INTEGER, STRING, DOUBLE, DATE } = DataType
 
-export interface Importation {
+export type Importation = {
   id?: number
   productID?: number
-  status?: ItemStatusType
   quantity?: number
+  status?: ItemStatusType
   dateImported?: Date
-  orderNumber?: number
 }
 
 @Table({
@@ -34,9 +33,6 @@ export default class ImportationSchema extends Model<Importation> {
 
   @Column({ type: DATE, field: 'date_imported' })
   declare dateImported: Date
-
-  @Column({ type: INTEGER, field: 'order_number', defaultValue: 0 })
-  declare orderNumber: number
 
   @BelongsTo(() => ProductSchema)
   declare product: ProductSchema
