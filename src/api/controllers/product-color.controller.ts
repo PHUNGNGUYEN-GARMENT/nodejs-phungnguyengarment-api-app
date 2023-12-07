@@ -34,7 +34,7 @@ export default class ProductColorController {
       if (item) {
         return res.formatter.ok({ data: item })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: `${PATH}/getItemByPk: Not found ` })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -47,7 +47,7 @@ export default class ProductColorController {
       if (item) {
         return res.formatter.ok({ data: item })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: `${PATH}/getItemByProductID: Not found ` })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -60,7 +60,7 @@ export default class ProductColorController {
       if (item) {
         return res.formatter.ok({ data: item })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: `${PATH}/getItemByColorID: Not found ` })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -84,16 +84,64 @@ export default class ProductColorController {
     }
   }
 
-  updateItemBy = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
+  updateItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.query.id)
     const itemRequest: ProductColor = {
       colorID: req.body.colorID,
       productID: req.body.productID,
+      productCode: req.body.productCode,
+      hexColor: req.body.hexColor,
+      nameColor: req.body.nameColor,
       status: req.body.status,
       orderNumber: req.body.orderNumber
     }
     try {
-      const itemUpdated = await service.updateItemByID(id, itemRequest)
+      console.log('updateItemByPk', itemRequest)
+      const itemUpdated = await service.updateItemByPk(id, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.query.productID)
+    const itemRequest: ProductColor = {
+      colorID: req.body.colorID,
+      productCode: req.body.productCode,
+      hexColor: req.body.hexColor,
+      nameColor: req.body.nameColor,
+      status: req.body.status,
+      orderNumber: req.body.orderNumber
+    }
+    try {
+      console.log('updateItemByProductID', itemRequest)
+      const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByColorID = async (req: Request, res: Response) => {
+    const colorID = Number(req.query.colorID)
+    const itemRequest: ProductColor = {
+      productID: req.body.productID,
+      productCode: req.body.productCode,
+      hexColor: req.body.hexColor,
+      nameColor: req.body.nameColor,
+      status: req.body.status,
+      orderNumber: req.body.orderNumber
+    }
+    try {
+      console.log('updateItemByColorID', itemRequest)
+      const itemUpdated = await service.updateItemByColorID(colorID, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }

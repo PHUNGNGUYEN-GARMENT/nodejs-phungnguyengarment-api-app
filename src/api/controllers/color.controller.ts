@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { Color } from '~/models/color.model'
 import * as service from '~/services/color.service'
+import * as productColorService from '~/services/product-color.service'
 import { RequestBodyType } from '~/type'
 
 const NAMESPACE = 'Color'
@@ -83,11 +84,19 @@ export default class ColorController {
       orderNumber: req.body.orderNumber
     }
     try {
-      const itemUpdated = await service.updateByID(id, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const colorUpdated = await service.updateByID(id, itemRequest)
+      if (colorUpdated) {
+        const productColorUpdated = await productColorService.updateItemByProductID(colorUpdated.id!, {
+          hexColor: colorUpdated.hexColor,
+          nameColor: colorUpdated.nameColor
+        })
+        if (productColorUpdated) {
+          return res.formatter.ok({ data: colorUpdated })
+        } else {
+          return res.formatter.badRequest({ message: 'Failed to update color to ProductColor!' })
+        }
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: 'Failed to update color!' })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

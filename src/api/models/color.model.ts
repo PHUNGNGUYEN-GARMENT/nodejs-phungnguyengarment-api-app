@@ -34,5 +34,4 @@ export default class ColorSchema extends Model<Color> {
 
   @Column({ type: INTEGER, field: 'order_number' })
   declare orderNumber: number
-
 }

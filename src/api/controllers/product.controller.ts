@@ -2,9 +2,7 @@ import { Request, Response } from 'express'
 import { Product } from '~/models/product.model'
 import * as productColorService from '~/services/product-color.service'
 import * as service from '~/services/product.service'
-import { RequestBodyType } from '~/type'
-import ColorSchema from '../models/color.model'
-import { ProductColor } from '../models/product-color.model'
+import { ItemStatusType, RequestBodyType } from '~/type'
 
 const NAMESPACE = 'Product'
 const PATH = 'controllers/product'
@@ -14,32 +12,24 @@ export default class ProductController {
 
   createNewItem = async (req: Request, res: Response) => {
     const dataRequest: Product = {
-      productCode: req.body.productCode,
-      quantityPO: req.body.quantityPO,
-      status: req.body.status,
-      dateInputNPL: req.body.dateInputNPL,
-      dateOutputFCR: req.body.dateOutputFCR
+      productCode: String(req.body.productCode),
+      quantityPO: Number(req.body.quantityPO),
+      status: req.body.status as ItemStatusType,
+      dateInputNPL: new Date(req.body.dateInputNPL),
+      dateOutputFCR: new Date(req.body.dateOutputFCR)
     }
-    const colorID = Number(req.body.colorID)
     try {
       const newProd = await service.createNewItem(dataRequest)
       if (newProd) {
-        const newItem = await productColorService.createNewItem({
-          colorID: colorID,
-          productID: newProd.id,
-          status: 'active'
-        })
-        if (newItem) {
-          return res.formatter.created({ data: newProd, meta: newItem })
-        }
+        return res.formatter.created({ data: newProd })
       }
-      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
+      return res.formatter.badRequest({ message: `Failed to create new item` })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: `Failed to create new item with: ${error}` })
     }
   }
 
-  getItemByID = async (req: Request, res: Response) => {
+  getItemByPk = async (req: Request, res: Response) => {
     try {
       const id = Number(req.query.id)
       const item = await service.getItemBy({ id: id })
@@ -63,10 +53,10 @@ export default class ProductController {
     }
   }
 
-  getItemByCode = async (req: Request, res: Response) => {
+  getItemByProductCode = async (req: Request, res: Response) => {
     try {
-      const code = String(req.query.code)
-      const item = await service.getItemBy({ productCode: code })
+      const productCode = String(req.params.productCode)
+      const item = await service.getItemBy({ productCode: productCode })
 
       if (item) {
         return res.formatter.ok({
@@ -83,7 +73,7 @@ export default class ProductController {
       }
       return res.formatter.notFound({})
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: `${PATH}/${error}` })
     }
   }
 
@@ -94,14 +84,9 @@ export default class ProductController {
       }
       const items = await service.getItems(bodyRequest)
       const total = await service.getItemsWithStatus(bodyRequest.filter.status)
-      const colorItems = await ColorSchema.findAll()
       const convertData = items.rows.map((item) => {
-        const getColor = colorItems.find(
-          (color) => color.id === (item.productColor as unknown as ProductColor[])[0].colorID ?? -1
-        )
         return {
           ...item.dataValues,
-          productColor: getColor ? getColor : null,
           progress: {
             sewing: 1500,
             iron: 1000,
@@ -121,7 +106,7 @@ export default class ProductController {
     }
   }
 
-  updateItemByID = async (req: Request, res: Response) => {
+  updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: Product = {
       productCode: req.body.productCode,
@@ -131,20 +116,27 @@ export default class ProductController {
       dateOutputFCR: req.body.dateOutputFCR
     }
     try {
-      const itemUpdated = await service.updateItemByID(id, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const productUpdated = await service.updateItemByPk(id, itemRequest)
+      if (productUpdated) {
+        const productColorUpdated = await productColorService.updateItemByProductID(productUpdated.id!, {
+          productCode: productUpdated.productCode
+        })
+        if (productColorUpdated) {
+          return res.formatter.ok({ data: productUpdated })
+        } else {
+          return res.formatter.badRequest({ message: 'Failed to update productCode to ProductColor!' })
+        }
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: 'Failed to update product!' })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  deleteItemByID = async (req: Request, res: Response) => {
+  deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
-      const item = await service.deleteItemByID(id)
+      const item = await service.deleteItemByPk(id)
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }

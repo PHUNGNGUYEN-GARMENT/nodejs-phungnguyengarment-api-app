@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param } from 'express-validator'
 import ProductController from '~/controllers/product.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
@@ -40,39 +40,34 @@ class ProductRoute {
           .exists()
           .withMessage('This field can not empty!')
           .isString()
-          .withMessage('This field must be string type!'),
-        body('colorID')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage('This field must be string type!')
       ]),
       this.controller.createNewItem
     )
 
     // Get item
     this.router.get(
-      '/id',
+      '/:id',
       requestValidationRules([
-        query('id')
+        param('id')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.getItemByID
+      this.controller.getItemByPk
     )
 
     this.router.get(
-      '/code',
+      '/productCode/:productCode',
       requestValidationRules([
-        query('code')
+        param('productCode')
           .exists()
           .withMessage('This field can not empty!')
           .isString()
           .withMessage('This field must be String type!')
       ]),
-      this.controller.getItemByCode
+      this.controller.getItemByProductCode
     )
 
     // Get items
@@ -113,7 +108,7 @@ class ProductRoute {
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.updateItemByID
+      this.controller.updateItemByPk
     )
 
     // Delete item
@@ -126,7 +121,7 @@ class ProductRoute {
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.deleteItemByID
+      this.controller.deleteItemByPk
     )
   }
 }

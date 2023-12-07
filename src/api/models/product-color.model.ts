@@ -3,12 +3,15 @@ import { ItemStatusType } from '~/type'
 import ColorSchema from './color.model'
 import ProductSchema from './product.model'
 
-const { INTEGER, STRING } = DataType
+const { INTEGER, DOUBLE, STRING } = DataType
 
-export interface ProductColor {
+export type ProductColor = {
   id?: number
   colorID?: number
   productID?: number
+  productCode?: string
+  nameColor?: string
+  hexColor?: string
   status?: ItemStatusType
   orderNumber?: number
 }
@@ -29,6 +32,15 @@ export default class ProductColorSchema extends Model<ProductColor> {
   @Column({ type: INTEGER, field: 'product_id' })
   @ForeignKey(() => ProductSchema)
   declare productID: number
+
+  @Column({ type: STRING, field: 'product_code' })
+  declare productCode: string
+
+  @Column({ type: STRING, field: 'name_color' })
+  declare nameColor: string
+
+  @Column({ type: STRING, field: 'hex_color' })
+  declare hexColor: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: string

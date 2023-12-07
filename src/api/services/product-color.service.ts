@@ -97,7 +97,7 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update
-export const updateItemByID = async (id: number, itemToUpdate: ProductColor): Promise<ProductColor | undefined> => {
+export const updateItemByPk = async (id: number, itemToUpdate: ProductColor): Promise<ProductColor | undefined> => {
   try {
     const affectedRows = await ProductColorSchema.update(
       {

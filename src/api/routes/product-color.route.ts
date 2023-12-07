@@ -116,17 +116,11 @@ class ProductColorRoute {
     )
 
     // Update item by id
-    this.router.put(
-      '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isInt()
-          .withMessage('This field must be Integer type!')
-      ]),
-      this.controller.updateItemBy
-    )
+    this.router.put('/', this.controller.updateItemByPk)
+
+    this.router.put('/product', this.controller.updateItemByProductID)
+
+    this.router.put('/color', this.controller.updateItemByColorID)
 
     // Delete item
     this.router.delete(

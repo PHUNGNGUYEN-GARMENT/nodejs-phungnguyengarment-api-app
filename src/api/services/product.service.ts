@@ -4,27 +4,24 @@ import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
 import ProductColorSchema from '../models/product-color.model'
 
-const NAMESPACE = 'Product'
-const PATH = 'services/products'
+const NAMESPACE = 'services/products'
 
 export const createNewItem = async (item: Product): Promise<ProductSchema> => {
   try {
-    const length = await ProductSchema.count()
-    return await ProductSchema.create({ ...item, orderNumber: length })
+    return await ProductSchema.create({ ...item, orderNumber: 0 })
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Creating new product :: ${error}`)
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
   }
 }
 
 // Get by id
-export const getItemBy = async (product: Product): Promise<ProductSchema | null> => {
+export const getItemBy = async (item: Product): Promise<ProductSchema | null> => {
   try {
-    const item = await ProductSchema.findOne({ where: { ...product } })
-    return item
+    return await ProductSchema.findOne({ where: { ...item } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
   }
 }
 
@@ -40,9 +37,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: 
-    ${error}`)
+    logging.error(NAMESPACE, `Error getItems :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
   }
 }
 
@@ -55,8 +51,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Produc
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
   }
 }
 
@@ -64,13 +60,13 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ProductSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
   }
 }
 
 // Update
-export const updateItemByID = async (id: number, itemToUpdate: Product): Promise<Product | undefined> => {
+export const updateItemByPk = async (id: number, itemToUpdate: Product): Promise<Product | undefined> => {
   try {
     const affectedRows = await ProductSchema.update(
       {
@@ -84,18 +80,18 @@ export const updateItemByID = async (id: number, itemToUpdate: Product): Promise
     )
     return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
   }
 }
 
 // Delete
-export const deleteItemByID = async (id: number): Promise<number> => {
+export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
     const affectedRows = await ProductSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
   }
 }
