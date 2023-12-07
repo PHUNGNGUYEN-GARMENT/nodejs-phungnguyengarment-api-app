@@ -5,7 +5,7 @@ import ProductColorSchema from './product-color.model'
 
 const { INTEGER, STRING, DATE, DOUBLE } = DataType
 
-export interface Product {
+export type Product = {
   id?: number
   productCode?: string
   quantityPO?: number

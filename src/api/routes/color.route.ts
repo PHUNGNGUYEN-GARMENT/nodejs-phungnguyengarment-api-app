@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param } from 'express-validator'
 import ColorController from '~/controllers/color.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
@@ -16,17 +16,17 @@ class ColorRoute {
     this.router.post(
       '/',
       requestValidationRules([
+        body('hexColor')
+          .notEmpty()
+          .withMessage('This field can not empty!')
+          .isString()
+          .withMessage('This field must be String type!'),
         body('nameColor')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isString()
           .withMessage('This field must be String type!'),
         body('status')
-          .notEmpty()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be String type!'),
-        body('hexColor')
           .notEmpty()
           .withMessage('This field can not empty!')
           .isString()
@@ -39,26 +39,26 @@ class ColorRoute {
     this.router.get(
       '/id',
       requestValidationRules([
-        query('id')
+        param('id')
           .exists()
           .withMessage('This field can not empty!')
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.getItemByID
+      this.controller.getItemByPk
     )
 
     // Get item
     this.router.get(
-      '/hex',
+      '/hexColor/:hexColor',
       requestValidationRules([
-        query('hex')
+        param('hexColor')
           .exists()
           .withMessage('This field can not empty!')
           .isString()
           .withMessage('This field must be String type!')
       ]),
-      this.controller.getItemByHexCode
+      this.controller.getItemByHexColor
     )
 
     // Get all items
@@ -99,7 +99,7 @@ class ColorRoute {
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.updateItemByID
+      this.controller.updateItemByPk
     )
 
     // Delete item by productID
@@ -112,7 +112,7 @@ class ColorRoute {
           .isInt()
           .withMessage('This field must be Integer type!')
       ]),
-      this.controller.deleteItemByID
+      this.controller.deleteItemByPk
     )
   }
 }

@@ -1,17 +1,15 @@
-import { BelongsTo, Column, DataType, Model, Table } from 'sequelize-typescript'
+import { Column, DataType, Model, Table } from 'sequelize-typescript'
 import { ItemStatusType } from '~/type'
-import ProductSchema from './product.model'
 
 const { INTEGER, STRING } = DataType
 
-export interface Color {
+export type Color = {
   id?: number
   nameColor?: string
   hexColor?: string
   status?: ItemStatusType
   createdAt?: string
   updatedAt?: string
-  orderNumber?: number
 }
 
 @Table({
@@ -31,7 +29,4 @@ export default class ColorSchema extends Model<Color> {
 
   @Column({ type: STRING, field: 'hex_color' })
   declare hexColor: string
-
-  @Column({ type: INTEGER, field: 'order_number' })
-  declare orderNumber: number
 }

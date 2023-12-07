@@ -3,16 +3,14 @@ import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
 
-const NAMESPACE = 'Color'
-const PATH = 'services/color'
+const NAMESPACE = 'services/color'
 
-export const createNew = async (item: Color): Promise<ColorSchema> => {
+export const createNewItem = async (item: Color): Promise<ColorSchema> => {
   try {
-    const length = await ColorSchema.count()
-    return await ColorSchema.create({ ...item, orderNumber: length })
+    return await ColorSchema.create({ ...item })
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Creating new ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
   }
 }
 
@@ -22,8 +20,8 @@ export const getItemByPk = async (id: number): Promise<ColorSchema | null> => {
     const item = await ColorSchema.findByPk(id)
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by color :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by color :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
   }
 }
 
@@ -32,8 +30,8 @@ export const getItemBy = async (color: Color): Promise<ColorSchema | null> => {
     const item = await ColorSchema.findOne({ where: { ...color } })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by color :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by color :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
   }
 }
 
@@ -49,8 +47,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItems :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
   }
 }
 
@@ -63,8 +61,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<ColorS
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
   }
 }
 
@@ -72,13 +70,13 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ColorSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
   }
 }
 
 // Update by productID
-export const updateByID = async (id: number, item: Color): Promise<Color | undefined> => {
+export const updateItemByPk = async (id: number, item: Color): Promise<Color | undefined> => {
   try {
     const affectedRows = await ColorSchema.update(
       {
@@ -86,8 +84,7 @@ export const updateByID = async (id: number, item: Color): Promise<Color | undef
         hexColor: item.hexColor,
         status: item.status,
         createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-        orderNumber: item.orderNumber
+        updatedAt: item.updatedAt
       },
       {
         where: {
@@ -97,18 +94,18 @@ export const updateByID = async (id: number, item: Color): Promise<Color | undef
     )
     return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
   }
 }
 
 // Delete importedID
-export const deleteByID = async (id: number): Promise<number> => {
+export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
     const affectedRows = await ColorSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} id :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
   }
 }

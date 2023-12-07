@@ -4,8 +4,7 @@ import * as service from '~/services/color.service'
 import * as productColorService from '~/services/product-color.service'
 import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'Color'
-const PATH = 'controllers/color'
+const NAMESPACE = 'controllers/color'
 
 export default class ColorController {
   constructor() {}
@@ -17,22 +16,21 @@ export default class ColorController {
       status: req.body.status
     }
     try {
-      const itemNew = await service.createNew(itemRequest)
+      const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
-      } else {
-        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
+      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
     } catch (error) {
       return res.formatter.badRequest({ message: `>>> ${error}` })
     }
   }
 
-  getItemByID = async (req: Request, res: Response) => {
-    const id = Number(req.query.id)
+  getItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     try {
-      const item = await service.getItemBy({ id: id })
+      const item = await service.getItemByPk(id)
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -42,10 +40,10 @@ export default class ColorController {
     }
   }
 
-  getItemByHexCode = async (req: Request, res: Response) => {
-    const hex = String(req.query.hex)
+  getItemByHexColor = async (req: Request, res: Response) => {
+    const hexColor = String(req.params.hexColor)
     try {
-      const item = await service.getItemBy({ hexColor: hex })
+      const item = await service.getItemBy({ hexColor: hexColor })
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -73,18 +71,15 @@ export default class ColorController {
     }
   }
 
-  updateItemByID = async (req: Request, res: Response) => {
+  updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: Color = {
       nameColor: req.body.nameColor,
       hexColor: req.body.hexColor,
-      status: req.body.status,
-      createdAt: req.body.createdAt,
-      updatedAt: req.body.updatedAt,
-      orderNumber: req.body.orderNumber
+      status: req.body.status
     }
     try {
-      const colorUpdated = await service.updateByID(id, itemRequest)
+      const colorUpdated = await service.updateItemByPk(id, itemRequest)
       if (colorUpdated) {
         const productColorUpdated = await productColorService.updateItemByProductID(colorUpdated.id!, {
           hexColor: colorUpdated.hexColor,
@@ -102,10 +97,10 @@ export default class ColorController {
     }
   }
 
-  deleteItemByID = async (req: Request, res: Response) => {
+  deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
-      const item = await service.deleteByID(id)
+      const item = await service.deleteItemByPk(id)
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
