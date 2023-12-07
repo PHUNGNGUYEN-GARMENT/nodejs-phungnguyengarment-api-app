@@ -22,15 +22,15 @@ export default class ProductController {
     }
     const colorID = Number(req.body.colorID)
     try {
-      const itemNew = await service.createNewItem(dataRequest)
-      if (itemNew) {
-        const itemProductColorNew = await productColorService.createNewItem({
+      const newProd = await service.createNewItem(dataRequest)
+      if (newProd) {
+        const newItem = await productColorService.createNewItem({
           colorID: colorID,
-          productID: itemNew.id,
+          productID: newProd.id,
           status: 'active'
         })
-        if (itemProductColorNew) {
-          return res.formatter.created({ data: itemNew, meta: itemProductColorNew })
+        if (newItem) {
+          return res.formatter.created({ data: newProd, meta: newItem })
         }
       }
       return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
