@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { body, param, query } from 'express-validator'
 import PrintRouteController from '~/controllers/print.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import { validators } from '../utils/constant'
 
 class PrintRoute {
   router = Router()
@@ -17,15 +18,15 @@ class PrintRoute {
       '/',
       requestValidationRules([
         body('name')
-          .notEmpty()
-          .withMessage('This field can not empty!')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('status')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createNewItem
     )
@@ -36,11 +37,11 @@ class PrintRoute {
       requestValidationRules([
         query('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
-      this.controller.getItemByID
+      this.controller.getItemByPk
     )
 
     // Get item
@@ -49,9 +50,9 @@ class PrintRoute {
       requestValidationRules([
         query('name')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.getItemByName
     )
@@ -62,24 +63,24 @@ class PrintRoute {
       requestValidationRules([
         body('filter')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('paginator')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('search')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('sorting')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!')
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
       ]),
       this.controller.getItems
     )
@@ -90,11 +91,11 @@ class PrintRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.updateItemByID
+      this.controller.updateItemByPk
     )
 
     // Delete item by productID
@@ -103,11 +104,11 @@ class PrintRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.deleteItemByID
+      this.controller.deleteItemByPk
     )
   }
 }

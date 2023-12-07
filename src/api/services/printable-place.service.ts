@@ -1,134 +1,189 @@
 import PrintablePlaceSchema, { PrintablePlace } from '~/models/printable-place.model'
 import logging from '~/utils/logging'
+import ProductSchema from '../models/product.model'
+import PrintSchema from '../models/print.model'
+import { ItemStatusType, RequestBodyType } from '~/type'
+import { buildDynamicQuery } from '../helpers/query'
 
-const NAMESPACE = 'PrintablePlace'
-const PATH = 'services/printable-place'
+const NAMESPACE = 'services/printable-place'
 
-export const createNew = async (items: PrintablePlace[]): Promise<PrintablePlaceSchema[]> => {
+export const createNewItem = async (item: PrintablePlace): Promise<PrintablePlaceSchema> => {
   try {
-    const list = await PrintablePlaceSchema.findAll()
-    const data = items.map((item) => {
-      return {
-        printID: item.printID,
-        productID: item.productID,
-        name: item.name,
-        orderNumber: list.length
-      }
-    })
-    const createdList = await PrintablePlaceSchema.bulkCreate(data)
-    return createdList
+    return await PrintablePlaceSchema.create({ ...item })
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Creating new ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
   }
 }
 
 // Get by id
-export const getByPrintID = async (printID: number): Promise<PrintablePlaceSchema | null> => {
+export const getItemByPk = async (id: number): Promise<PrintablePlaceSchema | null> => {
   try {
-    const item = await PrintablePlaceSchema.findOne({ where: { printID: printID } })
+    const item = await PrintablePlaceSchema.findByPk(id, {
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: PrintSchema, as: 'print' }
+      ]
+    })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by printID :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by printID :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
   }
 }
 
-export const getByProductID = async (productID: number): Promise<PrintablePlaceSchema | null> => {
+// Get by id
+export const getItemBy = async (product: PrintablePlace): Promise<PrintablePlaceSchema | null> => {
   try {
-    const item = await PrintablePlaceSchema.findOne({ where: { productID: productID } })
+    const item = await PrintablePlaceSchema.findOne({
+      where: { ...product },
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: PrintSchema, as: 'print' }
+      ]
+    })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by productID :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by productID :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} getItemBy :: ${error}`)
   }
 }
 
 // Get all
-export const getAll = async (): Promise<PrintablePlaceSchema[]> => {
+export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: PrintablePlaceSchema[] }> => {
   try {
-    // if (item.printID) {
-    //   return PrintablePlaceSchema.findAll({
-    //     where: {
-    //       printID: item.printID
-    //     }
-    //   })
-    // }
-
-    // if (item.productID) {
-    //   return await PrintablePlaceSchema.findAll({
-    //     where: {
-    //       productID: item.productID
-    //     }
-    //   })
-    // }
-    return await PrintablePlaceSchema.findAll()
+    // console.log(`${NAMESPACE}>>>`, buildDynamicQuery<PrintablePlace>(body))
+    const items = await PrintablePlaceSchema.findAndCountAll({
+      offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
+      limit: body.paginator.pageSize,
+      order: [[body.sorting.column, body.sorting.direction]],
+      where: buildDynamicQuery<PrintablePlace>(body),
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: PrintSchema, as: 'print' }
+      ]
+    })
+    return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItems :: ${error}`)
+    throw new Error(`${NAMESPACE} getItems :: ${error}`)
   }
 }
 
-// Update by productID
-export const updateByPrintID = async (item: PrintablePlace): Promise<number> => {
+export const getItemsWithStatus = async (status: ItemStatusType): Promise<PrintablePlaceSchema[]> => {
+  try {
+    const items = await PrintablePlaceSchema.findAll({
+      where: {
+        status: status
+      }
+    })
+    return items
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+  }
+}
+
+export const getItemsCount = async (): Promise<number> => {
+  try {
+    return await ProductSchema.count()
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
+    throw new Error(`${NAMESPACE} getItemsCount :: ${error}`)
+  }
+}
+
+// Update
+export const updateItemByPk = async (id: number, itemToUpdate: PrintablePlace): Promise<PrintablePlace | undefined> => {
   try {
     const affectedRows = await PrintablePlaceSchema.update(
       {
-        productID: item.productID,
-        name: item.name,
-        orderNumber: item.orderNumber
+        ...itemToUpdate
       },
       {
         where: {
-          printID: item.printID
+          id: id
         }
       }
     )
-    return affectedRows[0]
+    return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by printID :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by printID :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
   }
 }
 
-export const updateByProductID = async (item: PrintablePlace): Promise<number> => {
+export const updateItemByProductID = async (
+  productID: number,
+  itemToUpdate: PrintablePlace
+): Promise<PrintablePlace | undefined> => {
   try {
     const affectedRows = await PrintablePlaceSchema.update(
       {
-        printID: item.printID,
-        name: item.name,
-        orderNumber: item.orderNumber
+        ...itemToUpdate
       },
       {
         where: {
-          productID: item.productID
+          productID: productID
         }
       }
     )
-    return affectedRows[0]
+    return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by productID :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by productID :: ${error}`)
+    logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
   }
 }
 
-// Delete importedID
-export const deleteByPrintID = async (printID: number): Promise<number> => {
+export const updateItemByPrintID = async (
+  printID: number,
+  itemToUpdate: PrintablePlace
+): Promise<PrintablePlace | undefined> => {
+  try {
+    const affectedRows = await PrintablePlaceSchema.update(
+      {
+        ...itemToUpdate
+      },
+      {
+        where: {
+          printID: printID
+        }
+      }
+    )
+    return affectedRows[0] === 1 ? itemToUpdate : undefined
+  } catch (error) {
+    logging.error(NAMESPACE, `Error updateItemByColorID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByColorID :: ${error}`)
+  }
+}
+
+// Delete
+export const deleteItemByPk = async (id: number): Promise<number> => {
+  try {
+    const affectedRows = await PrintablePlaceSchema.destroy({ where: { id: id } })
+    return affectedRows
+  } catch (error) {
+    logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+  }
+}
+
+export const deleteItemByPrintID = async (printID: number): Promise<number> => {
   try {
     const affectedRows = await PrintablePlaceSchema.destroy({ where: { printID: printID } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} printID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by printID :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemByPrintID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByPrintID :: ${error}`)
   }
 }
 
-export const deleteByProductID = async (productID: number): Promise<number> => {
+export const deleteItemByProductID = async (productID: number): Promise<number> => {
   try {
     const affectedRows = await PrintablePlaceSchema.destroy({ where: { productID: productID } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} productID :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by productID :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByProductID :: ${error}`)
   }
 }

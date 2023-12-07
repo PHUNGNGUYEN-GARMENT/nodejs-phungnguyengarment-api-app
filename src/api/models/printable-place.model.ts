@@ -1,14 +1,16 @@
-import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { ItemStatusType } from '~/type'
 import PrintSchema from './print.model'
 import ProductSchema from './product.model'
 
 const { INTEGER, STRING } = DataType
 
 export interface PrintablePlace {
+  id?: number
   printID?: number
   productID?: number
   name?: string
-  orderNumber?: number
+  status?: ItemStatusType
 }
 
 @Table({
@@ -17,6 +19,9 @@ export interface PrintablePlace {
   timestamps: true
 })
 export default class PrintablePlaceSchema extends Model<PrintablePlace> {
+  @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
+  declare id: number
+
   @Column({ type: INTEGER, field: 'print_id' })
   @ForeignKey(() => PrintSchema)
   declare printID: number
@@ -28,6 +33,12 @@ export default class PrintablePlaceSchema extends Model<PrintablePlace> {
   @Column({ type: STRING, field: 'name' })
   declare name: string
 
-  @Column({ type: INTEGER, field: 'order_number' })
-  declare orderNumber: number
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
+
+  @BelongsTo(() => PrintSchema)
+  declare print: PrintSchema
+
+  @BelongsTo(() => PrintSchema)
+  declare product: ProductSchema
 }

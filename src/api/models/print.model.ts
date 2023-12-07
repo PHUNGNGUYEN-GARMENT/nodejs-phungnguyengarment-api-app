@@ -3,11 +3,10 @@ import { ItemStatusType } from '~/type'
 
 const { INTEGER, STRING } = DataType
 
-export interface Print {
+export type Print = {
   id?: number
   name?: string
   status?: ItemStatusType
-  orderNumber?: number
 }
 
 @Table({
@@ -24,7 +23,4 @@ export default class PrintSchema extends Model<Print> {
 
   @Column({ type: STRING, field: 'status' })
   declare status: string
-
-  @Column({ type: INTEGER, field: 'order_number' })
-  declare orderNumber: number
 }

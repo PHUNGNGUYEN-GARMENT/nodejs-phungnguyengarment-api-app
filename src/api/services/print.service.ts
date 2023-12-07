@@ -3,27 +3,35 @@ import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
 
-const NAMESPACE = 'Print'
-const PATH = 'services/print'
+const NAMESPACE = 'services/print'
 
-export const createNew = async (item: Print): Promise<PrintSchema> => {
+export const createNewItem = async (item: Print): Promise<PrintSchema> => {
   try {
-    const length = await PrintSchema.count()
-    return await PrintSchema.create({ ...item, orderNumber: length })
+    return await PrintSchema.create({ ...item })
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Creating new ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
   }
 }
 
 // Get by id
+export const getItemByPk = async (id: number): Promise<PrintSchema | null> => {
+  try {
+    const item = await PrintSchema.findByPk(id)
+    return item
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+  }
+}
+
 export const getItemBy = async (data: Print): Promise<PrintSchema | null> => {
   try {
     const item = await PrintSchema.findOne({ where: { ...data } })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error get ${NAMESPACE} by getItemBy :: ${error}`)
-    throw new Error(`Get ${NAMESPACE} by getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
   }
 }
 
@@ -39,8 +47,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItems :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
   }
 }
 
@@ -53,8 +61,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<PrintS
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
   }
 }
 
@@ -62,19 +70,18 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await PrintSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all ${NAMESPACE} :: ${error}`)
-    throw new Error(`Get all ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
   }
 }
 
 // Update by productID
-export const updateByID = async (id: number, item: Print): Promise<Print | undefined> => {
+export const updateItemByPk = async (id: number, item: Print): Promise<Print | undefined> => {
   try {
     const affectedRows = await PrintSchema.update(
       {
         name: item.name,
-        status: item.status,
-        orderNumber: item.orderNumber
+        status: item.status
       },
       {
         where: {
@@ -84,18 +91,18 @@ export const updateByID = async (id: number, item: Print): Promise<Print | undef
     )
     return affectedRows[0] === 1 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error update ${NAMESPACE} by id :: ${error}`)
-    throw new Error(`Update ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
   }
 }
 
 // Delete importedID
-export const deleteByID = async (id: number): Promise<number> => {
+export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
     const affectedRows = await PrintSchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete ${NAMESPACE} id :: ${error}`)
-    throw new Error(`Delete ${NAMESPACE} by id :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
   }
 }

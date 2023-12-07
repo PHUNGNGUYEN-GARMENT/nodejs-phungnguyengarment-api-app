@@ -1,38 +1,38 @@
 import { Request, Response } from 'express'
 import { PrintablePlace } from '~/models/printable-place.model'
 import * as service from '~/services/printable-place.service'
+import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'PrintablePlace'
-const PATH = 'controllers/printable-place'
+const NAMESPACE = 'controllers/product-color'
 
-export default class PrintablePlaceController {
+export default class ProductColorController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const { items } = req.body
+    const itemRequest: PrintablePlace = {
+      printID: req.body.printID,
+      productID: req.body.productID,
+      name: req.body.name,
+      status: req.body.status
+    }
     try {
-      const itemNew = await service.createNew(items)
+      const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
-      } else {
-        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
+      return res.formatter.badRequest({ message: `Failed to create new item` })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  getItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+  getItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     try {
-      const item1 = await service.getByPrintID(parseInt(id))
-      if (item1) {
-        return res.formatter.ok({ data: item1 })
-      }
-      const item2 = await service.getByProductID(parseInt(id))
-      if (item2) {
-        return res.formatter.ok({ data: item2 })
+      const item = await service.getItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ data: item })
       }
       return res.formatter.notFound({})
     } catch (error) {
@@ -40,34 +40,62 @@ export default class PrintablePlaceController {
     }
   }
 
-  getAllItems = async (req: Request, res: Response) => {
-    // const itemRequest: PrintablePlace = {
-    //   printID: req.body.printID,
-    //   productID: req.body.productID
-    // }
+  getItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
     try {
-      const items = await service.getAll()
-      return res.formatter.ok({ data: items })
+      const item = await service.getItemBy({ productID: productID })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  updateItemByID = async (req: Request, res: Response) => {
+  getItemByPrintID = async (req: Request, res: Response) => {
+    const printID = Number(req.params.printID)
+    try {
+      const item = await service.getItemBy({ printID: printID })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItems = async (req: Request, res: Response) => {
+    try {
+      const bodyRequest: RequestBodyType = {
+        ...req.body
+      }
+      const items = await service.getItems(bodyRequest)
+      const total = await service.getItemsWithStatus(bodyRequest.filter.status)
+      return res.formatter.ok({
+        data: items.rows,
+        length: items.count,
+        page: Number(bodyRequest.paginator.page),
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+      })
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     const itemRequest: PrintablePlace = {
       printID: req.body.printID,
       productID: req.body.productID,
       name: req.body.name,
-      orderNumber: req.body.orderNumber
+      status: req.body.status
     }
     try {
-      const itemUpdated1 = await service.updateByPrintID(itemRequest)
-      if (itemUpdated1) {
-        return res.formatter.ok({ data: itemUpdated1 })
-      }
-      const itemUpdated2 = await service.updateByPrintID(itemRequest)
-      if (itemUpdated2) {
-        return res.formatter.ok({ data: itemUpdated2 })
+      const itemUpdated = await service.updateItemByPk(id, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {
@@ -75,18 +103,76 @@ export default class PrintablePlaceController {
     }
   }
 
-  deleteItemByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+  updateItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
+    const itemRequest: PrintablePlace = {
+      printID: req.body.printID,
+      name: req.body.name,
+      status: req.body.status
+    }
     try {
-      const item1 = await service.deleteByPrintID(parseInt(id))
-      if (item1) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
       }
-      const item2 = await service.deleteByProductID(parseInt(id))
-      if (item2) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByPrintID = async (req: Request, res: Response) => {
+    const printID = Number(req.params.printID)
+    const itemRequest: PrintablePlace = {
+      productID: req.body.productID,
+      name: req.body.name,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.updateItemByPrintID(printID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
       }
-      return res.formatter.notFound({})
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    try {
+      const itemUpdated = await service.deleteItemByPk(id)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
+    try {
+      const itemUpdated = await service.deleteItemByProductID(productID)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByPrintID = async (req: Request, res: Response) => {
+    const printID = Number(req.params.printID)
+    try {
+      const itemUpdated = await service.deleteItemByPrintID(printID)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
