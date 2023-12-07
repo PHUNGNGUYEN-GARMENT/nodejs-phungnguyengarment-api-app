@@ -17,8 +17,7 @@ export const createNewItem = async (item: Color): Promise<ColorSchema> => {
 // Get by id
 export const getItemByPk = async (id: number): Promise<ColorSchema | null> => {
   try {
-    const item = await ColorSchema.findByPk(id)
-    return item
+    return await ColorSchema.findByPk(id)
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
@@ -27,8 +26,7 @@ export const getItemByPk = async (id: number): Promise<ColorSchema | null> => {
 
 export const getItemBy = async (color: Color): Promise<ColorSchema | null> => {
   try {
-    const item = await ColorSchema.findOne({ where: { ...color } })
-    return item
+    return await ColorSchema.findOne({ where: { ...color } })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -54,12 +52,11 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
 
 export const getItemsWithStatus = async (status: ItemStatusType): Promise<ColorSchema[]> => {
   try {
-    const items = await ColorSchema.findAll({
+    return await ColorSchema.findAll({
       where: {
         status: status
       }
     })
-    return items
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
@@ -100,8 +97,7 @@ export const updateItemByPk = async (id: number, item: Color): Promise<Color | u
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
-    const affectedRows = await ColorSchema.destroy({ where: { id: id } })
-    return affectedRows
+    return await ColorSchema.destroy({ where: { id: id } })
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)

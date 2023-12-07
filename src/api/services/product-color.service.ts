@@ -180,8 +180,7 @@ export const deleteItemByColorID = async (colorID: number): Promise<number> => {
 
 export const deleteItemByProductID = async (productID: number): Promise<number> => {
   try {
-    const affectedRows = await ProductColorSchema.destroy({ where: { productID: productID } })
-    return affectedRows
+    return await ProductColorSchema.destroy({ where: { productID: productID } })
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error deleteItemByProductID :: ${error}`)

@@ -1,13 +1,13 @@
-import GroupSchema, { Group } from '~/models/group.model'
+import SewingLineSchema, { SewingLine } from '~/models/sewing-line.model'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
 
-const NAMESPACE = 'services/group'
+const NAMESPACE = 'services/sewing-line'
 
-export const createNewItem = async (item: Group): Promise<GroupSchema> => {
+export const createNewItem = async (item: SewingLine): Promise<SewingLineSchema> => {
   try {
-    return await GroupSchema.create({ ...item })
+    return await SewingLineSchema.create({ ...item })
   } catch (error) {
     logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
     throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
@@ -15,18 +15,20 @@ export const createNewItem = async (item: Group): Promise<GroupSchema> => {
 }
 
 // Get by id
-export const getItemByPk = async (id: number): Promise<GroupSchema | null> => {
+export const getItemByPk = async (id: number): Promise<SewingLineSchema | null> => {
   try {
-    return await GroupSchema.findByPk(id)
+    const item = await SewingLineSchema.findByPk(id)
+    return item
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
   }
 }
 
-export const getItemBy = async (group: Group): Promise<GroupSchema | null> => {
+export const getItemBy = async (sewingLineDelivery: SewingLine): Promise<SewingLineSchema | null> => {
   try {
-    return await GroupSchema.findOne({ where: { ...group } })
+    const item = await SewingLineSchema.findOne({ where: { ...sewingLineDelivery } })
+    return item
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -34,14 +36,14 @@ export const getItemBy = async (group: Group): Promise<GroupSchema | null> => {
 }
 
 // Get all
-export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: GroupSchema[] }> => {
+export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: SewingLineSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<Group>(body))
-    const items = await GroupSchema.findAndCountAll({
+    console.log(buildDynamicQuery<SewingLine>(body))
+    const items = await SewingLineSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
-      where: buildDynamicQuery<Group>(body)
+      where: buildDynamicQuery<SewingLine>(body)
     })
     return items
   } catch (error) {
@@ -50,13 +52,14 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
   }
 }
 
-export const getItemsWithStatus = async (status: ItemStatusType): Promise<GroupSchema[]> => {
+export const getItemsWithStatus = async (status: ItemStatusType): Promise<SewingLineSchema[]> => {
   try {
-    return await GroupSchema.findAll({
+    const items = await SewingLineSchema.findAll({
       where: {
         status: status
       }
     })
+    return items
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
@@ -65,7 +68,7 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<GroupS
 
 export const getItemsCount = async (): Promise<number> => {
   try {
-    return await GroupSchema.count()
+    return await SewingLineSchema.count()
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
@@ -73,11 +76,11 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update by productID
-export const updateItemByPk = async (id: number, item: Group): Promise<Group | undefined> => {
+export const updateItemByPk = async (id: number, item: SewingLine): Promise<SewingLine | undefined> => {
   try {
-    const affectedRows = await GroupSchema.update(
+    const affectedRows = await SewingLineSchema.update(
       {
-        name: item.name,
+        sewingLine: item.sewingLine,
         status: item.status
       },
       {
@@ -96,7 +99,8 @@ export const updateItemByPk = async (id: number, item: Group): Promise<Group | u
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
-    return await GroupSchema.destroy({ where: { id: id } })
+    const affectedRows = await SewingLineSchema.destroy({ where: { id: id } })
+    return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)

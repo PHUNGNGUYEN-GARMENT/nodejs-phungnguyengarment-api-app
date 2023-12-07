@@ -133,6 +133,18 @@ class ImportationRoute {
       ]),
       this.controller.deleteItemByPk
     )
+
+    this.router.delete(
+      '/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.deleteItemByProductID
+    )
   }
 }
 

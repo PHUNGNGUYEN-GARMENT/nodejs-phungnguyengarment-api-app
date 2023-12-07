@@ -1,7 +1,8 @@
 import { Router } from 'express'
 import { body, param, query } from 'express-validator'
-import SewingLineDeliveryController from '~/controllers/sewing-line-delivery.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import SewingLineDeliveryController from '../controllers/sewing-line-delivery.controller'
+import { validators } from '../utils/constant'
 
 class SewingLineDeliveryRoute {
   router = Router()
@@ -16,16 +17,36 @@ class SewingLineDeliveryRoute {
     this.router.post(
       '/',
       requestValidationRules([
-        body('name')
-          .notEmpty()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be String type!'),
+        body('sewingLineID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('productID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('status')
-          .notEmpty()
-          .withMessage('This field can not empty!')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
+        body('quantityOrigin')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isFloat()
+          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
+        body('quantitySewed')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isFloat()
+          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
+        body('expiredDate')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createNewItem
     )
@@ -36,24 +57,37 @@ class SewingLineDeliveryRoute {
       requestValidationRules([
         query('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.getItemByID
+      this.controller.getItemByPk
     )
 
     // Get item
     this.router.get(
-      '/name',
+      '/sewingLineID/:sewingLineID',
       requestValidationRules([
-        query('name')
+        param('sewingLineID')
           .exists()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.getItemByName
+      this.controller.getItemBySewingLineID
+    )
+
+    // Get item
+    this.router.get(
+      '/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.getItemByProductID
     )
 
     // Get all items
@@ -62,24 +96,24 @@ class SewingLineDeliveryRoute {
       requestValidationRules([
         body('filter')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('paginator')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('search')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('sorting')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!')
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
       ]),
       this.controller.getItems
     )
@@ -90,11 +124,37 @@ class SewingLineDeliveryRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.updateItemByID
+      this.controller.updateItemByPk
+    )
+
+    // Update item by productID and importedID
+    this.router.put(
+      '/sewingLineID/:sewingLineID',
+      requestValidationRules([
+        param('sewingLineID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.updateItemBySewingLineID
+    )
+
+    // Update item by productID and importedID
+    this.router.put(
+      '/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.updateItemByProductID
     )
 
     // Delete item by productID
@@ -103,11 +163,35 @@ class SewingLineDeliveryRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
-      this.controller.deleteItemByID
+      this.controller.deleteItemByPk
+    )
+
+    this.router.delete(
+      '/sewingLineID/:sewingLineID',
+      requestValidationRules([
+        param('sewingLineID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.deleteItemBySewingLineID
+    )
+
+    this.router.delete(
+      '/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.deleteItemByProductID
     )
   }
 }

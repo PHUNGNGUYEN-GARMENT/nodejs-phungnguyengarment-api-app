@@ -1,19 +1,17 @@
 import { Request, Response } from 'express'
-import { Importation } from '~/models/importation.model'
-import * as service from '~/services/importation.service'
+import { SewingLine } from '~/models/sewing-line.model'
+import * as service from '~/services/sewing-line.service'
 import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'controllers/importation'
+const NAMESPACE = 'controllers/sewing-line'
 
-export default class ImportationController {
+export default class SewingLineController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: Importation = {
-      dateImported: req.body.dateImported,
-      status: req.body.status,
-      quantity: req.body.quantity,
-      productID: req.body.productID
+    const itemRequest: SewingLine = {
+      sewingLine: req.body.sewingLine,
+      status: req.body.status
     }
     try {
       const itemNew = await service.createNewItem(itemRequest)
@@ -21,14 +19,14 @@ export default class ImportationController {
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
     } catch (error) {
       return res.formatter.badRequest({ message: `>>> ${error}` })
     }
   }
 
   getItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.query.id)
+    const id = Number(req.params.id)
     try {
       const item = await service.getItemByPk(id)
       if (item) {
@@ -40,10 +38,10 @@ export default class ImportationController {
     }
   }
 
-  getItemByProductID = async (req: Request, res: Response) => {
-    const productID = Number(req.params.productID)
+  getItemBySewingLine = async (req: Request, res: Response) => {
+    const sewingLine = String(req.params.sewingLine)
     try {
-      const item = await service.getItemByProductID(productID)
+      const item = await service.getItemBy({ sewingLine: sewingLine })
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -73,33 +71,14 @@ export default class ImportationController {
 
   updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const itemRequest: Importation = {
-      dateImported: req.body.dateImported,
-      status: req.body.status,
-      quantity: req.body.quantity
+    const itemRequest: SewingLine = {
+      sewingLine: req.body.sewingLine,
+      status: req.body.status
     }
     try {
-      const itemUpdated = await service.updateItemByPk(id, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
-      }
-      return res.formatter.badRequest({})
-    } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
-    }
-  }
-
-  updateItemByProductID = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    const itemRequest: Importation = {
-      dateImported: req.body.dateImported,
-      status: req.body.status,
-      quantity: req.body.quantity
-    }
-    try {
-      const itemUpdated = await service.updateItemByProductID(id, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const printUpdated = await service.updateItemByPk(id, itemRequest)
+      if (printUpdated) {
+        return res.formatter.ok({ data: printUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {
@@ -112,20 +91,7 @@ export default class ImportationController {
     try {
       const item = await service.deleteItemByPk(id)
       if (item) {
-        return res.formatter.ok({ message: `${NAMESPACE}` })
-      }
-      return res.formatter.notFound({})
-    } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
-    }
-  }
-
-  deleteItemByProductID = async (req: Request, res: Response) => {
-    const productID = Number(req.params.productID)
-    try {
-      const item = await service.deleteItemByProductID(productID)
-      if (item) {
-        return res.formatter.ok({ message: `${NAMESPACE}` })
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }
       return res.formatter.notFound({})
     } catch (error) {

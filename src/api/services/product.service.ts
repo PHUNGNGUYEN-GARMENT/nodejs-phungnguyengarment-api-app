@@ -2,7 +2,10 @@ import ProductSchema, { Product } from '~/models/product.model'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
+import ImportationSchema from '../models/importation.model'
+import PrintablePlaceSchema from '../models/printable-place.model'
 import ProductColorSchema from '../models/product-color.model'
+import ProductGroupSchema from '../models/product-group.model'
 
 const NAMESPACE = 'services/products'
 
@@ -16,9 +19,33 @@ export const createNewItem = async (item: Product): Promise<ProductSchema> => {
 }
 
 // Get by id
+export const getItemByPk = async (id: number): Promise<ProductSchema | null> => {
+  try {
+    return await ProductSchema.findByPk(id, {
+      include: [
+        { model: ImportationSchema, as: 'importation' },
+        { model: ProductColorSchema, as: 'productColor' },
+        { model: PrintablePlaceSchema, as: 'printablePlace' },
+        { model: ProductGroupSchema, as: 'productGroup' }
+      ]
+    })
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+  }
+}
+
 export const getItemBy = async (item: Product): Promise<ProductSchema | null> => {
   try {
-    return await ProductSchema.findOne({ where: { ...item } })
+    return await ProductSchema.findOne({
+      where: { ...item },
+      include: [
+        { model: ImportationSchema, as: 'importation' },
+        { model: ProductColorSchema, as: 'productColor' },
+        { model: PrintablePlaceSchema, as: 'printablePlace' },
+        { model: ProductGroupSchema, as: 'productGroup' }
+      ]
+    })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -33,7 +60,12 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
       where: buildDynamicQuery<Product>(body),
-      include: [{ model: ProductColorSchema, as: 'productColor' }]
+      include: [
+        { model: ImportationSchema, as: 'importation' },
+        { model: ProductColorSchema, as: 'productColor' },
+        { model: PrintablePlaceSchema, as: 'printablePlace' },
+        { model: ProductGroupSchema, as: 'productGroup' }
+      ]
     })
     return items
   } catch (error) {
@@ -44,12 +76,11 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
 
 export const getItemsWithStatus = async (status: ItemStatusType): Promise<ProductSchema[]> => {
   try {
-    const items = await ProductSchema.findAll({
+    return await ProductSchema.findAll({
       where: {
         status: status
       }
     })
-    return items
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
@@ -88,8 +119,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: Product): Promise
 // Delete
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
-    const affectedRows = await ProductSchema.destroy({ where: { id: id } })
-    return affectedRows
+    return await ProductSchema.destroy({ where: { id: id } })
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)

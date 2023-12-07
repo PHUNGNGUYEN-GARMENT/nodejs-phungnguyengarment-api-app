@@ -1,38 +1,36 @@
 import { Request, Response } from 'express'
 import { Product } from '~/models/product.model'
-import * as productColorService from '~/services/product-color.service'
 import * as service from '~/services/product.service'
-import { ItemStatusType, RequestBodyType } from '~/type'
+import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'Product'
-const PATH = 'controllers/product'
+const NAMESPACE = 'controllers/product'
 
-export default class ProductController {
+class ProductController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
     const dataRequest: Product = {
-      productCode: String(req.body.productCode),
-      quantityPO: Number(req.body.quantityPO),
-      status: req.body.status as ItemStatusType,
-      dateInputNPL: new Date(req.body.dateInputNPL),
-      dateOutputFCR: new Date(req.body.dateOutputFCR)
+      productCode: req.body.productCode,
+      quantityPO: req.body.quantityPO,
+      status: req.body.status,
+      dateInputNPL: req.body.dateInputNPL,
+      dateOutputFCR: req.body.dateOutputFCR
     }
     try {
       const newProd = await service.createNewItem(dataRequest)
       if (newProd) {
         return res.formatter.created({ data: newProd })
       }
-      return res.formatter.badRequest({ message: `Failed to create new item` })
+      return res.formatter.badRequest({})
     } catch (error) {
-      return res.formatter.badRequest({ message: `Failed to create new item with: ${error}` })
+      return res.formatter.badRequest({})
     }
   }
 
   getItemByPk = async (req: Request, res: Response) => {
     try {
-      const id = Number(req.query.id)
-      const item = await service.getItemBy({ id: id })
+      const id = Number(req.params.id)
+      const item = await service.getItemByPk(id)
 
       if (item) {
         return res.formatter.ok({
@@ -73,7 +71,7 @@ export default class ProductController {
       }
       return res.formatter.notFound({})
     } catch (error) {
-      return res.formatter.badRequest({ message: `${PATH}/${error}` })
+      return res.formatter.badRequest({ message: `${NAMESPACE}/${error}` })
     }
   }
 
@@ -118,16 +116,9 @@ export default class ProductController {
     try {
       const productUpdated = await service.updateItemByPk(id, itemRequest)
       if (productUpdated) {
-        const productColorUpdated = await productColorService.updateItemByProductID(productUpdated.id!, {
-          productCode: productUpdated.productCode
-        })
-        if (productColorUpdated) {
-          return res.formatter.ok({ data: productUpdated })
-        } else {
-          return res.formatter.badRequest({ message: 'Failed to update productCode to ProductColor!' })
-        }
+        return res.formatter.ok({ data: productUpdated })
       }
-      return res.formatter.badRequest({ message: 'Failed to update product!' })
+      return res.formatter.badRequest({})
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -146,3 +137,5 @@ export default class ProductController {
     }
   }
 }
+
+export default ProductController

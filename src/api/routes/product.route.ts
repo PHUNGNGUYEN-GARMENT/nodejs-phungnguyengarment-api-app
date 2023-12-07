@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { body, param } from 'express-validator'
 import ProductController from '~/controllers/product.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import { validators } from '../utils/constant'
 
 class ProductRoute {
   router = Router()
@@ -18,29 +19,29 @@ class ProductRoute {
       requestValidationRules([
         body('productCode')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be string type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('quantityPO')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isFloat()
-          .withMessage('This field must be number type!'),
+          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
         body('dateInputNPL')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be string type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('dateOutputFCR')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be string type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('status')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be string type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createNewItem
     )
@@ -51,9 +52,9 @@ class ProductRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.getItemByPk
     )
@@ -63,9 +64,9 @@ class ProductRoute {
       requestValidationRules([
         param('productCode')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.getItemByProductCode
     )
@@ -76,22 +77,22 @@ class ProductRoute {
       requestValidationRules([
         body('filter')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
           .withMessage('This field must be object type!'),
         body('paginator')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
           .withMessage('This field must be object type!'),
         body('search')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
           .withMessage('This field must be object type!'),
         body('sorting')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
           .withMessage('This field must be object type!')
       ]),
@@ -104,9 +105,9 @@ class ProductRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.updateItemByPk
     )
@@ -117,9 +118,9 @@ class ProductRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.deleteItemByPk
     )

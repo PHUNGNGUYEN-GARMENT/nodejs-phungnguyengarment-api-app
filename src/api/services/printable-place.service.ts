@@ -1,9 +1,9 @@
 import PrintablePlaceSchema, { PrintablePlace } from '~/models/printable-place.model'
-import logging from '~/utils/logging'
-import ProductSchema from '../models/product.model'
-import PrintSchema from '../models/print.model'
 import { ItemStatusType, RequestBodyType } from '~/type'
+import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
+import PrintSchema from '../models/print.model'
+import ProductSchema from '../models/product.model'
 
 const NAMESPACE = 'services/printable-place'
 

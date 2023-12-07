@@ -81,7 +81,7 @@ export default class ColorController {
     try {
       const colorUpdated = await service.updateItemByPk(id, itemRequest)
       if (colorUpdated) {
-        const productColorUpdated = await productColorService.updateItemByProductID(colorUpdated.id!, {
+        const productColorUpdated = await productColorService.updateItemByColorID(colorUpdated.id!, {
           hexColor: colorUpdated.hexColor,
           nameColor: colorUpdated.nameColor
         })

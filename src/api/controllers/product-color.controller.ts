@@ -12,7 +12,6 @@ export default class ProductColorController {
     const itemRequest: ProductColor = {
       colorID: req.body.colorID,
       productID: req.body.productID,
-      productCode: req.body.productCode,
       nameColor: req.body.nameColor,
       hexColor: req.body.hexColor,
       status: req.body.status
@@ -91,7 +90,6 @@ export default class ProductColorController {
     const itemRequest: ProductColor = {
       colorID: req.body.colorID,
       productID: req.body.productID,
-      productCode: req.body.productCode,
       hexColor: req.body.hexColor,
       nameColor: req.body.nameColor,
       status: req.body.status
@@ -111,7 +109,6 @@ export default class ProductColorController {
     const productID = Number(req.params.productID)
     const itemRequest: ProductColor = {
       colorID: req.body.colorID,
-      productCode: req.body.productCode,
       hexColor: req.body.hexColor,
       nameColor: req.body.nameColor,
       status: req.body.status
@@ -131,7 +128,6 @@ export default class ProductColorController {
     const colorID = Number(req.params.colorID)
     const itemRequest: ProductColor = {
       productID: req.body.productID,
-      productCode: req.body.productCode,
       hexColor: req.body.hexColor,
       nameColor: req.body.nameColor,
       status: req.body.status

@@ -1,12 +1,12 @@
 import { Router } from 'express'
 import { body, param, query } from 'express-validator'
-import PrintRouteController from '~/controllers/print.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import SewingLineController from '../controllers/sewing-line'
 import { validators } from '../utils/constant'
 
-class PrintRoute {
+class SewingLineRoute {
   router = Router()
-  controller = new PrintRouteController()
+  controller = new SewingLineController()
 
   constructor() {
     this.initialize()
@@ -17,13 +17,13 @@ class PrintRoute {
     this.router.post(
       '/',
       requestValidationRules([
-        body('name')
+        body('sewingLine')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
@@ -33,9 +33,9 @@ class PrintRoute {
 
     // Get item
     this.router.get(
-      '/:id',
+      '/id',
       requestValidationRules([
-        param('id')
+        query('id')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
@@ -46,15 +46,15 @@ class PrintRoute {
 
     // Get item
     this.router.get(
-      '/name/:name',
+      '/sewingLine/:sewingLine',
       requestValidationRules([
-        param('name')
+        param('sewingLine')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
-      this.controller.getItemByName
+      this.controller.getItemBySewingLine
     )
 
     // Get all items
@@ -113,4 +113,4 @@ class PrintRoute {
   }
 }
 
-export default new PrintRoute().router
+export default new SewingLineRoute().router

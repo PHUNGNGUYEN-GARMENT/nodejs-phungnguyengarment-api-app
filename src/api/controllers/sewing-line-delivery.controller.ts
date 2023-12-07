@@ -3,34 +3,35 @@ import { SewingLineDelivery } from '~/models/sewing-line-delivery.model'
 import * as service from '~/services/sewing-line-delivery.service'
 import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'SewingLineDelivery'
-const PATH = 'controllers/sewing-line-delivery'
+const NAMESPACE = 'controllers/sewing-line-delivery'
 
 export default class SewingLineDeliveryController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: SewingLineDelivery = {
-      name: req.body.name,
+      productID: req.body.productID,
+      sewingLineID: req.body.sewingLineID,
+      quantityOrigin: req.body.quantityOrigin,
+      quantitySewed: req.body.quantitySewed,
       status: req.body.status
     }
     try {
-      const itemNew = await service.createNew(itemRequest)
+      const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
         return res.formatter.created({ data: itemNew })
-      } else {
-        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
       }
+      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
     } catch (error) {
       return res.formatter.badRequest({ message: `>>> ${error}` })
     }
   }
 
-  getItemByID = async (req: Request, res: Response) => {
-    const id = Number(req.query.id)
+  getItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     try {
-      const item = await service.getItemBy({ id: id })
+      const item = await service.getItemByPk(id)
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -40,10 +41,23 @@ export default class SewingLineDeliveryController {
     }
   }
 
-  getItemByName = async (req: Request, res: Response) => {
-    const name = String(req.query.name)
+  getItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
     try {
-      const item = await service.getItemBy({ name: name })
+      const item = await service.getItemBy({ productID: productID })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItemBySewingLineID = async (req: Request, res: Response) => {
+    const sewingLineID = Number(req.params.sewingLineID)
+    try {
+      const item = await service.getItemBy({ sewingLineID: sewingLineID })
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -71,17 +85,19 @@ export default class SewingLineDeliveryController {
     }
   }
 
-  updateItemByID = async (req: Request, res: Response) => {
+  updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: SewingLineDelivery = {
-      name: req.body.name,
-      status: req.body.status,
-      orderNumber: req.body.orderNumber
+      productID: req.body.productID,
+      sewingLineID: req.body.sewingLineID,
+      quantityOrigin: req.body.quantityOrigin,
+      quantitySewed: req.body.quantitySewed,
+      status: req.body.status
     }
     try {
-      const itemUpdated = await service.updateByID(id, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const printUpdated = await service.updateItemByPk(id, itemRequest)
+      if (printUpdated) {
+        return res.formatter.ok({ data: printUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {
@@ -89,10 +105,75 @@ export default class SewingLineDeliveryController {
     }
   }
 
-  deleteItemByID = async (req: Request, res: Response) => {
+  updateItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
+    const itemRequest: SewingLineDelivery = {
+      sewingLineID: req.body.sewingLineID,
+      quantityOrigin: req.body.quantityOrigin,
+      quantitySewed: req.body.quantitySewed,
+      status: req.body.status
+    }
+    try {
+      const printUpdated = await service.updateItemByProductID(productID, itemRequest)
+      if (printUpdated) {
+        return res.formatter.ok({ data: printUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemBySewingLineID = async (req: Request, res: Response) => {
+    const sewingLineID = Number(req.params.sewingLineID)
+    const itemRequest: SewingLineDelivery = {
+      productID: req.body.productID,
+      sewingLineID: req.body.sewingLineID,
+      quantityOrigin: req.body.quantityOrigin,
+      quantitySewed: req.body.quantitySewed,
+      status: req.body.status
+    }
+    try {
+      const printUpdated = await service.updateItemBySewingLineID(sewingLineID, itemRequest)
+      if (printUpdated) {
+        return res.formatter.ok({ data: printUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
-      const item = await service.deleteByID(id)
+      const item = await service.deleteItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemBySewingLineID = async (req: Request, res: Response) => {
+    const sewingLineID = Number(req.params.sewingLineID)
+    try {
+      const item = await service.deleteItemBySewingLineID(sewingLineID)
+      if (item) {
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
+    try {
+      const item = await service.deleteItemByProductID(productID)
       if (item) {
         return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
       }

@@ -131,3 +131,13 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
   }
 }
+
+export const deleteItemByProductID = async (productID: number): Promise<number> => {
+  try {
+    const affectedRows = await ImportationSchema.destroy({ where: { productID: productID } })
+    return affectedRows
+  } catch (error) {
+    logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+  }
+}
