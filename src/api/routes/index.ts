@@ -3,11 +3,10 @@ import { PassportStatic } from 'passport'
 import authRoute from '~/routes/auth/auth.route'
 import productRoute from '~/routes/product.route'
 import colorRoute from './color.route'
-import garmentAccessoryNoteRoute from './garment-accessory-note.route'
 import garmentAccessoryRoute from './garment-accessory.route'
 import groupRoute from './group.route'
 import importationRoute from './importation.route'
-import notionAccessoryRoute from './notion-accessory.route'
+import notionAccessoryRoute from './accessory-note.route'
 import printRoute from './print.route'
 import printablePlaceRoute from './printable-place.route'
 import productColorRoute from './product-color.route'
@@ -29,7 +28,6 @@ export default class AppRoutes {
     app.use('/api/printable-places', printablePlaceRoute) // Done (Checked)
     app.use('/api/notion-accessories', notionAccessoryRoute)
     app.use('/api/garment-accessories', garmentAccessoryRoute)
-    app.use('/api/garment-accessory-note', garmentAccessoryNoteRoute)
     app.use('/api/sewing-line-deliveries', sewingLineDeliveryRoute) // Done (Checked)
   }
 }
