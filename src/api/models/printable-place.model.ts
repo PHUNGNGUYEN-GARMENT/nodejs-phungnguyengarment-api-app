@@ -5,7 +5,7 @@ import ProductSchema from './product.model'
 
 const { INTEGER, STRING } = DataType
 
-export interface PrintablePlace {
+export type PrintablePlace = {
   id?: number
   printID?: number
   productID?: number
