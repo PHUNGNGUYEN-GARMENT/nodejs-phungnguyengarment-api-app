@@ -6,6 +6,7 @@ import ImportationSchema from '../models/importation.model'
 import PrintablePlaceSchema from '../models/printable-place.model'
 import ProductColorSchema from '../models/product-color.model'
 import ProductGroupSchema from '../models/product-group.model'
+import SampleSewingSchema from '../models/sample-sewing.model'
 
 const NAMESPACE = 'services/products'
 
@@ -26,7 +27,8 @@ export const getItemByPk = async (id: number): Promise<ProductSchema | null> => 
         { model: ImportationSchema, as: 'importation' },
         { model: ProductColorSchema, as: 'productColor' },
         { model: PrintablePlaceSchema, as: 'printablePlace' },
-        { model: ProductGroupSchema, as: 'productGroup' }
+        { model: ProductGroupSchema, as: 'productGroup' },
+        { model: SampleSewingSchema, as: 'sampleSewing' }
       ]
     })
   } catch (error) {
@@ -43,7 +45,8 @@ export const getItemBy = async (item: Product): Promise<ProductSchema | null> =>
         { model: ImportationSchema, as: 'importation' },
         { model: ProductColorSchema, as: 'productColor' },
         { model: PrintablePlaceSchema, as: 'printablePlace' },
-        { model: ProductGroupSchema, as: 'productGroup' }
+        { model: ProductGroupSchema, as: 'productGroup' },
+        { model: SampleSewingSchema, as: 'sampleSewing' }
       ]
     })
   } catch (error) {
@@ -64,7 +67,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
         { model: ImportationSchema, as: 'importation' },
         { model: ProductColorSchema, as: 'productColor' },
         { model: PrintablePlaceSchema, as: 'printablePlace' },
-        { model: ProductGroupSchema, as: 'productGroup' }
+        { model: ProductGroupSchema, as: 'productGroup' },
+        { model: SampleSewingSchema, as: 'sampleSewing' }
       ]
     })
     return items
