@@ -27,21 +27,6 @@ class ProductColorRoute {
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('productCode')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('nameColor')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('hexColor')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('status')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
@@ -117,11 +102,41 @@ class ProductColorRoute {
     )
 
     // Update item by id
-    this.router.put('/:id', this.controller.updateItemByPk)
+    this.router.put(
+      '/:id',
+      requestValidationRules([
+        param('id')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.updateItemByPk
+    )
 
-    this.router.put('/productID/:productID', this.controller.updateItemByProductID)
+    this.router.put(
+      '/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.updateItemByProductID
+    )
 
-    this.router.put('/colorID/:colorID', this.controller.updateItemByColorID)
+    this.router.put(
+      '/colorID/:colorID',
+      requestValidationRules([
+        param('colorID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.updateItemByColorID
+    )
 
     // Delete item
     this.router.delete(
