@@ -4,6 +4,7 @@ import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
 import AccessoryNoteSchema from '../models/accessory-note.model'
 import ProductSchema from '../models/product.model'
+import * as garmentAccessoryNoteService from '../services/garment-accessory-note.service'
 
 const NAMESPACE = 'services/garment-accessory'
 
@@ -113,7 +114,17 @@ export const updateItemByPk = async (
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    // Update GarmentAccessoryNote (children of GarmentAccessory)
+    if (affectedRows[0] === 1) {
+      const garmentAccessoryNoteUpdated = await garmentAccessoryNoteService.updateItemByGarmentAccessoryID(id, {
+        cuttingAccessoryDate: itemToUpdate.cuttingAccessoryDate,
+        amountCuttingAccessory: itemToUpdate.amountCuttingAccessory
+      })
+      if (garmentAccessoryNoteUpdated) {
+        return itemToUpdate
+      }
+    }
+    return undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)

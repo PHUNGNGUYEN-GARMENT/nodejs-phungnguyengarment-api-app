@@ -2,6 +2,7 @@ import AccessoryNoteSchema, { AccessoryNote } from '~/models/accessory-note.mode
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
+import * as garmentAccessoryNoteService from '../services/garment-accessory-note.service'
 
 const NAMESPACE = 'services/accessory-note'
 
@@ -73,13 +74,13 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update by productID
-export const updateItemByPk = async (id: number, item: AccessoryNote): Promise<AccessoryNote | undefined> => {
+export const updateItemByPk = async (id: number, itemToUpdate: AccessoryNote): Promise<AccessoryNote | undefined> => {
   try {
     const affectedRows = await AccessoryNoteSchema.update(
       {
-        title: item.title,
-        summary: item.summary,
-        status: item.status
+        title: itemToUpdate.title,
+        summary: itemToUpdate.summary,
+        status: itemToUpdate.status
       },
       {
         where: {
@@ -87,7 +88,16 @@ export const updateItemByPk = async (id: number, item: AccessoryNote): Promise<A
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    if (affectedRows[0] === 1) {
+      const garmentAccessoryNoteUpdated = await garmentAccessoryNoteService.updateItemByAccessoryNoteID(id, {
+        title: itemToUpdate.title,
+        summary: itemToUpdate.summary
+      })
+      if (garmentAccessoryNoteUpdated) {
+        return itemToUpdate
+      }
+    }
+    return undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)

@@ -9,6 +9,7 @@ export type SewingLineDelivery = {
   id?: number
   sewingLineID?: number
   productID?: number
+  sewingLineName?: string
   quantityOrigin?: number
   quantitySewed?: number
   expiredDate?: Date
@@ -29,11 +30,14 @@ export default class SewingLineDeliverySchema extends Model<SewingLineDelivery> 
   declare sewingLineID: number
 
   @Column({ type: INTEGER, field: 'product_id' })
-  @ForeignKey(() => SewingLineSchema)
+  @ForeignKey(() => ProductSchema)
   declare productID: number
 
   @Column({ type: FLOAT, field: 'quantity_origin' })
   declare quantityOrigin: number
+
+  @Column({ type: STRING, field: 'sewing_line' })
+  declare sewingLineName: string
 
   @Column({ type: FLOAT, field: 'quantity_sewed' })
   declare quantitySewed: number

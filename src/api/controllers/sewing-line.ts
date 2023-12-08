@@ -10,7 +10,7 @@ export default class SewingLineController {
 
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: SewingLine = {
-      sewingLine: req.body.sewingLine,
+      sewingLineName: req.body.sewingLineName,
       status: req.body.status
     }
     try {
@@ -39,9 +39,9 @@ export default class SewingLineController {
   }
 
   getItemBySewingLine = async (req: Request, res: Response) => {
-    const sewingLine = String(req.params.sewingLine)
+    const sewingLineName = String(req.params.sewingLineName)
     try {
-      const item = await service.getItemBy({ sewingLine: sewingLine })
+      const item = await service.getItemBy({ sewingLineName: sewingLineName })
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -72,7 +72,7 @@ export default class SewingLineController {
   updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: SewingLine = {
-      sewingLine: req.body.sewingLine,
+      sewingLineName: req.body.sewingLineName,
       status: req.body.status
     }
     try {

@@ -1,16 +1,19 @@
 import { Request, Response } from 'express'
-import { GarmentAccessory } from '~/models/garment-accessory.model'
-import * as service from '~/services/garment-accessory.service'
+import { GarmentAccessoryNote } from '~/models/garment-accessory-note.model'
+import * as service from '~/services/garment-accessory-note.service'
 import { RequestBodyType } from '~/type'
 
-const NAMESPACE = 'controllers/garment-accessory'
+const NAMESPACE = 'controllers/garment-accessory-note'
 
-export default class GarmentAccessoryController {
+export default class GarmentAccessoryNoteController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: GarmentAccessory = {
-      productID: req.body.productID,
+    const itemRequest: GarmentAccessoryNote = {
+      title: req.body.title,
+      summary: req.body.summary,
+      accessoryNoteID: req.body.accessoryNoteID,
+      garmentAccessoryID: req.body.garmentAccessoryID,
       cuttingAccessoryDate: req.body.cuttingAccessoryDate,
       amountCuttingAccessory: req.body.amountCuttingAccessory,
       status: req.body.status
@@ -40,10 +43,23 @@ export default class GarmentAccessoryController {
     }
   }
 
-  getItemByProductID = async (req: Request, res: Response) => {
-    const productID = Number(req.params.productID)
+  getItemByAccessoryNoteID = async (req: Request, res: Response) => {
+    const accessoryNoteID = Number(req.params.accessoryNoteID)
     try {
-      const item = await service.getItemBy({ productID: productID })
+      const item = await service.getItemBy({ accessoryNoteID: accessoryNoteID })
+      if (item) {
+        return res.formatter.ok({ data: item })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItemByGarmentAccessoryID = async (req: Request, res: Response) => {
+    const garmentAccessoryID = Number(req.params.garmentAccessoryID)
+    try {
+      const item = await service.getItemBy({ garmentAccessoryID: garmentAccessoryID })
       if (item) {
         return res.formatter.ok({ data: item })
       }
@@ -73,8 +89,11 @@ export default class GarmentAccessoryController {
 
   updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
-    const itemRequest: GarmentAccessory = {
-      productID: req.body.productID,
+    const itemRequest: GarmentAccessoryNote = {
+      title: req.body.title,
+      summary: req.body.summary,
+      accessoryNoteID: req.body.accessoryNoteID,
+      garmentAccessoryID: req.body.garmentAccessoryID,
       cuttingAccessoryDate: req.body.cuttingAccessoryDate,
       amountCuttingAccessory: req.body.amountCuttingAccessory,
       status: req.body.status
@@ -90,16 +109,39 @@ export default class GarmentAccessoryController {
     }
   }
 
-  updateItemByProductID = async (req: Request, res: Response) => {
-    const productID = Number(req.params.productID)
-    const itemRequest: GarmentAccessory = {
-      productID: req.body.productID,
+  updateItemByAccessoryNoteID = async (req: Request, res: Response) => {
+    const accessoryNoteID = Number(req.params.accessoryNoteID)
+    const itemRequest: GarmentAccessoryNote = {
+      title: req.body.title,
+      summary: req.body.summary,
+      garmentAccessoryID: req.body.garmentAccessoryID,
       cuttingAccessoryDate: req.body.cuttingAccessoryDate,
       amountCuttingAccessory: req.body.amountCuttingAccessory,
       status: req.body.status
     }
     try {
-      const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
+      const itemUpdated = await service.updateItemByAccessoryNoteID(accessoryNoteID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateItemByGarmentAccessoryID = async (req: Request, res: Response) => {
+    const garmentAccessoryID = Number(req.params.garmentAccessoryID)
+    const itemRequest: GarmentAccessoryNote = {
+      title: req.body.title,
+      summary: req.body.summary,
+      accessoryNoteID: req.body.accessoryNoteID,
+      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
+      amountCuttingAccessory: req.body.amountCuttingAccessory,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.updateItemByGarmentAccessoryID(garmentAccessoryID, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
@@ -122,10 +164,23 @@ export default class GarmentAccessoryController {
     }
   }
 
-  deleteItemByProductID = async (req: Request, res: Response) => {
-    const productID = Number(req.params.productID)
+  deleteItemByAccessoryNoteID = async (req: Request, res: Response) => {
+    const accessoryNoteID = Number(req.params.accessoryNoteID)
     try {
-      const itemUpdated = await service.deleteItemByProductID(productID)
+      const itemUpdated = await service.deleteItemByAccessoryNoteID(accessoryNoteID)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByGarmentAccessoryID = async (req: Request, res: Response) => {
+    const garmentAccessoryID = Number(req.params.garmentAccessoryID)
+    try {
+      const itemUpdated = await service.deleteItemByGarmentAccessoryID(garmentAccessoryID)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }

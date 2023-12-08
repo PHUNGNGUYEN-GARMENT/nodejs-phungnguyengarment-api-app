@@ -2,14 +2,13 @@ import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize
 import { ItemStatusType } from '~/type'
 import ProductSchema from './product.model'
 
-const { INTEGER, STRING, DATE, ARRAY } = DataType
+const { INTEGER, STRING, DATE } = DataType
 
 export type SampleSewing = {
   id?: number
   productID?: number
-  sampleSewingDate?: Date
-  dateSends?: string[]
-  approvalDateSO?: Date
+  dateSubmissionNPL?: Date
+  dateApprovalSO?: Date
   status?: ItemStatusType
 }
 
@@ -26,14 +25,11 @@ export default class SampleSewingSchema extends Model<SampleSewing> {
   @ForeignKey(() => ProductSchema)
   declare productID: string
 
-  @Column({ type: DATE, field: 'sample_sewing_date' })
-  declare sampleSewingDate: Date
+  @Column({ type: DATE, field: 'date_submission_npl' })
+  declare dateSubmissionNPL: Date
 
-  @Column({ type: ARRAY, field: 'date_sends' })
-  declare dateSends: string[]
-
-  @Column({ type: DATE, field: 'approval_date_so' })
-  declare approvalDateSO: Date
+  @Column({ type: DATE, field: 'date_approval_so' })
+  declare dateApprovalSO: Date
 
   @Column({ type: STRING, field: 'status' })
   declare status: string

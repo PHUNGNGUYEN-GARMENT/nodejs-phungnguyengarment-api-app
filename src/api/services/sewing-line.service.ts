@@ -1,4 +1,5 @@
 import SewingLineSchema, { SewingLine } from '~/models/sewing-line.model'
+import * as sewingLineDeliveryService from '~/services/sewing-line-delivery.service'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
@@ -76,12 +77,11 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update by productID
-export const updateItemByPk = async (id: number, item: SewingLine): Promise<SewingLine | undefined> => {
+export const updateItemByPk = async (id: number, itemToUpdate: SewingLine): Promise<SewingLine | undefined> => {
   try {
     const affectedRows = await SewingLineSchema.update(
       {
-        sewingLine: item.sewingLine,
-        status: item.status
+        ...itemToUpdate
       },
       {
         where: {
@@ -89,7 +89,15 @@ export const updateItemByPk = async (id: number, item: SewingLine): Promise<Sewi
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    if (affectedRows[0] === 1) {
+      const sewingLineDeliveryUpdated = await sewingLineDeliveryService.updateItemBySewingLineID(id, {
+        sewingLineName: itemToUpdate.sewingLineName
+      })
+      if (sewingLineDeliveryUpdated) {
+        return itemToUpdate
+      }
+    }
+    return undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)

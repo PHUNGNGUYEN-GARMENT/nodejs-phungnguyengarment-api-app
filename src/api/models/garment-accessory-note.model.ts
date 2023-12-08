@@ -1,29 +1,43 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { ItemStatusType } from '~/type'
+import AccessoryNoteSchema from './accessory-note.model'
 import ProductSchema from './product.model'
 
 const { INTEGER, STRING, FLOAT, DATE } = DataType
 
-export type GarmentAccessory = {
+export type GarmentAccessoryNote = {
   id?: number
-  productID?: number
+  garmentAccessoryID?: number
+  accessoryNoteID?: number
+  title?: string
+  summary?: string
   cuttingAccessoryDate?: Date
   amountCuttingAccessory?: number
   status?: ItemStatusType
 }
 
 @Table({
-  modelName: 'GarmentAccessory',
-  tableName: 'garment_accessories',
+  modelName: 'GarmentAccessoryNote',
+  tableName: 'garment_accessory-note',
   timestamps: true
 })
-export default class GarmentAccessorySchema extends Model<GarmentAccessory> {
+export default class GarmentAccessoryNoteSchema extends Model<GarmentAccessoryNote> {
   @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
   declare id: number
 
-  @Column({ type: INTEGER, field: 'product_id' })
+  @Column({ type: INTEGER, field: 'garment_accessory_id' })
+  @ForeignKey(() => GarmentAccessoryNoteSchema)
+  declare garmentAccessoryID: number
+
+  @Column({ type: INTEGER, field: 'accessory_note_id' })
   @ForeignKey(() => ProductSchema)
-  declare productID: number
+  declare accessoryNoteID: number
+
+  @Column({ type: STRING, field: 'title' })
+  declare title: string
+
+  @Column({ type: STRING, field: 'summary' })
+  declare summary: string
 
   @Column({ type: DATE, field: 'cutting_accessory_date' })
   declare cuttingAccessoryDate: Date
@@ -36,4 +50,7 @@ export default class GarmentAccessorySchema extends Model<GarmentAccessory> {
 
   @BelongsTo(() => ProductSchema)
   declare product: ProductSchema
+
+  @BelongsTo(() => AccessoryNoteSchema)
+  declare accessoryNote: AccessoryNoteSchema
 }
