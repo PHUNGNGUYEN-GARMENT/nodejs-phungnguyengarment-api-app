@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { NotionAccessory } from '~/models/notion-accessory.model'
+import { NotionAccessory } from '~/api/models/accessory-note.model'
 import * as service from '~/services/notion-accessory.service'
 
 const NAMESPACE = 'NotionAccessory'

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { body, param } from 'express-validator'
-import GarmentAccessoryNoteController from '~/controllers/garment-accessory-note.controller'
+import GarmentAccessoryNoteController from '~/api/controllers/accessory-note.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 
 class GarmentAccessoryNoteRoute {

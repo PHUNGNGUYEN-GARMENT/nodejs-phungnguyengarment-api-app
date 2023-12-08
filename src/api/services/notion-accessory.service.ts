@@ -1,4 +1,4 @@
-import NotionAccessorySchema, { NotionAccessory } from '~/models/notion-accessory.model'
+import NotionAccessorySchema, { NotionAccessory } from '~/api/models/accessory-note.model'
 import logging from '~/utils/logging'
 
 const NAMESPACE = 'Color'
