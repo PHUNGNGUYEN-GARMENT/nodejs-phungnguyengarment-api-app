@@ -74,6 +74,7 @@ export default class ImportationController {
   updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: Importation = {
+      productID: req.body.productID,
       dateImported: req.body.dateImported,
       status: req.body.status,
       quantity: req.body.quantity
@@ -90,14 +91,14 @@ export default class ImportationController {
   }
 
   updateItemByProductID = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
+    const productID = Number(req.params.productID)
     const itemRequest: Importation = {
       dateImported: req.body.dateImported,
       status: req.body.status,
       quantity: req.body.quantity
     }
     try {
-      const itemUpdated = await service.updateItemByProductID(id, itemRequest)
+      const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }

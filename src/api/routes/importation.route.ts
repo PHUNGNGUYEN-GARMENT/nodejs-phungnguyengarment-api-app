@@ -22,16 +22,16 @@ class ImportationRoute {
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('dateImported')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('quantity')
           .notEmpty()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isFloat()
           .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
+        body('dateImported')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('status')
           .notEmpty()
           .withMessage(validators.ROLE_IS_EMPTY)

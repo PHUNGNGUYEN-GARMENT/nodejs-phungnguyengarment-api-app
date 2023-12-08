@@ -30,7 +30,10 @@ export const getItemByPk = async (id: number): Promise<ImportationSchema | null>
 // Get by id
 export const getItemByProductID = async (productID: number): Promise<ImportationSchema | null> => {
   try {
-    const item = await ImportationSchema.findOne({ where: { productID: productID } })
+    const item = await ImportationSchema.findOne({
+      where: { productID: productID },
+      include: [{ model: ProductSchema, as: 'product' }]
+    })
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemByProductID :: ${error}`)
@@ -60,7 +63,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Import
     const items = await ImportationSchema.findAll({
       where: {
         status: status
-      }
+      },
+      include: [{ model: ProductSchema, as: 'product' }]
     })
     return items
   } catch (error) {
