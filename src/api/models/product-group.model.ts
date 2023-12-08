@@ -1,11 +1,11 @@
-import { Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { ItemStatusType } from '~/type'
 import GroupSchema from './group.model'
 import ProductSchema from './product.model'
 
 const { INTEGER, STRING } = DataType
 
-export interface ProductGroup {
+export type ProductGroup = {
   id?: number
   groupID?: number
   productID?: number
@@ -35,4 +35,10 @@ export default class ProductGroupSchema extends Model<ProductGroup> {
 
   @Column({ type: STRING, field: 'status' })
   declare status: string
+
+  @BelongsTo(() => ProductSchema)
+  declare product: ProductSchema
+
+  @BelongsTo(() => GroupSchema)
+  declare group: GroupSchema
 }

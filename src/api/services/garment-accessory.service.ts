@@ -75,7 +75,11 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Garmen
     const items = await GarmentAccessorySchema.findAll({
       where: {
         status: status
-      }
+      },
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: AccessoryNoteSchema, as: 'accessoryNotes' }
+      ]
     })
     return items
   } catch (error) {

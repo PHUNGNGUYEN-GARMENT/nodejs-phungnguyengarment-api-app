@@ -149,4 +149,30 @@ export default class ProductGroupController {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
+
+  deleteItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
+    try {
+      const item = await service.deleteItemByProductID(productID)
+      if (item) {
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  deleteItemByGroupID = async (req: Request, res: Response) => {
+    const groupID = Number(req.params.groupID)
+    try {
+      const item = await service.deleteItemByGroupID(groupID)
+      if (item) {
+        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+      }
+      return res.formatter.notFound({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
 }

@@ -149,3 +149,23 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
   }
 }
+
+export const deleteItemByProductID = async (productID: number): Promise<number> => {
+  try {
+    const affectedRows = await ProductGroupSchema.destroy({ where: { productID: productID } })
+    return affectedRows
+  } catch (error) {
+    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
+  }
+}
+
+export const deleteItemByGroupID = async (groupID: number): Promise<number> => {
+  try {
+    const affectedRows = await ProductGroupSchema.destroy({ where: { groupID: groupID } })
+    return affectedRows
+  } catch (error) {
+    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
+  }
+}

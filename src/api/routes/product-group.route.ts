@@ -158,6 +158,30 @@ class ProductGroupRoute {
       ]),
       this.controller.deleteItemByPk
     )
+
+    this.router.delete(
+      '/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.deleteItemByProductID
+    )
+
+    this.router.delete(
+      '/groupID/:groupID',
+      requestValidationRules([
+        param('groupID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      ]),
+      this.controller.deleteItemByGroupID
+    )
   }
 }
 
