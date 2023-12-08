@@ -128,7 +128,6 @@ export default class SewingLineDeliveryController {
     const sewingLineID = Number(req.params.sewingLineID)
     const itemRequest: SewingLineDelivery = {
       productID: req.body.productID,
-      sewingLineID: req.body.sewingLineID,
       quantityOrigin: req.body.quantityOrigin,
       quantitySewed: req.body.quantitySewed,
       status: req.body.status

@@ -17,7 +17,7 @@ export type SewingLineDelivery = {
 
 @Table({
   modelName: 'SewingLineDelivery',
-  tableName: 'sewing-line-deliveries',
+  tableName: 'sewing-line-delivery',
   timestamps: true
 })
 export default class SewingLineDeliverySchema extends Model<SewingLineDelivery> {
