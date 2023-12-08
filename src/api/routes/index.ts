@@ -21,7 +21,7 @@ export default class AppRoutes {
     app.use('/api/groups', groupRoute) // Done (Checked)
     app.use('/api/prints', printRoute) // Done (Checked)
     app.use('/api/products', productRoute) // Done (Checked)
-    app.use('/api/sewing-line', sewingLineRoute) // Done (Checked)
+    app.use('/api/sewing-lines', sewingLineRoute) // Done (Checked)
     app.use('/api/importations', importationRoute) // Done (Checked)
     app.use('/api/product-groups', productGroupRoute) // Done (Checked)
     app.use('/api/product-colors', productColorRoute) // Done (Checked)
