@@ -1,9 +1,8 @@
 import { Sequelize } from 'sequelize-typescript'
 import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
-import NotionAccessorySchema from './accessory-note.model'
+import AccessoryNoteSchema from './accessory-note.model'
 import ColorSchema from './color.model'
-import GarmentAccessoryNoteSchema from './garment-accessory-note.model'
 import GarmentAccessorySchema from './garment-accessory.model'
 import GroupSchema from './group.model'
 import ImportationSchema from './importation.model'
@@ -12,7 +11,9 @@ import PrintablePlaceSchema from './printable-place.model'
 import ProductColorSchema from './product-color.model'
 import ProductGroupSchema from './product-group.model'
 import ProductSchema from './product.model'
+import SampleSewingSchema from './sample-sewing.model'
 import SewingLineDeliverySchema from './sewing-line-delivery.model'
+import SewingLineSchema from './sewing-line.model'
 import UserSchema from './user.model'
 
 const PATH = 'model/index'
@@ -43,18 +44,19 @@ class DBConnection {
 
     this.sequelize?.addModels([
       UserSchema,
-      ProductSchema,
-      ImportationSchema,
       ColorSchema,
-      ProductColorSchema,
       GroupSchema,
-      ProductGroupSchema,
-      GarmentAccessoryNoteSchema,
-      NotionAccessorySchema,
-      GarmentAccessorySchema,
       PrintSchema,
-      SewingLineDeliverySchema,
-      PrintablePlaceSchema
+      ProductSchema,
+      SewingLineSchema,
+      ImportationSchema,
+      SampleSewingSchema,
+      ProductColorSchema,
+      ProductGroupSchema,
+      AccessoryNoteSchema,
+      PrintablePlaceSchema,
+      GarmentAccessorySchema,
+      SewingLineDeliverySchema
     ])
 
     await this.sequelize

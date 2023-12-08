@@ -8,8 +8,6 @@ export type Color = {
   nameColor?: string
   hexColor?: string
   status?: ItemStatusType
-  createdAt?: string
-  updatedAt?: string
 }
 
 @Table({
@@ -24,9 +22,9 @@ export default class ColorSchema extends Model<Color> {
   @Column({ type: STRING, field: 'name_color' })
   declare nameColor: string
 
-  @Column({ type: STRING, field: 'status' })
-  declare status: string
-
   @Column({ type: STRING, field: 'hex_color' })
   declare hexColor: string
+
+  @Column({ type: STRING, field: 'status' })
+  declare status: string
 }

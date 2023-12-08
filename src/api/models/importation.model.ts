@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize
 import { ItemStatusType } from '~/type'
 import ProductSchema from './product.model'
 
-const { INTEGER, STRING, DOUBLE, DATE } = DataType
+const { INTEGER, STRING, FLOAT, DATE } = DataType
 
 export type Importation = {
   id?: number
@@ -28,7 +28,7 @@ export default class ImportationSchema extends Model<Importation> {
   @Column({ type: STRING, field: 'status' })
   declare status: string
 
-  @Column({ type: DOUBLE, field: 'quantity' })
+  @Column({ type: FLOAT, field: 'quantity' })
   declare quantity: number
 
   @Column({ type: DATE, field: 'date_imported' })

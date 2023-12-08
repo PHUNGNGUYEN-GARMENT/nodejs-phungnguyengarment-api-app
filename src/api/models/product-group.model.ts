@@ -28,7 +28,7 @@ export default class ProductGroupSchema extends Model<ProductGroup> {
 
   @Column({ type: INTEGER, field: 'product_id' })
   @ForeignKey(() => ProductSchema)
-  declare productID: string
+  declare productID: number
 
   @Column({ type: STRING, field: 'name' })
   declare name: string

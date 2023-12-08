@@ -5,7 +5,7 @@ import PrintablePlaceSchema from './printable-place.model'
 import ProductColorSchema from './product-color.model'
 import ProductGroupSchema from './product-group.model'
 
-const { INTEGER, STRING, DATE, DOUBLE } = DataType
+const { INTEGER, STRING, DATE, FLOAT } = DataType
 
 export type Product = {
   id?: number
@@ -28,7 +28,7 @@ export default class ProductSchema extends Model<Product> {
   @Column({ type: STRING, field: 'product_code' })
   declare productCode: string
 
-  @Column({ type: DOUBLE, field: 'quantity_po' })
+  @Column({ type: FLOAT, field: 'quantity_po' })
   declare quantityPO: number
 
   @Column({ type: STRING, field: 'status' })

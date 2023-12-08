@@ -3,13 +3,13 @@ import { ItemStatusType } from '~/type'
 import AccessoryNoteSchema from './accessory-note.model'
 import ProductSchema from './product.model'
 
-const { INTEGER, STRING, FLOAT, ARRAY } = DataType
+const { INTEGER, STRING, FLOAT, ARRAY, DATE } = DataType
 
 export type GarmentAccessory = {
   id?: number
   productID?: number
   accessoryNoteIDs?: number[]
-  cuttingAccessoryDate?: string
+  cuttingAccessoryDate?: Date
   amountCuttingAccessory?: number
   status?: ItemStatusType
 }
@@ -31,8 +31,8 @@ export default class GarmentAccessorySchema extends Model<GarmentAccessory> {
   @ForeignKey(() => AccessoryNoteSchema)
   declare accessoryNoteIDs: number[]
 
-  @Column({ type: STRING, field: 'cutting_accessory_date' })
-  declare cuttingAccessoryDate: string
+  @Column({ type: DATE, field: 'cutting_accessory_date' })
+  declare cuttingAccessoryDate: Date
 
   @Column({ type: FLOAT, field: 'amount_cutting_accessory' })
   declare amountCuttingAccessory: number

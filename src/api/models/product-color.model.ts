@@ -40,9 +40,6 @@ export default class ProductColorSchema extends Model<ProductColor> {
   @Column({ type: STRING, field: 'status' })
   declare status: string
 
-  @Column({ type: INTEGER, field: 'order_number' })
-  declare orderNumber: number
-
   @BelongsTo(() => ProductSchema)
   declare product: ProductSchema
 
