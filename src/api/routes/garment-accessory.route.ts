@@ -35,8 +35,8 @@ class GarmentAccessoryRoute {
         body('amountCuttingAccessory')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
+          .isFloat()
+          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
         body('status')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
@@ -100,9 +100,29 @@ class GarmentAccessoryRoute {
     )
 
     // Update item by id
-    this.router.put('/:id', this.controller.updateItemByPk)
+    this.router.put(
+      '/:id',
+      requestValidationRules([
+        param('id')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
+      ]),
+      this.controller.updateItemByPk
+    )
 
-    this.router.put('/productID/:productID', this.controller.updateItemByProductID)
+    this.router.put(
+      '/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .exists()
+          .withMessage('This field can not empty!')
+          .isInt()
+          .withMessage('This field must be Integer type!')
+      ]),
+      this.controller.updateItemByProductID
+    )
 
     // Delete item
     this.router.delete(
