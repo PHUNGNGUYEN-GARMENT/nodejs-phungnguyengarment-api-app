@@ -8,7 +8,7 @@ export const buildDynamicQuery = <T>(params: RequestBodyType): WhereOptions<T> |
   if (params.filter.items.includes(-1)) {
     conditions = { ...conditions, status: params.filter.status }
   } else {
-    conditions = { ...conditions, id: { [Op.in]: params.filter.items } }
+    conditions = { ...conditions, [params.filter.field]: { [Op.in]: params.filter.items } }
   }
 
   if (params.search.term.length > 0) {

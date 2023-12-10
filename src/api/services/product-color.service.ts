@@ -52,7 +52,7 @@ export const getItemBy = async (product: ProductColor): Promise<ProductColorSche
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ProductColorSchema[] }> => {
   try {
-    // console.log(`${NAMESPACE}>>>`, buildDynamicQuery<ProductColor>(body))
+    console.log(`${NAMESPACE}>>>`, buildDynamicQuery<ProductColor>(body))
     const items = await ProductColorSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,

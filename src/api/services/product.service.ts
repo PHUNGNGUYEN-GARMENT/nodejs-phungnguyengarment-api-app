@@ -2,11 +2,6 @@ import ProductSchema, { Product } from '~/models/product.model'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
-import ImportationSchema from '../models/importation.model'
-import PrintablePlaceSchema from '../models/printable-place.model'
-import ProductColorSchema from '../models/product-color.model'
-import ProductGroupSchema from '../models/product-group.model'
-import SampleSewingSchema from '../models/sample-sewing.model'
 
 const NAMESPACE = 'services/products'
 
@@ -22,15 +17,7 @@ export const createNewItem = async (item: Product): Promise<ProductSchema> => {
 // Get by id
 export const getItemByPk = async (id: number): Promise<ProductSchema | null> => {
   try {
-    return await ProductSchema.findByPk(id, {
-      include: [
-        { model: ImportationSchema, as: 'importation' },
-        { model: ProductColorSchema, as: 'productColor' },
-        { model: PrintablePlaceSchema, as: 'printablePlace' },
-        { model: ProductGroupSchema, as: 'productGroup' },
-        { model: SampleSewingSchema, as: 'sampleSewing' }
-      ]
-    })
+    return await ProductSchema.findByPk(id)
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
@@ -40,14 +27,7 @@ export const getItemByPk = async (id: number): Promise<ProductSchema | null> => 
 export const getItemBy = async (item: Product): Promise<ProductSchema | null> => {
   try {
     return await ProductSchema.findOne({
-      where: { ...item },
-      include: [
-        { model: ImportationSchema, as: 'importation' },
-        { model: ProductColorSchema, as: 'productColor' },
-        { model: PrintablePlaceSchema, as: 'printablePlace' },
-        { model: ProductGroupSchema, as: 'productGroup' },
-        { model: SampleSewingSchema, as: 'sampleSewing' }
-      ]
+      where: { ...item }
     })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
@@ -62,14 +42,7 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
-      where: buildDynamicQuery<Product>(body),
-      include: [
-        { model: ImportationSchema, as: 'importation' },
-        { model: ProductColorSchema, as: 'productColor' },
-        { model: PrintablePlaceSchema, as: 'printablePlace' },
-        { model: ProductGroupSchema, as: 'productGroup' },
-        { model: SampleSewingSchema, as: 'sampleSewing' }
-      ]
+      where: buildDynamicQuery<Product>(body)
     })
     return items
   } catch (error) {

@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { body, param } from 'express-validator'
 import ColorController from '~/controllers/color.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
+import { validators } from '../utils/constant'
 
 class ColorRoute {
   router = Router()
@@ -18,32 +19,32 @@ class ColorRoute {
       requestValidationRules([
         body('hexColor')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('nameColor')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!'),
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('status')
           .notEmpty()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createNewItem
     )
 
     // Get item
     this.router.get(
-      '/id',
+      '/:id',
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.getItemByPk
     )
@@ -54,9 +55,9 @@ class ColorRoute {
       requestValidationRules([
         param('hexColor')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage('This field must be String type!')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.getItemByHexColor
     )
@@ -67,24 +68,24 @@ class ColorRoute {
       requestValidationRules([
         body('filter')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('paginator')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('search')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('sorting')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!')
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
       ]),
       this.controller.getItems
     )
@@ -95,9 +96,9 @@ class ColorRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.updateItemByPk
     )
@@ -108,9 +109,9 @@ class ColorRoute {
       requestValidationRules([
         param('id')
           .exists()
-          .withMessage('This field can not empty!')
+          .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage('This field must be Integer type!')
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.deleteItemByPk
     )

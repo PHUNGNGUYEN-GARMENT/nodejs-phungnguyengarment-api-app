@@ -3,6 +3,7 @@ export type ItemStatusType = 'draft' | 'active' | 'closed' | 'archived' | 'delet
 export type RequestBodyType = {
   filter: {
     status: ItemStatusType
+    field: string
     items: number[] // items: mảng id : default -1: Lấy tất cả post
   }
   paginator: {

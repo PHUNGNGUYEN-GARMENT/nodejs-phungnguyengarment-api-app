@@ -9,8 +9,6 @@ export type ProductColor = {
   id?: number
   colorID?: number
   productID?: number
-  nameColor?: string
-  hexColor?: string
   status?: ItemStatusType
 }
 
@@ -30,12 +28,6 @@ export default class ProductColorSchema extends Model<ProductColor> {
   @Column({ type: INTEGER, field: 'product_id' })
   @ForeignKey(() => ProductSchema)
   declare productID: number
-
-  @Column({ type: STRING, field: 'name_color' })
-  declare nameColor: string
-
-  @Column({ type: STRING, field: 'hex_color' })
-  declare hexColor: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: string
