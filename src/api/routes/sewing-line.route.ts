@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param } from 'express-validator'
 import { requestValidationRules } from '~/middleware/response-validator'
 import SewingLineController from '../controllers/sewing-line.controller'
 import { validators } from '../utils/constant'
@@ -33,9 +33,9 @@ class SewingLineRoute {
 
     // Get item
     this.router.get(
-      '/id',
+      '/:id',
       requestValidationRules([
-        query('id')
+        param('id')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
