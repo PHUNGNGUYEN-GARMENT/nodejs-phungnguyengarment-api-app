@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { Group } from '~/models/group.model'
 import * as service from '~/services/group.service'
-import * as productGroupService from '~/services/product-group.service'
 import { RequestBodyType } from '~/type'
 
 const NAMESPACE = 'controllers/group'
@@ -79,14 +78,7 @@ export default class GroupController {
     try {
       const groupUpdated = await service.updateItemByPk(id, itemRequest)
       if (groupUpdated) {
-        const productGroupUpdated = await productGroupService.updateItemByGroupID(groupUpdated.id!, {
-          name: groupUpdated.name
-        })
-        if (productGroupUpdated) {
-          return res.formatter.ok({ data: groupUpdated })
-        } else {
-          return res.formatter.badRequest({})
-        }
+        return res.formatter.ok({ data: groupUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {

@@ -33,7 +33,7 @@ class GroupRoute {
 
     // Get item
     this.router.get(
-      '/id',
+      '/:id',
       requestValidationRules([
         param('id')
           .exists()

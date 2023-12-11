@@ -2,6 +2,8 @@ import ProductGroupSchema, { ProductGroup } from '~/models/product-group.model'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
+import GroupSchema from '../models/group.model'
+import ProductSchema from '../models/product.model'
 
 const NAMESPACE = 'services/product-group'
 
@@ -17,7 +19,12 @@ export const createNewItem = async (item: ProductGroup): Promise<ProductGroupSch
 // Get by id
 export const getItemByPk = async (id: number): Promise<ProductGroupSchema | null> => {
   try {
-    const item = await ProductGroupSchema.findByPk(id)
+    const item = await ProductGroupSchema.findByPk(id, {
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: GroupSchema, as: 'group' }
+      ]
+    })
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
@@ -27,7 +34,13 @@ export const getItemByPk = async (id: number): Promise<ProductGroupSchema | null
 
 export const getItemBy = async (productGroup: ProductGroup): Promise<ProductGroupSchema | null> => {
   try {
-    const item = await ProductGroupSchema.findOne({ where: { ...productGroup } })
+    const item = await ProductGroupSchema.findOne({
+      where: { ...productGroup },
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: GroupSchema, as: 'group' }
+      ]
+    })
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
@@ -43,7 +56,11 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
-      where: buildDynamicQuery<ProductGroup>(body)
+      where: buildDynamicQuery<ProductGroup>(body),
+      include: [
+        { model: ProductSchema, as: 'product' },
+        { model: GroupSchema, as: 'group' }
+      ]
     })
     return items
   } catch (error) {

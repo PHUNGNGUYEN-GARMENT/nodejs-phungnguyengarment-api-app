@@ -38,7 +38,7 @@ export default class SewingLineController {
     }
   }
 
-  getItemBySewingLine = async (req: Request, res: Response) => {
+  getItemBySewingLineName = async (req: Request, res: Response) => {
     const sewingLineName = String(req.params.sewingLineName)
     try {
       const item = await service.getItemBy({ sewingLineName: sewingLineName })

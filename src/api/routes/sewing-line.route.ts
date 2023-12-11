@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { body, param, query } from 'express-validator'
 import { requestValidationRules } from '~/middleware/response-validator'
-import SewingLineController from '../controllers/sewing-line'
+import SewingLineController from '../controllers/sewing-line.controller'
 import { validators } from '../utils/constant'
 
 class SewingLineRoute {
@@ -17,7 +17,7 @@ class SewingLineRoute {
     this.router.post(
       '/',
       requestValidationRules([
-        body('sewingLine')
+        body('sewingLineName')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
@@ -46,15 +46,15 @@ class SewingLineRoute {
 
     // Get item
     this.router.get(
-      '/sewingLine/:sewingLine',
+      '/sewingLineName/:sewingLineName',
       requestValidationRules([
-        param('sewingLine')
+        param('sewingLineName')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
-      this.controller.getItemBySewingLine
+      this.controller.getItemBySewingLineName
     )
 
     // Get all items

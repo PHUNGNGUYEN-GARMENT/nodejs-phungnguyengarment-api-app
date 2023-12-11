@@ -1,5 +1,4 @@
 import SewingLineSchema, { SewingLine } from '~/models/sewing-line.model'
-import * as sewingLineDeliveryService from '~/services/sewing-line-delivery.service'
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
@@ -89,15 +88,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: SewingLine): Prom
         }
       }
     )
-    if (affectedRows[0] === 1) {
-      const sewingLineDeliveryUpdated = await sewingLineDeliveryService.updateItemBySewingLineID(id, {
-        sewingLineName: itemToUpdate.sewingLineName
-      })
-      if (sewingLineDeliveryUpdated) {
-        return itemToUpdate
-      }
-    }
-    return undefined
+    return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)

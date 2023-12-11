@@ -36,7 +36,7 @@ export default class SewingLineDeliverySchema extends Model<SewingLineDelivery> 
   @Column({ type: FLOAT, field: 'quantity_origin' })
   declare quantityOrigin: number
 
-  @Column({ type: STRING, field: 'sewing_line' })
+  @Column({ type: STRING, field: 'sewing_line_name' })
   declare sewingLineName: string
 
   @Column({ type: FLOAT, field: 'quantity_sewed' })
