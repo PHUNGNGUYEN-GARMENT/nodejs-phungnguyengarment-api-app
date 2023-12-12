@@ -97,8 +97,7 @@ export const updateItemByPk = async (id: number, item: ProductGroup): Promise<Pr
   try {
     const affectedRows = await ProductGroupSchema.update(
       {
-        name: item.name,
-        status: item.status
+        ...item
       },
       {
         where: {
@@ -120,8 +119,7 @@ export const updateItemByProductID = async (
   try {
     const affectedRows = await ProductGroupSchema.update(
       {
-        name: item.name,
-        status: item.status
+        ...item
       },
       {
         where: {
@@ -140,8 +138,7 @@ export const updateItemByGroupID = async (groupID: number, item: ProductGroup): 
   try {
     const affectedRows = await ProductGroupSchema.update(
       {
-        name: item.name,
-        status: item.status
+        ...item
       },
       {
         where: {

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { Print } from '~/models/print.model'
 import * as service from '~/services/print.service'
-import * as printablePlaceService from '~/services/printable-place.service'
 import { RequestBodyType } from '~/type'
 
 const NAMESPACE = 'controllers/print'
@@ -79,14 +78,7 @@ export default class PrintController {
     try {
       const printUpdated = await service.updateItemByPk(id, itemRequest)
       if (printUpdated) {
-        const productGroupUpdated = await printablePlaceService.updateItemByPrintID(printUpdated.id!, {
-          name: printUpdated.name
-        })
-        if (productGroupUpdated) {
-          return res.formatter.ok({ data: printUpdated })
-        } else {
-          return res.formatter.badRequest({})
-        }
+        return res.formatter.ok({ data: printUpdated })
       }
       return res.formatter.badRequest({})
     } catch (error) {

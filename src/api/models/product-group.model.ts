@@ -9,7 +9,6 @@ export type ProductGroup = {
   id?: number
   groupID?: number
   productID?: number
-  name?: string
   status?: ItemStatusType
 }
 
@@ -29,9 +28,6 @@ export default class ProductGroupSchema extends Model<ProductGroup> {
   @Column({ type: INTEGER, field: 'product_id' })
   @ForeignKey(() => ProductSchema)
   declare productID: number
-
-  @Column({ type: STRING, field: 'name' })
-  declare name: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: string

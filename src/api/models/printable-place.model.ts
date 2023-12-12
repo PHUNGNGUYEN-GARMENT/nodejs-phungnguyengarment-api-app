@@ -9,7 +9,6 @@ export type PrintablePlace = {
   id?: number
   printID?: number
   productID?: number
-  name?: string
   status?: ItemStatusType
 }
 
@@ -30,15 +29,12 @@ export default class PrintablePlaceSchema extends Model<PrintablePlace> {
   @ForeignKey(() => ProductSchema)
   declare productID: number
 
-  @Column({ type: STRING, field: 'name' })
-  declare name: string
-
   @Column({ type: STRING, field: 'status' })
   declare status: string
 
   @BelongsTo(() => PrintSchema)
   declare print: PrintSchema
 
-  @BelongsTo(() => PrintSchema)
+  @BelongsTo(() => ProductSchema)
   declare product: ProductSchema
 }

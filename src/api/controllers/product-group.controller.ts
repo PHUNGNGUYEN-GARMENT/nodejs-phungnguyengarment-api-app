@@ -12,7 +12,6 @@ export default class ProductGroupController {
     const itemRequest: ProductGroup = {
       productID: req.body.productID,
       groupID: req.body.groupID,
-      name: req.body.name,
       status: req.body.status
     }
     try {
@@ -87,7 +86,8 @@ export default class ProductGroupController {
   updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: ProductGroup = {
-      name: req.body.name,
+      productID: req.body.productID,
+      groupID: req.body.groupID,
       status: req.body.status
     }
     try {
@@ -105,7 +105,6 @@ export default class ProductGroupController {
     const productID = Number(req.params.productID)
     const itemRequest: ProductGroup = {
       groupID: req.body.groupID,
-      name: req.body.name,
       status: req.body.status
     }
     try {
@@ -123,7 +122,6 @@ export default class ProductGroupController {
     const groupID = Number(req.params.groupID)
     const itemRequest: ProductGroup = {
       productID: req.body.productID,
-      name: req.body.name,
       status: req.body.status
     }
     try {

@@ -12,7 +12,6 @@ export default class ProductColorController {
     const itemRequest: PrintablePlace = {
       printID: req.body.printID,
       productID: req.body.productID,
-      name: req.body.name,
       status: req.body.status
     }
     try {
@@ -89,7 +88,6 @@ export default class ProductColorController {
     const itemRequest: PrintablePlace = {
       printID: req.body.printID,
       productID: req.body.productID,
-      name: req.body.name,
       status: req.body.status
     }
     try {
@@ -107,7 +105,6 @@ export default class ProductColorController {
     const productID = Number(req.params.productID)
     const itemRequest: PrintablePlace = {
       printID: req.body.printID,
-      name: req.body.name,
       status: req.body.status
     }
     try {
@@ -125,7 +122,6 @@ export default class ProductColorController {
     const printID = Number(req.params.printID)
     const itemRequest: PrintablePlace = {
       productID: req.body.productID,
-      name: req.body.name,
       status: req.body.status
     }
     try {
