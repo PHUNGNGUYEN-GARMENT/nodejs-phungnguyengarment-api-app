@@ -79,22 +79,22 @@ class ProductRoute {
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('paginator')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('search')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!'),
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
         body('sorting')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isObject()
-          .withMessage('This field must be object type!')
+          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
       ]),
       this.controller.getItems
     )

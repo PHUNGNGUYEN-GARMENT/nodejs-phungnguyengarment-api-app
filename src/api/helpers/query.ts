@@ -12,7 +12,7 @@ export const buildDynamicQuery = <T>(params: RequestBodyType): WhereOptions<T> |
   }
 
   if (params.search.term.length > 0) {
-    conditions = { ...conditions, [params.search.field]: { [Op.like]: params.search.term } }
+    conditions = { ...conditions, [params.search.field]: { [Op.like]: `%${params.search.term}%` } }
   }
   return Object.keys(conditions).length > 0 ? conditions : undefined
 }
