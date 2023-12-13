@@ -2,7 +2,6 @@ import AccessoryNoteSchema, { AccessoryNote } from '~/models/accessory-note.mode
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
-import * as garmentAccessoryNoteService from '../services/garment-accessory-note.service'
 
 const NAMESPACE = 'services/accessory-note'
 
@@ -88,16 +87,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: AccessoryNote): P
         }
       }
     )
-    if (affectedRows[0] === 1) {
-      const garmentAccessoryNoteUpdated = await garmentAccessoryNoteService.updateItemByAccessoryNoteID(id, {
-        title: itemToUpdate.title,
-        summary: itemToUpdate.summary
-      })
-      if (garmentAccessoryNoteUpdated) {
-        return itemToUpdate
-      }
-    }
-    return undefined
+    return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
