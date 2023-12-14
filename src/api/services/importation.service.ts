@@ -125,6 +125,62 @@ export const updateItemByProductID = async (productID: number, item: Importation
   }
 }
 
+export const createOrUpdateItemByPk = async (
+  id: number,
+  item: Importation
+): Promise<Importation | ImportationSchema | undefined> => {
+  try {
+    const affectedRows = await ImportationSchema.update(
+      {
+        quantity: item.quantity,
+        dateImported: item.dateImported,
+        status: item.status
+      },
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await ImportationSchema.create({ ...item })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateByProductID :: ${error}`)
+  }
+}
+
+export const createOrUpdateItemByProductID = async (
+  productID: number,
+  item: Importation
+): Promise<Importation | ImportationSchema | undefined> => {
+  try {
+    const affectedRows = await ImportationSchema.update(
+      {
+        quantity: item.quantity,
+        dateImported: item.dateImported,
+        status: item.status
+      },
+      {
+        where: {
+          productID: productID
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await ImportationSchema.create({ ...item })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateByProductID :: ${error}`)
+  }
+}
+
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {

@@ -28,7 +28,7 @@ export default class ImportationController {
   }
 
   getItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.query.id)
+    const id = Number(req.params.id)
     try {
       const item = await service.getItemByPk(id)
       if (item) {
@@ -99,6 +99,43 @@ export default class ImportationController {
     }
     try {
       const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  createOrUpdateItemByPk = async (req: Request, res: Response) => {
+    const itemRequest: Importation = {
+      id: req.body.id,
+      productID: req.body.productID,
+      dateImported: req.body.dateImported,
+      status: req.body.status,
+      quantity: req.body.quantity
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByPk(itemRequest.id!, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  createOrUpdateItemByProductID = async (req: Request, res: Response) => {
+    const itemRequest: Importation = {
+      productID: req.body.productID,
+      dateImported: req.body.dateImported,
+      status: req.body.status,
+      quantity: req.body.quantity
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByProductID(itemRequest.productID!, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
