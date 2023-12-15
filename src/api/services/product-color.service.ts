@@ -165,6 +165,61 @@ export const updateItemByColorID = async (
   }
 }
 
+export const createOrUpdateItemByPk = async (
+  id: number,
+  item: ProductColor
+): Promise<ProductColor | ProductColorSchema | undefined> => {
+  try {
+    const affectedRows = await ProductColorSchema.update(
+      {
+        colorID: item.colorID,
+        productID: item.productID,
+        status: item.status
+      },
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await ProductColorSchema.create({ ...item })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+  }
+}
+
+export const createOrUpdateItemByProductID = async (
+  productID: number,
+  item: ProductColor
+): Promise<ProductColor | ProductColorSchema | undefined> => {
+  try {
+    const affectedRows = await ProductColorSchema.update(
+      {
+        colorID: item.colorID,
+        status: item.status
+      },
+      {
+        where: {
+          productID: productID
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await ProductColorSchema.create({ ...item, productID: productID })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByProductID :: ${error}`)
+  }
+}
+
 // Delete
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {

@@ -126,6 +126,40 @@ export default class ProductColorController {
     }
   }
 
+  createOrUpdateItemByPk = async (req: Request, res: Response) => {
+    const itemRequest: ProductColor = {
+      id: req.body.id,
+      productID: req.body.productID,
+      colorID: req.body.colorID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByPk(itemRequest.id!, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  createOrUpdateItemByProductID = async (req: Request, res: Response) => {
+    const itemRequest: ProductColor = {
+      colorID: req.body.colorID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByProductID(Number(req.params.productID), itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
   deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {

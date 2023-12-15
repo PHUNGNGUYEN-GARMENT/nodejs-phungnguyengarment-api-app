@@ -27,6 +27,26 @@ class ProductController {
     }
   }
 
+  createOrUpdateItemByPk = async (req: Request, res: Response) => {
+    const dataRequest: Product = {
+      id: req.body.id,
+      productCode: req.body.productCode,
+      quantityPO: req.body.quantityPO,
+      status: req.body.status,
+      dateInputNPL: req.body.dateInputNPL,
+      dateOutputFCR: req.body.dateOutputFCR
+    }
+    try {
+      const newProd = await service.createOrUpdateItemByPk(dataRequest.id!, { ...dataRequest })
+      if (newProd) {
+        return res.formatter.ok({ data: newProd })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({})
+    }
+  }
+
   getItemByPk = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id)

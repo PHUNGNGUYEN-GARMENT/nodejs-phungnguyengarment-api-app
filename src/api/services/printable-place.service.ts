@@ -24,6 +24,61 @@ export const createNewItem = async (item: PrintablePlace): Promise<PrintablePlac
   }
 }
 
+export const createOrUpdateItemByPk = async (
+  id: number,
+  item: PrintablePlace
+): Promise<PrintablePlace | PrintablePlaceSchema | undefined> => {
+  try {
+    const affectedRows = await PrintablePlaceSchema.update(
+      {
+        printID: item.printID,
+        productID: item.productID,
+        status: item.status
+      },
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await PrintablePlaceSchema.create({ ...item })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+  }
+}
+
+export const createOrUpdateItemByProductID = async (
+  productID: number,
+  item: PrintablePlace
+): Promise<PrintablePlace | PrintablePlaceSchema | undefined> => {
+  try {
+    const affectedRows = await PrintablePlaceSchema.update(
+      {
+        printID: item.printID,
+        status: item.status
+      },
+      {
+        where: {
+          productID: productID
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await PrintablePlaceSchema.create({ ...item, productID: productID })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByProductID :: ${error}`)
+  }
+}
+
 // Get by id
 export const getItemByPk = async (id: number): Promise<PrintablePlaceSchema | null> => {
   try {

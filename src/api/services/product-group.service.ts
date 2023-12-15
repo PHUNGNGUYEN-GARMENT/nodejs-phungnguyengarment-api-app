@@ -161,6 +161,60 @@ export const updateItemByGroupID = async (groupID: number, item: ProductGroup): 
   }
 }
 
+export const createOrUpdateItemByPk = async (
+  id: number,
+  item: ProductGroup
+): Promise<ProductGroup | ProductGroupSchema | undefined> => {
+  try {
+    const affectedRows = await ProductGroupSchema.update(
+      {
+        groupID: item.groupID,
+        productID: item.productID,
+        status: item.status
+      },
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await ProductGroupSchema.create({ ...item })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+  }
+}
+
+export const createOrUpdateItemByProductID = async (
+  productID: number,
+  item: ProductGroup
+): Promise<ProductGroup | ProductGroupSchema | undefined> => {
+  try {
+    const affectedRows = await ProductGroupSchema.update(
+      {
+        groupID: item.groupID,
+        status: item.status
+      },
+      {
+        where: {
+          productID: productID
+        }
+      }
+    )
+    if (affectedRows[0] === 1) {
+      return item
+    } else {
+      return await ProductGroupSchema.create({ ...item, productID: productID })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByProductID :: ${error}`)
+  }
+}
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {

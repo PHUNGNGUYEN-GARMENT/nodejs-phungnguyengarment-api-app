@@ -36,6 +36,50 @@ class ProductColorRoute {
       this.controller.createNewItem
     )
 
+    this.router.post(
+      '/createOrUpdate',
+      requestValidationRules([
+        body('productID')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('colorID')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('status')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      ]),
+      this.controller.createOrUpdateItemByPk
+    )
+
+    this.router.post(
+      '/createOrUpdate/productID/:productID',
+      requestValidationRules([
+        param('productID')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('colorID')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('status')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      ]),
+      this.controller.createOrUpdateItemByProductID
+    )
+
     // Get item
     this.router.get(
       '/:id',

@@ -46,6 +46,43 @@ class ProductRoute {
       this.controller.createNewItem
     )
 
+    this.router.post(
+      '/createOrUpdate',
+      requestValidationRules([
+        body('id')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('productCode')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
+        body('quantityPO')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isFloat()
+          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
+        body('dateInputNPL')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
+        body('dateOutputFCR')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
+        body('status')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      ]),
+      this.controller.createOrUpdateItemByPk
+    )
+
     // Get item
     this.router.get(
       '/:id',

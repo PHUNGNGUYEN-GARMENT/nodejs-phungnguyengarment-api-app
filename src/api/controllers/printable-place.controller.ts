@@ -26,14 +26,46 @@ export default class ProductColorController {
     }
   }
 
+  createOrUpdateItemByPk = async (req: Request, res: Response) => {
+    const itemRequest: PrintablePlace = {
+      id: req.body.id,
+      productID: req.body.productID,
+      printID: req.body.printID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByPk(itemRequest.id!, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  createOrUpdateItemByProductID = async (req: Request, res: Response) => {
+    const itemRequest: PrintablePlace = {
+      productID: Number(req.params.productID),
+      printID: req.body.printID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByProductID(itemRequest.productID!, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
   getItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
       const item = await service.getItemByPk(id)
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -43,10 +75,7 @@ export default class ProductColorController {
     const productID = Number(req.params.productID)
     try {
       const item = await service.getItemBy({ productID: productID })
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -56,10 +85,7 @@ export default class ProductColorController {
     const printID = Number(req.params.printID)
     try {
       const item = await service.getItemBy({ printID: printID })
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

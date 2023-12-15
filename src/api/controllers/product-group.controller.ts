@@ -30,10 +30,7 @@ export default class ProductGroupController {
     const id = Number(req.params.id)
     try {
       const item = await service.getItemByPk(id)
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -43,10 +40,7 @@ export default class ProductGroupController {
     const productID = Number(req.params.productID)
     try {
       const item = await service.getItemBy({ productID: productID })
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -56,10 +50,7 @@ export default class ProductGroupController {
     const groupID = Number(req.params.groupID)
     try {
       const item = await service.getItemBy({ groupID: groupID })
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -126,6 +117,41 @@ export default class ProductGroupController {
     }
     try {
       const itemUpdated = await service.updateItemByGroupID(groupID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  createOrUpdateItemByPk = async (req: Request, res: Response) => {
+    const itemRequest: ProductGroup = {
+      id: req.body.id,
+      productID: req.body.productID,
+      groupID: req.body.groupID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByPk(itemRequest.id!, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  createOrUpdateItemByProductID = async (req: Request, res: Response) => {
+    const itemRequest: ProductGroup = {
+      productID: Number(req.params.productID),
+      groupID: req.body.groupID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByProductID(itemRequest.productID!, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }
