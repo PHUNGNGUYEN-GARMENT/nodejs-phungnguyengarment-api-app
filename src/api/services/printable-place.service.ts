@@ -9,7 +9,15 @@ const NAMESPACE = 'services/printable-place'
 
 export const createNewItem = async (item: PrintablePlace): Promise<PrintablePlaceSchema> => {
   try {
-    return await PrintablePlaceSchema.create({ ...item })
+    return await PrintablePlaceSchema.create(
+      { ...item },
+      {
+        include: [
+          { model: ProductSchema, as: 'product' },
+          { model: PrintSchema, as: 'print' }
+        ]
+      }
+    )
   } catch (error) {
     logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
     throw new Error(`${NAMESPACE} createNewItem :: ${error}`)

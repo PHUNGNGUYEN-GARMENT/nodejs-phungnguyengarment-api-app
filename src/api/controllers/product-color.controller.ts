@@ -30,10 +30,7 @@ export default class ProductColorController {
     const id = Number(req.params.id)
     try {
       const item = await service.getItemByPk(id)
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -43,10 +40,7 @@ export default class ProductColorController {
     const productID = Number(req.params.productID)
     try {
       const item = await service.getItemBy({ productID: productID })
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -56,10 +50,7 @@ export default class ProductColorController {
     const colorID = Number(req.params.colorID)
     try {
       const item = await service.getItemBy({ colorID: colorID })
-      if (item) {
-        return res.formatter.ok({ data: item })
-      }
-      return res.formatter.notFound({})
+      return res.formatter.ok({ data: item })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

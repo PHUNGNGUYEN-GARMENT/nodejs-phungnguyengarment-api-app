@@ -9,7 +9,15 @@ const NAMESPACE = 'services/product-color'
 
 export const createNewItem = async (item: ProductColor): Promise<ProductColorSchema> => {
   try {
-    return await ProductColorSchema.create({ ...item })
+    return await ProductColorSchema.create(
+      { ...item },
+      {
+        include: [
+          { model: ProductSchema, as: 'product' },
+          { model: ColorSchema, as: 'color' }
+        ]
+      }
+    )
   } catch (error) {
     logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
     throw new Error(`${NAMESPACE} createNewItem :: ${error}`)

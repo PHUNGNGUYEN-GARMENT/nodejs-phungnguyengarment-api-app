@@ -9,7 +9,15 @@ const NAMESPACE = 'services/product-group'
 
 export const createNewItem = async (item: ProductGroup): Promise<ProductGroupSchema> => {
   try {
-    return await ProductGroupSchema.create({ ...item })
+    return await ProductGroupSchema.create(
+      { ...item },
+      {
+        include: [
+          { model: ProductSchema, as: 'product' },
+          { model: GroupSchema, as: 'group' }
+        ]
+      }
+    )
   } catch (error) {
     logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
     throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
