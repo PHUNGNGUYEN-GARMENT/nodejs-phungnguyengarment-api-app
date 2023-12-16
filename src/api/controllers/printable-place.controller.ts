@@ -61,6 +61,23 @@ export default class ProductColorController {
     }
   }
 
+  createOrUpdateItemByPrintID = async (req: Request, res: Response) => {
+    const itemRequest: PrintablePlace = {
+      printID: Number(req.params.printID),
+      productID: req.body.productID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByPrintID(itemRequest.printID!, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
   getItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {

@@ -100,10 +100,8 @@ export default class ProductColorController {
     }
     try {
       const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
-      }
-      return res.formatter.badRequest({})
+      console.log(itemUpdated)
+      return res.formatter.ok({ data: itemUpdated })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -128,7 +126,7 @@ export default class ProductColorController {
 
   createOrUpdateItemByPk = async (req: Request, res: Response) => {
     const itemRequest: ProductColor = {
-      id: req.body.id,
+      id: Number(req.params.id),
       productID: req.body.productID,
       colorID: req.body.colorID,
       status: req.body.status
@@ -146,11 +144,29 @@ export default class ProductColorController {
 
   createOrUpdateItemByProductID = async (req: Request, res: Response) => {
     const itemRequest: ProductColor = {
+      productID: Number(req.params.productID),
       colorID: req.body.colorID,
       status: req.body.status
     }
     try {
-      const itemUpdated = await service.createOrUpdateItemByProductID(Number(req.params.productID), itemRequest)
+      const itemUpdated = await service.createOrUpdateItemByProductID(itemRequest.productID!, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated })
+      }
+      return res.formatter.badRequest({})
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  createOrUpdateItemByColorID = async (req: Request, res: Response) => {
+    const itemRequest: ProductColor = {
+      colorID: Number(req.params.colorID),
+      productID: req.body.productID,
+      status: req.body.status
+    }
+    try {
+      const itemUpdated = await service.createOrUpdateItemByProductID(itemRequest.colorID!, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated })
       }

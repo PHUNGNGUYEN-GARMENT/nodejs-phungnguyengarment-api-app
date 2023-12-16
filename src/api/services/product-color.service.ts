@@ -102,19 +102,24 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update
-export const updateItemByPk = async (id: number, itemToUpdate: ProductColor): Promise<ProductColor | undefined> => {
+export const updateItemByPk = async (
+  id: number,
+  itemToUpdate: ProductColor
+): Promise<ProductColor | ProductColorSchema | ProductColorSchema[] | undefined> => {
   try {
-    const affectedRows = await ProductColorSchema.update(
+    const updatedCount = await ProductColorSchema.update(
       {
-        ...itemToUpdate
+        colorID: itemToUpdate.colorID,
+        status: itemToUpdate.status
       },
       {
         where: {
           id: id
-        }
+        },
+        returning: true
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return updatedCount[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
@@ -124,11 +129,12 @@ export const updateItemByPk = async (id: number, itemToUpdate: ProductColor): Pr
 export const updateItemByProductID = async (
   productID: number,
   itemToUpdate: ProductColor
-): Promise<ProductColor | undefined> => {
+): Promise<ProductColor | ProductColorSchema | ProductColorSchema[] | undefined> => {
   try {
-    const affectedRows = await ProductColorSchema.update(
+    const updatedCount = await ProductColorSchema.update(
       {
-        ...itemToUpdate
+        colorID: itemToUpdate.colorID,
+        status: itemToUpdate.status
       },
       {
         where: {
@@ -136,7 +142,7 @@ export const updateItemByProductID = async (
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return updatedCount[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
@@ -146,19 +152,20 @@ export const updateItemByProductID = async (
 export const updateItemByColorID = async (
   colorID: number,
   itemToUpdate: ProductColor
-): Promise<ProductColor | undefined> => {
+): Promise<ProductColor | ProductColorSchema | ProductColorSchema[] | undefined> => {
   try {
-    const affectedRows = await ProductColorSchema.update(
+    const updatedCount = await ProductColorSchema.update(
       {
-        ...itemToUpdate
+        productID: itemToUpdate.productID,
+        status: itemToUpdate.status
       },
       {
         where: {
-          colorID: colorID
+          id: colorID
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return updatedCount[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByColorID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByColorID :: ${error}`)
@@ -168,22 +175,24 @@ export const updateItemByColorID = async (
 export const createOrUpdateItemByPk = async (
   id: number,
   item: ProductColor
-): Promise<ProductColor | ProductColorSchema | undefined> => {
+): Promise<ProductColor | ProductColorSchema | ProductColorSchema[] | undefined> => {
   try {
-    const affectedRows = await ProductColorSchema.update(
-      {
-        colorID: item.colorID,
-        productID: item.productID,
-        status: item.status
-      },
-      {
-        where: {
-          id: id
+    const getItem = await ProductColorSchema.findByPk(id)
+    if (getItem) {
+      const updatedCount = await ProductColorSchema.update(
+        {
+          colorID: item.colorID,
+          productID: item.productID,
+          status: item.status
+        },
+        {
+          where: {
+            id: id
+          },
+          returning: true
         }
-      }
-    )
-    if (affectedRows[0] === 1) {
-      return item
+      )
+      return updatedCount[0] > 0 ? item : undefined
     } else {
       return await ProductColorSchema.create({ ...item })
     }
@@ -209,7 +218,7 @@ export const createOrUpdateItemByProductID = async (
         }
       }
     )
-    if (affectedRows[0] === 1) {
+    if (affectedRows[0] > 0) {
       return item
     } else {
       return await ProductColorSchema.create({ ...item, productID: productID })

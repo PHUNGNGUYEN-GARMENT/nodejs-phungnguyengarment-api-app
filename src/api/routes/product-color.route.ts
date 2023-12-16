@@ -37,8 +37,13 @@ class ProductColorRoute {
     )
 
     this.router.post(
-      '/createOrUpdate',
+      '/createOrUpdate/:id',
       requestValidationRules([
+        param('id')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('productID')
           .notEmpty()
           .withMessage(validators.ROLE_IS_EMPTY)
@@ -78,6 +83,28 @@ class ProductColorRoute {
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createOrUpdateItemByProductID
+    )
+
+    this.router.post(
+      '/createOrUpdate/colorID/:colorID',
+      requestValidationRules([
+        param('colorID')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        param('productID')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('status')
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isString()
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      ]),
+      this.controller.createOrUpdateItemByColorID
     )
 
     // Get item

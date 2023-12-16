@@ -47,9 +47,9 @@ class ProductRoute {
     )
 
     this.router.post(
-      '/createOrUpdate',
+      '/createOrUpdate/:id',
       requestValidationRules([
-        body('id')
+        param('id')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()

@@ -17,26 +17,28 @@ export const createNewItem = async (item: Product): Promise<ProductSchema> => {
 export const createOrUpdateItemByPk = async (
   id: number,
   item: Product
-): Promise<Product | ProductSchema | undefined> => {
+): Promise<Product | ProductSchema | ProductSchema[] | undefined> => {
   try {
-    const affectedRows = await ProductSchema.update(
-      {
-        productCode: item.productCode,
-        quantityPO: item.quantityPO,
-        dateInputNPL: item.dateInputNPL,
-        dateOutputFCR: item.dateOutputFCR,
-        status: item.status
-      },
-      {
-        where: {
-          id: id
+    const getItem = await ProductSchema.findByPk(id)
+    if (getItem) {
+      const updatedCount = await ProductSchema.update(
+        {
+          productCode: item.productCode,
+          quantityPO: item.quantityPO,
+          dateInputNPL: item.dateInputNPL,
+          dateOutputFCR: item.dateOutputFCR,
+          status: item.status
+        },
+        {
+          where: {
+            id: id
+          }
         }
-      }
-    )
-    if (affectedRows[0] === 1) {
-      return item
+      )
+      return updatedCount[0] > 0 ? item : undefined
     } else {
-      return await ProductSchema.create({ ...item })
+      const newItem = await ProductSchema.create({ ...item })
+      return newItem
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
@@ -104,9 +106,12 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update
-export const updateItemByPk = async (id: number, itemToUpdate: Product): Promise<Product | undefined> => {
+export const updateItemByPk = async (
+  id: number,
+  itemToUpdate: Product
+): Promise<Product | ProductSchema[] | undefined> => {
   try {
-    const affectedRows = await ProductSchema.update(
+    const updatedCount = await ProductSchema.update(
       {
         ...itemToUpdate
       },
@@ -116,7 +121,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: Product): Promise
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return updatedCount[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)

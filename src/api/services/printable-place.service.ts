@@ -41,7 +41,7 @@ export const createOrUpdateItemByPk = async (
         }
       }
     )
-    if (affectedRows[0] === 1) {
+    if (affectedRows[0] > 0) {
       return item
     } else {
       return await PrintablePlaceSchema.create({ ...item })
@@ -68,7 +68,7 @@ export const createOrUpdateItemByProductID = async (
         }
       }
     )
-    if (affectedRows[0] === 1) {
+    if (affectedRows[0] > 0) {
       return item
     } else {
       return await PrintablePlaceSchema.create({ ...item, productID: productID })
@@ -76,6 +76,33 @@ export const createOrUpdateItemByProductID = async (
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error createOrUpdateItemByProductID :: ${error}`)
+  }
+}
+
+export const createOrUpdateItemByPrintID = async (
+  printID: number,
+  item: PrintablePlace
+): Promise<PrintablePlace | PrintablePlaceSchema | undefined> => {
+  try {
+    const affectedRows = await PrintablePlaceSchema.update(
+      {
+        productID: item.productID,
+        status: item.status
+      },
+      {
+        where: {
+          printID: printID
+        }
+      }
+    )
+    if (affectedRows[0] > 0) {
+      return item
+    } else {
+      return await PrintablePlaceSchema.create({ ...item, printID: printID })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByPrintID :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPrintID :: ${error}`)
   }
 }
 

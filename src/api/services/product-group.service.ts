@@ -113,7 +113,7 @@ export const updateItemByPk = async (id: number, item: ProductGroup): Promise<Pr
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
@@ -135,7 +135,7 @@ export const updateItemByProductID = async (
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
@@ -154,7 +154,7 @@ export const updateItemByGroupID = async (groupID: number, item: ProductGroup): 
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByGroupID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByGroupID :: ${error}`)
@@ -178,7 +178,7 @@ export const createOrUpdateItemByPk = async (
         }
       }
     )
-    if (affectedRows[0] === 1) {
+    if (affectedRows[0] > 0) {
       return item
     } else {
       return await ProductGroupSchema.create({ ...item })
@@ -205,7 +205,7 @@ export const createOrUpdateItemByProductID = async (
         }
       }
     )
-    if (affectedRows[0] === 1) {
+    if (affectedRows[0] > 0) {
       return item
     } else {
       return await ProductGroupSchema.create({ ...item, productID: productID })

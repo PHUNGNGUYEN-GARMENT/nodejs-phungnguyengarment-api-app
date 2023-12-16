@@ -29,7 +29,7 @@ class ProductController {
 
   createOrUpdateItemByPk = async (req: Request, res: Response) => {
     const dataRequest: Product = {
-      id: req.body.id,
+      id: Number(req.params.id),
       productCode: req.body.productCode,
       quantityPO: req.body.quantityPO,
       status: req.body.status,
