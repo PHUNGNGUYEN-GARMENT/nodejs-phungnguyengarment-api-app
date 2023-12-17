@@ -10,7 +10,7 @@ export default class ColorController {
 
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: Color = {
-      nameColor: req.body.nameColor,
+      name: req.body.name,
       hexColor: req.body.hexColor,
       status: req.body.status
     }
@@ -73,7 +73,7 @@ export default class ColorController {
   updateItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     const itemRequest: Color = {
-      nameColor: req.body.nameColor,
+      name: req.body.name,
       hexColor: req.body.hexColor,
       status: req.body.status
     }

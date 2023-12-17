@@ -100,7 +100,6 @@ export default class ProductColorController {
     }
     try {
       const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
-      console.log(itemUpdated)
       return res.formatter.ok({ data: itemUpdated })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })

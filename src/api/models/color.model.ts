@@ -5,7 +5,7 @@ const { INTEGER, STRING } = DataType
 
 export type Color = {
   id?: number
-  nameColor?: string
+  name?: string
   hexColor?: string
   status?: ItemStatusType
 }
@@ -19,8 +19,8 @@ export default class ColorSchema extends Model<Color> {
   @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
   declare id: number
 
-  @Column({ type: STRING, field: 'name_color' })
-  declare nameColor: string
+  @Column({ type: STRING, field: 'name' })
+  declare name: string
 
   @Column({ type: STRING, field: 'hex_color' })
   declare hexColor: string
