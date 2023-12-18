@@ -33,10 +33,10 @@ export const getItemByPk = async (id: number): Promise<GarmentAccessoryNoteSchem
 }
 
 // Get by id
-export const getItemBy = async (data: GarmentAccessoryNote): Promise<GarmentAccessoryNoteSchema | null> => {
+export const getItemBy = async (query: { field: string; id: number }): Promise<GarmentAccessoryNoteSchema | null> => {
   try {
     const item = await GarmentAccessoryNoteSchema.findOne({
-      where: { ...data },
+      where: { [query.field]: query.id },
       include: [
         { model: AccessoryNoteSchema, as: 'accessoryNote' },
         { model: GarmentAccessorySchema, as: 'garmentAccessory' }

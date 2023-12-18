@@ -14,10 +14,9 @@ export default class AccessoryNoteController {
       const itemRequest: AccessoryNote = {
         title: req.body.title,
         summary: req.body.summary,
-        status: req.body.status
+        status: req.body.status ?? 'active'
       }
       const itemNew = await service.createNewItem(itemRequest)
-
       if (itemNew) {
         return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
@@ -65,7 +64,7 @@ export default class AccessoryNoteController {
       const itemRequest: AccessoryNote = {
         title: req.body.title,
         summary: req.body.summary,
-        status: req.body.status
+        status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemByPk(id, itemRequest)
       if (itemUpdated) {

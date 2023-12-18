@@ -43,7 +43,7 @@ export default class GarmentAccessoryNoteController {
   getItemByAccessoryNoteID = async (req: Request, res: Response) => {
     try {
       const accessoryNoteID = Number(req.params.accessoryNoteID)
-      const item = await service.getItemBy({ accessoryNoteID: accessoryNoteID })
+      const item = await service.getItemBy({ field: 'accessoryNoteID', id: accessoryNoteID })
       if (item) {
         return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
@@ -56,7 +56,7 @@ export default class GarmentAccessoryNoteController {
   getItemByGarmentAccessoryID = async (req: Request, res: Response) => {
     const garmentAccessoryID = Number(req.params.garmentAccessoryID)
     try {
-      const item = await service.getItemBy({ garmentAccessoryID: garmentAccessoryID })
+      const item = await service.getItemBy({ field: 'garmentAccessoryID', id: garmentAccessoryID })
       if (item) {
         return res.formatter.ok({ data: item, message: message.SUCCESS })
       }

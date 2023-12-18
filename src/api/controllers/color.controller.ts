@@ -10,12 +10,12 @@ export default class ColorController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: Color = {
-      name: req.body.name,
-      hexColor: req.body.hexColor,
-      status: req.body.status ?? 'active'
-    }
     try {
+      const itemRequest: Color = {
+        name: req.body.name,
+        hexColor: req.body.hexColor,
+        status: req.body.status ?? 'active'
+      }
       const itemNew = await service.createNewItem(itemRequest)
       if (itemNew) {
         return res.formatter.created({ data: itemNew, message: message.CREATED })
@@ -27,8 +27,8 @@ export default class ColorController {
   }
 
   getItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
     try {
+      const id = Number(req.params.id)
       const item = await service.getItemByPk(id)
       if (item) {
         return res.formatter.ok({ data: item, message: message.SUCCESS })
@@ -40,8 +40,8 @@ export default class ColorController {
   }
 
   getItemByHexColor = async (req: Request, res: Response) => {
-    const hexColor = String(req.params.hexColor)
     try {
+      const hexColor = String(req.params.hexColor)
       const item = await service.getItemBy({ hexColor: hexColor })
       if (item) {
         return res.formatter.ok({ data: item, message: message.SUCCESS })
@@ -71,13 +71,13 @@ export default class ColorController {
   }
 
   updateItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    const itemRequest: Color = {
-      name: req.body.name,
-      hexColor: req.body.hexColor,
-      status: req.body.status ?? 'active'
-    }
     try {
+      const id = Number(req.params.id)
+      const itemRequest: Color = {
+        name: req.body.name,
+        hexColor: req.body.hexColor,
+        status: req.body.status ?? 'active'
+      }
       const colorUpdated = await service.updateItemByPk(id, itemRequest)
       if (colorUpdated) {
         return res.formatter.ok({ data: colorUpdated, message: message.UPDATED })
@@ -89,8 +89,8 @@ export default class ColorController {
   }
 
   deleteItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
     try {
+      const id = Number(req.params.id)
       const item = await service.deleteItemByPk(id)
       if (item) {
         return res.formatter.ok({ message: message.DELETED })

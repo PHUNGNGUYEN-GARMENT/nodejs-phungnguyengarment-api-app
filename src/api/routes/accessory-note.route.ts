@@ -102,7 +102,7 @@ class AccessoryNoteRoute {
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
