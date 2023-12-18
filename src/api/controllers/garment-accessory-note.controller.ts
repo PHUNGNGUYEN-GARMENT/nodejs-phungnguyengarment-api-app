@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { GarmentAccessoryNote } from '~/models/garment-accessory-note.model'
 import * as service from '~/services/garment-accessory-note.service'
 import { RequestBodyType } from '~/type'
+import { message } from '../utils/constant'
 
 const NAMESPACE = 'controllers/garment-accessory-note'
 
@@ -9,50 +10,46 @@ export default class GarmentAccessoryNoteController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: GarmentAccessoryNote = {
-      title: req.body.title,
-      summary: req.body.summary,
-      accessoryNoteID: req.body.accessoryNoteID,
-      garmentAccessoryID: req.body.garmentAccessoryID,
-      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
-      amountCuttingAccessory: req.body.amountCuttingAccessory,
-      status: req.body.status
-    }
     try {
+      const itemRequest: GarmentAccessoryNote = {
+        accessoryNoteID: req.body.accessoryNoteID,
+        garmentAccessoryID: req.body.garmentAccessoryID,
+        status: req.body.status ?? 'active'
+      }
       const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
-        return res.formatter.created({ data: itemNew })
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
-      return res.formatter.badRequest({ message: `Failed to create new item` })
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   getItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
     try {
+      const id = Number(req.params.id)
       const item = await service.getItemByPk(id)
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   getItemByAccessoryNoteID = async (req: Request, res: Response) => {
-    const accessoryNoteID = Number(req.params.accessoryNoteID)
     try {
+      const accessoryNoteID = Number(req.params.accessoryNoteID)
       const item = await service.getItemBy({ accessoryNoteID: accessoryNoteID })
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -61,11 +58,11 @@ export default class GarmentAccessoryNoteController {
     try {
       const item = await service.getItemBy({ garmentAccessoryID: garmentAccessoryID })
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -80,74 +77,66 @@ export default class GarmentAccessoryNoteController {
         data: items.rows,
         length: items.count,
         page: Number(bodyRequest.paginator.page),
-        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length,
+        message: message.SUCCESS
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   updateItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
-    const itemRequest: GarmentAccessoryNote = {
-      title: req.body.title,
-      summary: req.body.summary,
-      accessoryNoteID: req.body.accessoryNoteID,
-      garmentAccessoryID: req.body.garmentAccessoryID,
-      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
-      amountCuttingAccessory: req.body.amountCuttingAccessory,
-      status: req.body.status
-    }
     try {
+      const id = Number(req.params.id)
+      const itemRequest: GarmentAccessoryNote = {
+        accessoryNoteID: req.body.accessoryNoteID,
+        garmentAccessoryID: req.body.garmentAccessoryID,
+        status: req.body.status ?? 'active'
+      }
       const itemUpdated = await service.updateItemByPk(id, itemRequest)
       if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   updateItemByAccessoryNoteID = async (req: Request, res: Response) => {
-    const accessoryNoteID = Number(req.params.accessoryNoteID)
-    const itemRequest: GarmentAccessoryNote = {
-      title: req.body.title,
-      summary: req.body.summary,
-      garmentAccessoryID: req.body.garmentAccessoryID,
-      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
-      amountCuttingAccessory: req.body.amountCuttingAccessory,
-      status: req.body.status
-    }
     try {
-      const itemUpdated = await service.updateItemByAccessoryNoteID(accessoryNoteID, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const accessoryNoteID = Number(req.params.accessoryNoteID)
+      const itemRequest: GarmentAccessoryNote = {
+        garmentAccessoryID: req.body.garmentAccessoryID,
+        status: req.body.status ?? 'active'
       }
-      return res.formatter.badRequest({})
+      const itemUpdated = await service.updateItemBy({ field: 'accessoryNoteID', id: accessoryNoteID }, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+      }
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   updateItemByGarmentAccessoryID = async (req: Request, res: Response) => {
-    const garmentAccessoryID = Number(req.params.garmentAccessoryID)
-    const itemRequest: GarmentAccessoryNote = {
-      title: req.body.title,
-      summary: req.body.summary,
-      accessoryNoteID: req.body.accessoryNoteID,
-      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
-      amountCuttingAccessory: req.body.amountCuttingAccessory,
-      status: req.body.status
-    }
     try {
-      const itemUpdated = await service.updateItemByGarmentAccessoryID(garmentAccessoryID, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const garmentAccessoryID = Number(req.params.garmentAccessoryID)
+      const itemRequest: GarmentAccessoryNote = {
+        accessoryNoteID: req.body.accessoryNoteID,
+        status: req.body.status ?? 'active'
       }
-      return res.formatter.badRequest({})
+      const itemUpdated = await service.updateItemBy(
+        { field: 'garmentAccessoryID', id: garmentAccessoryID },
+        itemRequest
+      )
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+      }
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -156,37 +145,37 @@ export default class GarmentAccessoryNoteController {
     try {
       const itemUpdated = await service.deleteItemByPk(id)
       if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+        return res.formatter.ok({ data: itemUpdated, message: message.DELETED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   deleteItemByAccessoryNoteID = async (req: Request, res: Response) => {
     const accessoryNoteID = Number(req.params.accessoryNoteID)
     try {
-      const itemUpdated = await service.deleteItemByAccessoryNoteID(accessoryNoteID)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const itemDeleted = await service.deleteItemBy({ field: 'accessoryNoteID', id: accessoryNoteID })
+      if (itemDeleted) {
+        return res.formatter.ok({ data: itemDeleted, message: message.DELETED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   deleteItemByGarmentAccessoryID = async (req: Request, res: Response) => {
     const garmentAccessoryID = Number(req.params.garmentAccessoryID)
     try {
-      const itemUpdated = await service.deleteItemByGarmentAccessoryID(garmentAccessoryID)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const itemDeleted = await service.deleteItemBy({ field: 'garmentAccessoryID', id: garmentAccessoryID })
+      if (itemDeleted) {
+        return res.formatter.ok({ data: itemDeleted, message: message.DELETED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 }

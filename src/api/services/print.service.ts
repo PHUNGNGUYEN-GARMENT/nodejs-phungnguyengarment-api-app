@@ -24,9 +24,9 @@ export const getItemByPk = async (id: number): Promise<PrintSchema | null> => {
   }
 }
 
-export const getItemBy = async (data: Print): Promise<PrintSchema | null> => {
+export const getItemBy = async (item: Print): Promise<PrintSchema | null> => {
   try {
-    return await PrintSchema.findOne({ where: { ...data } })
+    return await PrintSchema.findOne({ where: { ...item } })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -36,7 +36,6 @@ export const getItemBy = async (data: Print): Promise<PrintSchema | null> => {
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: PrintSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<Print>(body))
     const items = await PrintSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -86,7 +85,7 @@ export const updateItemByPk = async (id: number, item: Print): Promise<Print | u
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)

@@ -24,9 +24,9 @@ export const getItemByPk = async (id: number): Promise<AccessoryNoteSchema | nul
   }
 }
 
-export const getItemBy = async (data: AccessoryNote): Promise<AccessoryNoteSchema | null> => {
+export const getItemBy = async (item: AccessoryNote): Promise<AccessoryNoteSchema | null> => {
   try {
-    return await AccessoryNoteSchema.findOne({ where: { ...data } })
+    return await AccessoryNoteSchema.findOne({ where: { ...item } })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -36,7 +36,6 @@ export const getItemBy = async (data: AccessoryNote): Promise<AccessoryNoteSchem
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: AccessoryNoteSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<AccessoryNote>(body))
     const items = await AccessoryNoteSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -87,7 +86,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: AccessoryNote): P
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)

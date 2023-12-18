@@ -18,17 +18,12 @@ class ColorRoute {
       '/',
       requestValidationRules([
         body('hexColor')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('name')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)

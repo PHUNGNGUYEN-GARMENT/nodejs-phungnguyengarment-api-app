@@ -2,9 +2,7 @@ import GarmentAccessorySchema, { GarmentAccessory } from '~/models/garment-acces
 import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
 import { buildDynamicQuery } from '../helpers/query'
-import AccessoryNoteSchema from '../models/accessory-note.model'
 import ProductSchema from '../models/product.model'
-import * as garmentAccessoryNoteService from '../services/garment-accessory-note.service'
 
 const NAMESPACE = 'services/garment-accessory'
 
@@ -21,10 +19,7 @@ export const createNewItem = async (item: GarmentAccessory): Promise<GarmentAcce
 export const getItemByPk = async (id: number): Promise<GarmentAccessorySchema | null> => {
   try {
     const item = await GarmentAccessorySchema.findByPk(id, {
-      include: [
-        { model: ProductSchema, as: 'product' },
-        { model: AccessoryNoteSchema, as: 'accessoryNotes' }
-      ]
+      include: [{ model: ProductSchema, as: 'product' }]
     })
     return item
   } catch (error) {
@@ -34,16 +29,13 @@ export const getItemByPk = async (id: number): Promise<GarmentAccessorySchema | 
 }
 
 // Get by id
-export const getItemBy = async (data: GarmentAccessory): Promise<GarmentAccessorySchema | null> => {
+export const getItemBy = async (item: GarmentAccessory): Promise<GarmentAccessorySchema | null> => {
   try {
-    const item = await GarmentAccessorySchema.findOne({
-      where: { ...data },
-      include: [
-        { model: ProductSchema, as: 'product' },
-        { model: AccessoryNoteSchema, as: 'accessoryNotes' }
-      ]
+    const itemFound = await GarmentAccessorySchema.findOne({
+      where: { ...item },
+      include: [{ model: ProductSchema, as: 'product' }]
     })
-    return item
+    return itemFound
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} getItemBy :: ${error}`)
@@ -59,10 +51,7 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
       limit: body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
       where: buildDynamicQuery<GarmentAccessory>(body),
-      include: [
-        { model: ProductSchema, as: 'product' },
-        { model: AccessoryNoteSchema, as: 'accessoryNotes' }
-      ]
+      include: [{ model: ProductSchema, as: 'product' }]
     })
     return items
   } catch (error) {
@@ -77,10 +66,7 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Garmen
       where: {
         status: status
       },
-      include: [
-        { model: ProductSchema, as: 'product' },
-        { model: AccessoryNoteSchema, as: 'accessoryNotes' }
-      ]
+      include: [{ model: ProductSchema, as: 'product' }]
     })
     return items
   } catch (error) {
@@ -114,17 +100,7 @@ export const updateItemByPk = async (
         }
       }
     )
-    // Update GarmentAccessoryNote (children of GarmentAccessory)
-    if (affectedRows[0] === 1) {
-      const garmentAccessoryNoteUpdated = await garmentAccessoryNoteService.updateItemByGarmentAccessoryID(id, {
-        cuttingAccessoryDate: itemToUpdate.cuttingAccessoryDate,
-        amountCuttingAccessory: itemToUpdate.amountCuttingAccessory
-      })
-      if (garmentAccessoryNoteUpdated) {
-        return itemToUpdate
-      }
-    }
-    return undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
@@ -146,7 +122,7 @@ export const updateItemByProductID = async (
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)

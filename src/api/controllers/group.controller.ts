@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { Group } from '~/models/group.model'
 import * as service from '~/services/group.service'
 import { RequestBodyType } from '~/type'
+import { message } from '../utils/constant'
 
 const NAMESPACE = 'controllers/group'
 
@@ -9,32 +10,32 @@ export default class GroupController {
   constructor() {}
 
   createNewItem = async (req: Request, res: Response) => {
-    const itemRequest: Group = {
-      name: req.body.name,
-      status: req.body.status
-    }
     try {
+      const itemRequest: Group = {
+        name: req.body.name,
+        status: req.body.status ?? 'active'
+      }
       const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
-        return res.formatter.created({ data: itemNew })
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
-      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `>>> ${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   getItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
     try {
+      const id = Number(req.params.id)
       const item = await service.getItemByPk(id)
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -43,11 +44,11 @@ export default class GroupController {
     try {
       const item = await service.getItemBy({ name: name })
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -62,10 +63,11 @@ export default class GroupController {
         data: items.rows,
         length: items.rows.length,
         page: Number(bodyRequest.paginator.page),
-        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length,
+        message: message.SUCCESS
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -73,16 +75,16 @@ export default class GroupController {
     const id = Number(req.params.id)
     const itemRequest: Group = {
       name: req.body.name,
-      status: req.body.status
+      status: req.body.status ?? 'active'
     }
     try {
-      const groupUpdated = await service.updateItemByPk(id, itemRequest)
-      if (groupUpdated) {
-        return res.formatter.ok({ data: groupUpdated })
+      const itemUpdated = await service.updateItemByPk(id, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -91,11 +93,11 @@ export default class GroupController {
     try {
       const item = await service.deleteItemByPk(id)
       if (item) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+        return res.formatter.ok({ message: message.DELETED })
       }
-      return res.formatter.notFound({})
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 }

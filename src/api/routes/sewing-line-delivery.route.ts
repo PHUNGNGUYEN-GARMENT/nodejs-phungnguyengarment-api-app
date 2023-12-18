@@ -27,11 +27,6 @@ class SewingLineDeliveryRoute {
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('quantityOrigin')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)

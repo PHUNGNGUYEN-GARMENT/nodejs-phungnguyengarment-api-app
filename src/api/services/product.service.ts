@@ -14,38 +14,6 @@ export const createNewItem = async (item: Product): Promise<ProductSchema> => {
   }
 }
 
-export const createOrUpdateItemByPk = async (
-  id: number,
-  item: Product
-): Promise<Product | ProductSchema | ProductSchema[] | undefined> => {
-  try {
-    const getItem = await ProductSchema.findByPk(id)
-    if (getItem) {
-      const updatedCount = await ProductSchema.update(
-        {
-          productCode: item.productCode,
-          quantityPO: item.quantityPO,
-          dateInputNPL: item.dateInputNPL,
-          dateOutputFCR: item.dateOutputFCR,
-          status: item.status
-        },
-        {
-          where: {
-            id: id
-          }
-        }
-      )
-      return updatedCount[0] > 0 ? item : undefined
-    } else {
-      const newItem = await ProductSchema.create({ ...item })
-      return newItem
-    }
-  } catch (error) {
-    logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
-  }
-}
-
 // Get by id
 export const getItemByPk = async (id: number): Promise<ProductSchema | null> => {
   try {

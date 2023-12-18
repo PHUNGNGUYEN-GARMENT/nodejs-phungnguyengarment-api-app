@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param } from 'express-validator'
 import PrintRouteController from '~/controllers/print.controller'
 import { requestValidationRules } from '~/middleware/response-validator'
 import { validators } from '../utils/constant'
@@ -19,11 +19,6 @@ class PrintRoute {
       requestValidationRules([
         body('name')
           .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
-          .notEmpty()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)

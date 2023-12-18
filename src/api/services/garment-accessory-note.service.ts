@@ -54,7 +54,6 @@ export const getItems = async (
   body: RequestBodyType
 ): Promise<{ count: number; rows: GarmentAccessoryNoteSchema[] }> => {
   try {
-    // console.log(`${NAMESPACE}>>>`, buildDynamicQuery<ProductColor>(body))
     const items = await GarmentAccessoryNoteSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -77,11 +76,7 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Garmen
     const items = await GarmentAccessoryNoteSchema.findAll({
       where: {
         status: status
-      },
-      include: [
-        { model: AccessoryNoteSchema, as: 'accessoryNote' },
-        { model: GarmentAccessorySchema, as: 'garmentAccessory' }
-      ]
+      }
     })
     return items
   } catch (error) {
@@ -115,15 +110,15 @@ export const updateItemByPk = async (
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
   }
 }
 
-export const updateItemByAccessoryNoteID = async (
-  accessoryNoteID: number,
+export const updateItemBy = async (
+  query: { field: string; id: number },
   itemToUpdate: GarmentAccessoryNote
 ): Promise<GarmentAccessoryNote | undefined> => {
   try {
@@ -133,33 +128,11 @@ export const updateItemByAccessoryNoteID = async (
       },
       {
         where: {
-          accessoryNoteID: accessoryNoteID
+          [query.field]: query.id
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
-  } catch (error) {
-    logging.error(NAMESPACE, `Error updateItemByAccessoryNoteID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByAccessoryNoteID :: ${error}`)
-  }
-}
-
-export const updateItemByGarmentAccessoryID = async (
-  garmentAccessoryID: number,
-  itemToUpdate: GarmentAccessoryNote
-): Promise<GarmentAccessoryNote | undefined> => {
-  try {
-    const affectedRows = await GarmentAccessoryNoteSchema.update(
-      {
-        ...itemToUpdate
-      },
-      {
-        where: {
-          garmentAccessoryID: garmentAccessoryID
-        }
-      }
-    )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByGarmentAccessoryID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByGarmentAccessoryID :: ${error}`)
@@ -177,20 +150,11 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
   }
 }
 
-export const deleteItemByAccessoryNoteID = async (accessoryNoteID: number): Promise<number> => {
+export const deleteItemBy = async (query: { field: string; id: number }): Promise<number> => {
   try {
-    return await GarmentAccessoryNoteSchema.destroy({ where: { accessoryNoteID: accessoryNoteID } })
+    return await GarmentAccessoryNoteSchema.destroy({ where: { [query.field]: query.id } })
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByAccessoryNoteID :: ${error}`)
     throw new Error(`${NAMESPACE} Error deleteItemByAccessoryNoteID :: ${error}`)
-  }
-}
-
-export const deleteItemByGarmentAccessoryID = async (garmentAccessoryID: number): Promise<number> => {
-  try {
-    return await GarmentAccessoryNoteSchema.destroy({ where: { garmentAccessoryID: garmentAccessoryID } })
-  } catch (error) {
-    logging.error(NAMESPACE, `Error deleteItemByGarmentAccessoryID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByGarmentAccessoryID :: ${error}`)
   }
 }

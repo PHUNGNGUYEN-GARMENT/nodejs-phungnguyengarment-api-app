@@ -18,20 +18,15 @@ class PrintablePlaceRoute {
       '/',
       requestValidationRules([
         body('productID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('printID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.createNewItem
     )
@@ -145,17 +140,17 @@ class PrintablePlaceRoute {
       '/createOrUpdate',
       requestValidationRules([
         body('productID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('printID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
@@ -167,17 +162,17 @@ class PrintablePlaceRoute {
       '/createOrUpdate/productID/:productID',
       requestValidationRules([
         param('productID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('printID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
@@ -189,17 +184,17 @@ class PrintablePlaceRoute {
       '/createOrUpdate/printID/:printID',
       requestValidationRules([
         param('printID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('printID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)

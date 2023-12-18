@@ -36,11 +36,6 @@ class ProductRoute {
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
       ]),
       this.controller.createNewItem
@@ -70,11 +65,6 @@ class ProductRoute {
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
         body('dateOutputFCR')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()

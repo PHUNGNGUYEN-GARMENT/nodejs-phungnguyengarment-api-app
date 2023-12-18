@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { GarmentAccessory } from '~/models/garment-accessory.model'
 import * as service from '~/services/garment-accessory.service'
 import { RequestBodyType } from '~/type'
+import { message } from '../utils/constant'
 
 const NAMESPACE = 'controllers/garment-accessory'
 
@@ -13,43 +14,43 @@ export default class GarmentAccessoryController {
       productID: req.body.productID,
       cuttingAccessoryDate: req.body.cuttingAccessoryDate,
       amountCuttingAccessory: req.body.amountCuttingAccessory,
-      status: req.body.status
+      status: req.body.status ?? 'active'
     }
     try {
       const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
-        return res.formatter.created({ data: itemNew })
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
-      return res.formatter.badRequest({ message: `Failed to create new item` })
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   getItemByPk = async (req: Request, res: Response) => {
-    const id = Number(req.params.id)
     try {
+      const id = Number(req.params.id)
       const item = await service.getItemByPk(id)
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   getItemByProductID = async (req: Request, res: Response) => {
-    const productID = Number(req.params.productID)
     try {
+      const productID = Number(req.params.productID)
       const item = await service.getItemBy({ productID: productID })
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -64,10 +65,11 @@ export default class GarmentAccessoryController {
         data: items.rows,
         length: items.count,
         page: Number(bodyRequest.paginator.page),
-        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length,
+        message: message.SUCCESS
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -77,16 +79,16 @@ export default class GarmentAccessoryController {
       productID: req.body.productID,
       cuttingAccessoryDate: req.body.cuttingAccessoryDate,
       amountCuttingAccessory: req.body.amountCuttingAccessory,
-      status: req.body.status
+      status: req.body.status ?? 'active'
     }
     try {
       const itemUpdated = await service.updateItemByPk(id, itemRequest)
       if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -96,42 +98,42 @@ export default class GarmentAccessoryController {
       productID: req.body.productID,
       cuttingAccessoryDate: req.body.cuttingAccessoryDate,
       amountCuttingAccessory: req.body.amountCuttingAccessory,
-      status: req.body.status
+      status: req.body.status ?? 'active'
     }
     try {
       const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
       if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
-      const itemUpdated = await service.deleteItemByPk(id)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const itemDeleted = await service.deleteItemByPk(id)
+      if (itemDeleted) {
+        return res.formatter.ok({ data: itemDeleted, message: message.DELETED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
   deleteItemByProductID = async (req: Request, res: Response) => {
     const productID = Number(req.params.productID)
     try {
-      const itemUpdated = await service.deleteItemByProductID(productID)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated })
+      const itemDeleted = await service.deleteItemByProductID(productID)
+      if (itemDeleted) {
+        return res.formatter.ok({ data: itemDeleted, message: message.DELETED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 }

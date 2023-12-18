@@ -22,11 +22,6 @@ class GarmentAccessoryRoute {
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('accessoryNoteIDs')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isArray()
-          .withMessage(validators.ROLE_MUST_BE_ARRAY_TYPE),
         body('cuttingAccessoryDate')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
@@ -36,12 +31,7 @@ class GarmentAccessoryRoute {
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isFloat()
-          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE)
       ]),
       this.controller.createNewItem
     )

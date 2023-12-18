@@ -97,7 +97,7 @@ export const updateItemByPk = async (id: number, item: Importation): Promise<Imp
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
@@ -118,63 +118,7 @@ export const updateItemByProductID = async (productID: number, item: Importation
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
-  } catch (error) {
-    logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByProductID :: ${error}`)
-  }
-}
-
-export const createOrUpdateItemByPk = async (
-  id: number,
-  item: Importation
-): Promise<Importation | ImportationSchema | undefined> => {
-  try {
-    const affectedRows = await ImportationSchema.update(
-      {
-        quantity: item.quantity,
-        dateImported: item.dateImported,
-        status: item.status
-      },
-      {
-        where: {
-          id: id
-        }
-      }
-    )
-    if (affectedRows[0] === 1) {
-      return item
-    } else {
-      return await ImportationSchema.create({ ...item })
-    }
-  } catch (error) {
-    logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByProductID :: ${error}`)
-  }
-}
-
-export const createOrUpdateItemByProductID = async (
-  productID: number,
-  item: Importation
-): Promise<Importation | ImportationSchema | undefined> => {
-  try {
-    const affectedRows = await ImportationSchema.update(
-      {
-        quantity: item.quantity,
-        dateImported: item.dateImported,
-        status: item.status
-      },
-      {
-        where: {
-          productID: productID
-        }
-      }
-    )
-    if (affectedRows[0] === 1) {
-      return item
-    } else {
-      return await ImportationSchema.create({ ...item })
-    }
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByProductID :: ${error}`)

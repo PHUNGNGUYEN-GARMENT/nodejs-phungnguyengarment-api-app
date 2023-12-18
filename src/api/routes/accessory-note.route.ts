@@ -21,8 +21,20 @@ class AccessoryNoteRoute {
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
+          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      ]),
+      this.controller.createNewItem
+    )
+
+    this.router.post(
+      '/createOrUpdate/:id',
+      requestValidationRules([
+        param('id')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('title')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
@@ -36,7 +48,7 @@ class AccessoryNoteRoute {
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
@@ -77,7 +89,7 @@ class AccessoryNoteRoute {
       '/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)

@@ -18,22 +18,17 @@ class ImportationRoute {
       '/',
       requestValidationRules([
         body('productID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('quantity')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isFloat()
           .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
         body('dateImported')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
@@ -42,25 +37,25 @@ class ImportationRoute {
     )
 
     this.router.post(
-      '/createOrUpdate',
+      '/createOrUpdate/:id',
       requestValidationRules([
+        param('id')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('productID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('quantity')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isFloat()
           .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
         body('dateImported')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
@@ -69,25 +64,20 @@ class ImportationRoute {
     )
 
     this.router.post(
-      '/createOrUpdate/productID',
+      '/createOrUpdate/:productID',
       requestValidationRules([
-        body('productID')
-          .notEmpty()
+        param('productID')
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('quantity')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isFloat()
           .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
         body('dateImported')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('status')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)

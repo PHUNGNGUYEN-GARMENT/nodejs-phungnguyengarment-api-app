@@ -26,12 +26,7 @@ class ProductColorRoute {
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.createNewItem
     )
@@ -40,25 +35,20 @@ class ProductColorRoute {
       '/createOrUpdate/:id',
       requestValidationRules([
         param('id')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('productID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('colorID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.createOrUpdateItemByPk
     )
@@ -67,20 +57,15 @@ class ProductColorRoute {
       '/createOrUpdate/productID/:productID',
       requestValidationRules([
         param('productID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
         body('colorID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.createOrUpdateItemByProductID
     )
@@ -89,20 +74,15 @@ class ProductColorRoute {
       '/createOrUpdate/colorID/:colorID',
       requestValidationRules([
         param('colorID')
-          .notEmpty()
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        param('productID')
-          .notEmpty()
+        body('productID')
+          .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .notEmpty()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.createOrUpdateItemByColorID
     )

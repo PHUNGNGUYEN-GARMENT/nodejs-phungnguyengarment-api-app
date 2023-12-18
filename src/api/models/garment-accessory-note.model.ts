@@ -9,10 +9,6 @@ export type GarmentAccessoryNote = {
   id?: number
   garmentAccessoryID?: number
   accessoryNoteID?: number
-  title?: string
-  summary?: string
-  cuttingAccessoryDate?: Date
-  amountCuttingAccessory?: number
   status?: ItemStatusType
 }
 
@@ -32,18 +28,6 @@ export default class GarmentAccessoryNoteSchema extends Model<GarmentAccessoryNo
   @Column({ type: INTEGER, field: 'accessory_note_id' })
   @ForeignKey(() => ProductSchema)
   declare accessoryNoteID: number
-
-  @Column({ type: STRING, field: 'title' })
-  declare title: string
-
-  @Column({ type: STRING, field: 'summary' })
-  declare summary: string
-
-  @Column({ type: DATE, field: 'cutting_accessory_date' })
-  declare cuttingAccessoryDate: Date
-
-  @Column({ type: FLOAT, field: 'amount_cutting_accessory' })
-  declare amountCuttingAccessory: number
 
   @Column({ type: STRING, field: 'status' })
   declare status: string

@@ -60,7 +60,6 @@ export const getItemBy = async (product: ProductColor): Promise<ProductColorSche
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ProductColorSchema[] }> => {
   try {
-    console.log(`${NAMESPACE}>>>`, buildDynamicQuery<ProductColor>(body))
     const items = await ProductColorSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -115,8 +114,7 @@ export const updateItemByPk = async (
       {
         where: {
           id: id
-        },
-        returning: true
+        }
       }
     )
     return updatedCount[0] > 0 ? itemToUpdate : undefined
@@ -126,8 +124,8 @@ export const updateItemByPk = async (
   }
 }
 
-export const updateItemByProductID = async (
-  productID: number,
+export const updateItemBy = async (
+  query: { field: string; id: number },
   itemToUpdate: ProductColor
 ): Promise<ProductColor | ProductColorSchema | ProductColorSchema[] | undefined> => {
   try {
@@ -138,7 +136,7 @@ export const updateItemByProductID = async (
       },
       {
         where: {
-          productID: productID
+          [query.field]: query.id
         }
       }
     )
@@ -146,29 +144,6 @@ export const updateItemByProductID = async (
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
-  }
-}
-
-export const updateItemByColorID = async (
-  colorID: number,
-  itemToUpdate: ProductColor
-): Promise<ProductColor | ProductColorSchema | ProductColorSchema[] | undefined> => {
-  try {
-    const updatedCount = await ProductColorSchema.update(
-      {
-        productID: itemToUpdate.productID,
-        status: itemToUpdate.status
-      },
-      {
-        where: {
-          id: colorID
-        }
-      }
-    )
-    return updatedCount[0] > 0 ? itemToUpdate : undefined
-  } catch (error) {
-    logging.error(NAMESPACE, `Error updateItemByColorID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByColorID :: ${error}`)
   }
 }
 
@@ -188,8 +163,7 @@ export const createOrUpdateItemByPk = async (
         {
           where: {
             id: id
-          },
-          returning: true
+          }
         }
       )
       return updatedCount[0] > 0 ? item : undefined
@@ -202,8 +176,8 @@ export const createOrUpdateItemByPk = async (
   }
 }
 
-export const createOrUpdateItemByProductID = async (
-  productID: number,
+export const createOrUpdateItemBy = async (
+  query: { field: string; id: number },
   item: ProductColor
 ): Promise<ProductColor | ProductColorSchema | undefined> => {
   try {
@@ -214,14 +188,14 @@ export const createOrUpdateItemByProductID = async (
       },
       {
         where: {
-          productID: productID
+          [query.field]: query.id
         }
       }
     )
     if (affectedRows[0] > 0) {
       return item
     } else {
-      return await ProductColorSchema.create({ ...item, productID: productID })
+      return await ProductColorSchema.create({ ...item, [query.field]: query.id })
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
@@ -240,21 +214,12 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
   }
 }
 
-export const deleteItemByColorID = async (colorID: number): Promise<number> => {
+export const deleteItemBy = async (query: { field: string; id: number }): Promise<number> => {
   try {
-    const affectedRows = await ProductColorSchema.destroy({ where: { colorID: colorID } })
+    const affectedRows = await ProductColorSchema.destroy({ where: { [query.field]: query.id } })
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByColorID :: ${error}`)
     throw new Error(`${NAMESPACE} Error deleteItemByColorID :: ${error}`)
-  }
-}
-
-export const deleteItemByProductID = async (productID: number): Promise<number> => {
-  try {
-    return await ProductColorSchema.destroy({ where: { productID: productID } })
-  } catch (error) {
-    logging.error(NAMESPACE, `Error deleteItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByProductID :: ${error}`)
   }
 }

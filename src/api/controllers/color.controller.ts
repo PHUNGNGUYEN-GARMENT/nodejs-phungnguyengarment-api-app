@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { Color } from '~/models/color.model'
 import * as service from '~/services/color.service'
 import { RequestBodyType } from '~/type'
+import { message } from '../utils/constant'
 
 const NAMESPACE = 'controllers/color'
 
@@ -12,17 +13,16 @@ export default class ColorController {
     const itemRequest: Color = {
       name: req.body.name,
       hexColor: req.body.hexColor,
-      status: req.body.status
+      status: req.body.status ?? 'active'
     }
     try {
       const itemNew = await service.createNewItem(itemRequest)
-
       if (itemNew) {
-        return res.formatter.created({ data: itemNew })
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
-      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `>>> ${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -31,11 +31,11 @@ export default class ColorController {
     try {
       const item = await service.getItemByPk(id)
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -44,11 +44,11 @@ export default class ColorController {
     try {
       const item = await service.getItemBy({ hexColor: hexColor })
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -66,7 +66,7 @@ export default class ColorController {
         total: bodyRequest.search.term.length > 0 ? items.count : total.length
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -75,16 +75,16 @@ export default class ColorController {
     const itemRequest: Color = {
       name: req.body.name,
       hexColor: req.body.hexColor,
-      status: req.body.status
+      status: req.body.status ?? 'active'
     }
     try {
       const colorUpdated = await service.updateItemByPk(id, itemRequest)
       if (colorUpdated) {
-        return res.formatter.ok({ data: colorUpdated })
+        return res.formatter.ok({ data: colorUpdated, message: message.UPDATED })
       }
-      return res.formatter.badRequest({ message: 'Failed to update color!' })
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -93,11 +93,11 @@ export default class ColorController {
     try {
       const item = await service.deleteItemByPk(id)
       if (item) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+        return res.formatter.ok({ message: message.DELETED })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 }

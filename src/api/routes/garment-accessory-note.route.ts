@@ -26,27 +26,7 @@ class GarmentAccessoryNoteRoute {
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('title')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('cuttingAccessoryDate')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('amountCuttingAccessory')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isFloat()
-          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.createNewItem
     )
@@ -136,6 +116,11 @@ class GarmentAccessoryNoteRoute {
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('garmentAccessoryID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
           .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
       ]),
       this.controller.updateItemByAccessoryNoteID
@@ -145,6 +130,11 @@ class GarmentAccessoryNoteRoute {
       '/garmentAccessoryID/:garmentAccessoryID',
       requestValidationRules([
         param('garmentAccessoryID')
+          .exists()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isInt()
+          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
+        body('accessoryNoteID')
           .exists()
           .withMessage(validators.ROLE_IS_EMPTY)
           .isInt()

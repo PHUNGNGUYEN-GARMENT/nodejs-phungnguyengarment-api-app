@@ -24,9 +24,9 @@ export const getItemByPk = async (id: number): Promise<GroupSchema | null> => {
   }
 }
 
-export const getItemBy = async (group: Group): Promise<GroupSchema | null> => {
+export const getItemBy = async (item: Group): Promise<GroupSchema | null> => {
   try {
-    return await GroupSchema.findOne({ where: { ...group } })
+    return await GroupSchema.findOne({ where: { ...item } })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -86,7 +86,7 @@ export const updateItemByPk = async (id: number, item: Group): Promise<Group | u
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)

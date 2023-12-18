@@ -24,9 +24,9 @@ export const getItemByPk = async (id: number): Promise<ColorSchema | null> => {
   }
 }
 
-export const getItemBy = async (color: Color): Promise<ColorSchema | null> => {
+export const getItemBy = async (item: Color): Promise<ColorSchema | null> => {
   try {
-    return await ColorSchema.findOne({ where: { ...color } })
+    return await ColorSchema.findOne({ where: { ...item } })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -36,7 +36,6 @@ export const getItemBy = async (color: Color): Promise<ColorSchema | null> => {
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: ColorSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<Color>(body))
     const items = await ColorSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -87,7 +86,7 @@ export const updateItemByPk = async (id: number, item: Color): Promise<Color | u
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)

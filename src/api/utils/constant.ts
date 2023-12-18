@@ -18,3 +18,16 @@ export const validators = {
   ROLE_MUST_BE_DATE_TYPE: 'ROLE_MUST_BE_DATE_TYPE',
   ROLE_MUST_BE_OBJECT_TYPE: 'ROLE_MUST_BE_OBJECT_TYPE'
 }
+
+export const message = {
+  SUCCESS: 'Success!',
+  FAILED: 'Failed!',
+  ERROR: 'Error!',
+  CREATED: 'Created!',
+  UPDATED: 'Updated!',
+  DELETED: 'Deleted!',
+  CREATION_FAILED: 'Creation failed!',
+  UPDATE_FAILED: 'Update failed!',
+  DELETE_FAILED: 'Delete failed!',
+  NOT_FOUND: 'Not found!'
+}
