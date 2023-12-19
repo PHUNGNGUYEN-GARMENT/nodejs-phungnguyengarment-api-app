@@ -1,8 +1,6 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
 import GarmentAccessoryNoteController from '~/controllers/garment-accessory-note.controller'
-import { requestValidationRules } from '~/middleware/response-validator'
-import { validators } from '../utils/constant'
+import { validationRules } from '../middleware/request-validator'
 
 class GarmentAccessoryNoteRoute {
   router = Router()
@@ -16,17 +14,9 @@ class GarmentAccessoryNoteRoute {
     // Create new item
     this.router.post(
       '/',
-      requestValidationRules([
-        body('accessoryNoteID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('garmentAccessoryID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'accessoryNoteID', fieldType: 'int', location: 'body' },
+        { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createNewItem
     )
@@ -34,64 +24,30 @@ class GarmentAccessoryNoteRoute {
     // Get item
     this.router.get(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByPk
     )
 
     this.router.get(
       '/accessoryNoteID/:accessoryNoteID',
-      requestValidationRules([
-        param('accessoryNoteID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'accessoryNoteID', fieldType: 'int', location: 'body' }]),
       this.controller.getItemByAccessoryNoteID
     )
 
     this.router.get(
       '/garmentAccessoryID/:garmentAccessoryID',
-      requestValidationRules([
-        param('garmentAccessoryID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'garmentAccessoryID', fieldType: 'int', location: 'body' }]),
       this.controller.getItemByGarmentAccessoryID
     )
 
     // Get items
     this.router.post(
       '/find',
-      requestValidationRules([
-        body('filter')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('paginator')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('search')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('sorting')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
+      validationRules([
+        { field: 'filter', fieldType: 'object', location: 'body' },
+        { field: 'paginator', fieldType: 'object', location: 'body' },
+        { field: 'search', fieldType: 'object', location: 'body' },
+        { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
       this.controller.getItems
     )
@@ -99,46 +55,24 @@ class GarmentAccessoryNoteRoute {
     // Update item by id
     this.router.put(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
     )
 
     this.router.put(
       '/accessoryNoteID/:accessoryNoteID',
-      requestValidationRules([
-        param('accessoryNoteID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('garmentAccessoryID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'accessoryNoteID', fieldType: 'int', location: 'params' },
+        { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.updateItemByAccessoryNoteID
     )
 
     this.router.put(
       '/garmentAccessoryID/:garmentAccessoryID',
-      requestValidationRules([
-        param('garmentAccessoryID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('accessoryNoteID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'garmentAccessoryID', fieldType: 'int', location: 'params' },
+        { field: 'accessoryNoteID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.updateItemByGarmentAccessoryID
     )
@@ -146,37 +80,19 @@ class GarmentAccessoryNoteRoute {
     // Delete item
     this.router.delete(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
     )
 
     this.router.delete(
       '/accessoryNoteID/:accessoryNoteID',
-      requestValidationRules([
-        param('accessoryNoteID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'accessoryNoteID', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByAccessoryNoteID
     )
 
     this.router.delete(
       '/garmentAccessoryID/:garmentAccessoryID',
-      requestValidationRules([
-        param('garmentAccessoryID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'garmentAccessoryID', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByGarmentAccessoryID
     )
   }

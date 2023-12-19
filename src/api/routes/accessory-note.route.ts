@@ -1,8 +1,6 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
 import AccessoryNoteController from '~/controllers/accessory-note.controller'
-import { requestValidationRules } from '~/middleware/response-validator'
-import { validators } from '../utils/constant'
+import { validationRules } from '../middleware/request-validator'
 
 class AccessoryNoteRoute {
   router = Router()
@@ -16,29 +14,15 @@ class AccessoryNoteRoute {
     // Create new item
     this.router.post(
       '/',
-      requestValidationRules([
-        body('title')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
-      ]),
+      validationRules([{ field: 'title', fieldType: 'string', location: 'body' }]),
       this.controller.createNewItem
     )
 
     this.router.post(
       '/createOrUpdate/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('title')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      validationRules([
+        { field: 'id', fieldType: 'int', location: 'params' },
+        { field: 'title', fieldType: 'string', location: 'body' }
       ]),
       this.controller.createNewItem
     )
@@ -46,40 +30,18 @@ class AccessoryNoteRoute {
     // Get item by productID and importedID
     this.router.get(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByPk
     )
 
     // Get all items
     this.router.post(
       '/find',
-      requestValidationRules([
-        body('filter')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('paginator')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('search')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('sorting')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
+      validationRules([
+        { field: 'filter', fieldType: 'object', location: 'body' },
+        { field: 'paginator', fieldType: 'object', location: 'body' },
+        { field: 'search', fieldType: 'object', location: 'body' },
+        { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
       this.controller.getItems
     )
@@ -87,26 +49,14 @@ class AccessoryNoteRoute {
     // Update item by productID and importedID
     this.router.put(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
     )
 
     // Delete item by productID
     this.router.delete(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
     )
   }

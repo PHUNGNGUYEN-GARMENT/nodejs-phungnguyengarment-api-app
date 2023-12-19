@@ -1,8 +1,6 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
 import ProductController from '~/controllers/product.controller'
-import { requestValidationRules } from '~/middleware/response-validator'
-import { validators } from '../utils/constant'
+import { validationRules } from '../middleware/request-validator'
 
 class ProductRoute {
   router = Router()
@@ -16,59 +14,23 @@ class ProductRoute {
     // Create new item
     this.router.post(
       '/',
-      requestValidationRules([
-        body('productCode')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('quantityPO')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isFloat()
-          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
-        body('dateInputNPL')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('dateOutputFCR')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      validationRules([
+        { field: 'productCode', fieldType: 'string', location: 'body' },
+        { field: 'quantityPO', fieldType: 'float', location: 'body' },
+        { field: 'dateInputNPL', fieldType: 'date', location: 'body' },
+        { field: 'dateOutputFCR', fieldType: 'date', location: 'body' }
       ]),
       this.controller.createNewItem
     )
 
     this.router.post(
       '/createOrUpdate/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('productCode')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('quantityPO')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isFloat()
-          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
-        body('dateInputNPL')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE),
-        body('dateOutputFCR')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      validationRules([
+        { field: 'id', fieldType: 'int', location: 'params' },
+        { field: 'productCode', fieldType: 'string', location: 'body' },
+        { field: 'quantityPO', fieldType: 'float', location: 'body' },
+        { field: 'dateInputNPL', fieldType: 'date', location: 'body' },
+        { field: 'dateOutputFCR', fieldType: 'date', location: 'body' }
       ]),
       this.controller.createOrUpdateItemByPk
     )
@@ -76,52 +38,24 @@ class ProductRoute {
     // Get item
     this.router.get(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByPk
     )
 
     this.router.get(
       '/productCode/:productCode',
-      requestValidationRules([
-        param('productCode')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
-      ]),
+      validationRules([{ field: 'productCode', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByProductCode
     )
 
     // Get items
     this.router.post(
       '/find',
-      requestValidationRules([
-        body('filter')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('paginator')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('search')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('sorting')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
+      validationRules([
+        { field: 'filter', fieldType: 'object', location: 'body' },
+        { field: 'paginator', fieldType: 'object', location: 'body' },
+        { field: 'search', fieldType: 'object', location: 'body' },
+        { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
       this.controller.getItems
     )
@@ -129,26 +63,14 @@ class ProductRoute {
     // Update item by id
     this.router.put(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
     )
 
     // Delete item
     this.router.delete(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
     )
   }

@@ -1,8 +1,6 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
 import PrintablePlaceController from '~/controllers/printable-place.controller'
-import { requestValidationRules } from '~/middleware/response-validator'
-import { validators } from '../utils/constant'
+import { validationRules } from '../middleware/request-validator'
 
 class PrintablePlaceRoute {
   router = Router()
@@ -16,17 +14,9 @@ class PrintablePlaceRoute {
     // Create new item
     this.router.post(
       '/',
-      requestValidationRules([
-        body('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('printID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'body' },
+        { field: 'printID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createNewItem
     )
@@ -34,66 +24,32 @@ class PrintablePlaceRoute {
     // Get item
     this.router.get(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByPk
     )
 
     // Get item
     this.router.get(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByProductID
     )
 
     // Get item
     this.router.get(
       '/printID/:printID',
-      requestValidationRules([
-        param('printID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'printID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByPrintID
     )
 
     // Get all items
     this.router.post(
       '/find',
-      requestValidationRules([
-        body('filter')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('paginator')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('search')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('sorting')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
+      validationRules([
+        { field: 'filter', fieldType: 'object', location: 'body' },
+        { field: 'paginator', fieldType: 'object', location: 'body' },
+        { field: 'search', fieldType: 'object', location: 'body' },
+        { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
       this.controller.getItems
     )
@@ -101,103 +57,47 @@ class PrintablePlaceRoute {
     // Update item by productID and importedID
     this.router.put(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
     )
 
     // Update item by productID and importedID
     this.router.put(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByProductID
     )
 
     this.router.put(
       '/printID/:printID',
-      requestValidationRules([
-        param('printID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'printID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPrintID
     )
 
     this.router.post(
-      '/createOrUpdate',
-      requestValidationRules([
-        body('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('printID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      '/createOrUpdate/:id',
+      validationRules([
+        { field: 'id', fieldType: 'int', location: 'params' },
+        { field: 'productID', fieldType: 'int', location: 'body' },
+        { field: 'printID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createOrUpdateItemByPk
     )
 
     this.router.post(
       '/createOrUpdate/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('printID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'params' },
+        { field: 'printID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createOrUpdateItemByProductID
     )
 
     this.router.post(
       '/createOrUpdate/printID/:printID',
-      requestValidationRules([
-        param('printID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('printID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('status')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'params' },
+        { field: 'printID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createOrUpdateItemByPrintID
     )
@@ -205,13 +105,7 @@ class PrintablePlaceRoute {
     // Delete item by productID
     this.router.delete(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
     )
   }

@@ -1,8 +1,6 @@
 import { Router } from 'express'
-import { body, param, query } from 'express-validator'
-import { requestValidationRules } from '~/middleware/response-validator'
 import SewingLineDeliveryController from '../controllers/sewing-line-delivery.controller'
-import { validators } from '../utils/constant'
+import { validationRules } from '../middleware/request-validator'
 
 class SewingLineDeliveryRoute {
   router = Router()
@@ -16,32 +14,12 @@ class SewingLineDeliveryRoute {
     // Create new item
     this.router.post(
       '/',
-      requestValidationRules([
-        body('sewingLineID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('quantityOrigin')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isFloat()
-          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
-        body('quantitySewed')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isFloat()
-          .withMessage(validators.ROLE_MUST_BE_FLOAT_TYPE),
-        body('expiredDate')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isString()
-          .withMessage(validators.ROLE_MUST_BE_STRING_TYPE)
+      validationRules([
+        { field: 'sewingLineID', fieldType: 'int', location: 'body' },
+        { field: 'productID', fieldType: 'int', location: 'body' },
+        { field: 'quantityOrigin', fieldType: 'float', location: 'body' },
+        { field: 'quantitySewed', fieldType: 'float', location: 'body' },
+        { field: 'expiredDate', fieldType: 'date', location: 'body' }
       ]),
       this.controller.createNewItem
     )
@@ -49,66 +27,32 @@ class SewingLineDeliveryRoute {
     // Get item
     this.router.get(
       '/id',
-      requestValidationRules([
-        query('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByPk
     )
 
     // Get item
     this.router.get(
       '/sewingLineID/:sewingLineID',
-      requestValidationRules([
-        param('sewingLineID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'sewingLineID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemBySewingLineID
     )
 
     // Get item
     this.router.get(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByProductID
     )
 
     // Get all items
     this.router.post(
       '/find',
-      requestValidationRules([
-        body('filter')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('paginator')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('search')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('sorting')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
+      validationRules([
+        { field: 'filter', fieldType: 'object', location: 'body' },
+        { field: 'paginator', fieldType: 'object', location: 'body' },
+        { field: 'search', fieldType: 'object', location: 'body' },
+        { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
       this.controller.getItems
     )
@@ -116,76 +60,40 @@ class SewingLineDeliveryRoute {
     // Update item by productID and importedID
     this.router.put(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
     )
 
     // Update item by productID and importedID
     this.router.put(
       '/sewingLineID/:sewingLineID',
-      requestValidationRules([
-        param('sewingLineID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'sewingLineID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemBySewingLineID
     )
 
     // Update item by productID and importedID
     this.router.put(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByProductID
     )
 
     // Delete item by productID
     this.router.delete(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
     )
 
     this.router.delete(
       '/sewingLineID/:sewingLineID',
-      requestValidationRules([
-        param('sewingLineID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'sewingLineID', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemBySewingLineID
     )
 
     this.router.delete(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByProductID
     )
   }

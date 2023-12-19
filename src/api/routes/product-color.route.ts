@@ -1,8 +1,6 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
 import ProductColorController from '~/controllers/product-color.controller'
-import { requestValidationRules } from '~/middleware/response-validator'
-import { validators } from '../utils/constant'
+import { validationRules } from '../middleware/request-validator'
 
 class ProductColorRoute {
   router = Router()
@@ -16,73 +14,37 @@ class ProductColorRoute {
     // Create new item
     this.router.post(
       '/',
-      requestValidationRules([
-        body('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('colorID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'body' },
+        { field: 'colorID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createNewItem
     )
 
     this.router.post(
       '/createOrUpdate/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('colorID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'id', fieldType: 'int', location: 'params' },
+        { field: 'productID', fieldType: 'int', location: 'body' },
+        { field: 'colorID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createOrUpdateItemByPk
     )
 
     this.router.post(
       '/createOrUpdate/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('colorID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'params' },
+        { field: 'colorID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createOrUpdateItemByProductID
     )
 
     this.router.post(
       '/createOrUpdate/colorID/:colorID',
-      requestValidationRules([
-        param('colorID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE),
-        body('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
+      validationRules([
+        { field: 'colorID', fieldType: 'int', location: 'params' },
+        { field: 'productID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createOrUpdateItemByColorID
     )
@@ -90,64 +52,30 @@ class ProductColorRoute {
     // Get item
     this.router.get(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByPk
     )
 
     this.router.get(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByProductID
     )
 
     this.router.get(
       '/colorID/:colorID',
-      requestValidationRules([
-        param('colorID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'colorID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByColorID
     )
 
     // Get items
     this.router.post(
       '/find',
-      requestValidationRules([
-        body('filter')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('paginator')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('search')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE),
-        body('sorting')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isObject()
-          .withMessage(validators.ROLE_MUST_BE_OBJECT_TYPE)
+      validationRules([
+        { field: 'filter', fieldType: 'object', location: 'body' },
+        { field: 'paginator', fieldType: 'object', location: 'body' },
+        { field: 'search', fieldType: 'object', location: 'body' },
+        { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
       this.controller.getItems
     )
@@ -155,74 +83,38 @@ class ProductColorRoute {
     // Update item by id
     this.router.put(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
     )
 
     this.router.put(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByProductID
     )
 
     this.router.put(
       '/colorID/:colorID',
-      requestValidationRules([
-        param('colorID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'colorID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByColorID
     )
 
     // Delete item
     this.router.delete(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
     )
 
     this.router.delete(
       '/productID/:productID',
-      requestValidationRules([
-        param('productID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByProductID
     )
 
     this.router.delete(
       '/colorID/:colorID',
-      requestValidationRules([
-        param('colorID')
-          .exists()
-          .withMessage(validators.ROLE_IS_EMPTY)
-          .isInt()
-          .withMessage(validators.ROLE_MUST_BE_INTEGER_TYPE)
-      ]),
+      validationRules([{ field: 'colorID', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByColorID
     )
   }
