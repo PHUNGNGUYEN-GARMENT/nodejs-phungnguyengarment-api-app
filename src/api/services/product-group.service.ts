@@ -189,8 +189,8 @@ export const createOrUpdateItemByPk = async (
   }
 }
 
-export const createOrUpdateItemByProductID = async (
-  productID: number,
+export const createOrUpdateItemBy = async (
+  query: { field: string; id: number },
   item: ProductGroup
 ): Promise<ProductGroup | ProductGroupSchema | undefined> => {
   try {
@@ -201,20 +201,21 @@ export const createOrUpdateItemByProductID = async (
       },
       {
         where: {
-          productID: productID
+          [query.field]: query.id
         }
       }
     )
     if (affectedRows[0] > 0) {
       return item
     } else {
-      return await ProductGroupSchema.create({ ...item, productID: productID })
+      return await ProductGroupSchema.create({ ...item, [query.field]: query.id })
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error createOrUpdateItemByProductID :: ${error}`)
   }
 }
+
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
@@ -226,22 +227,12 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
   }
 }
 
-export const deleteItemByProductID = async (productID: number): Promise<number> => {
+export const deleteItemBy = async (query: { field: string; id: number }): Promise<number> => {
   try {
-    const affectedRows = await ProductGroupSchema.destroy({ where: { productID: productID } })
+    const affectedRows = await ProductGroupSchema.destroy({ where: { [query.field]: query.id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
-  }
-}
-
-export const deleteItemByGroupID = async (groupID: number): Promise<number> => {
-  try {
-    const affectedRows = await ProductGroupSchema.destroy({ where: { groupID: groupID } })
-    return affectedRows
-  } catch (error) {
-    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemBy :: ${error}`)
   }
 }

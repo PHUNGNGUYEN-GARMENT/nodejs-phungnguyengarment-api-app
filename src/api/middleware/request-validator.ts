@@ -65,7 +65,7 @@ export const validationRules = (rules: RuleType[]) => {
           .withMessage(validators.ROLE_DOES_NOT_EXIST)
           .notEmpty()
           .withMessage(validators.ROLE_IS_EMPTY)
-          .isDate()
+          .isString()
           .withMessage(validators.ROLE_MUST_BE_DATE_TYPE)
       default:
         return validationChain
