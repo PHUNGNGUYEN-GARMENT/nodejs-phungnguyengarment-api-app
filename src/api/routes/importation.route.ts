@@ -24,22 +24,13 @@ class ImportationRoute {
 
     this.router.post(
       '/createOrUpdate/:id',
-      validationRules([
-        { field: 'id', fieldType: 'int', location: 'params' },
-        { field: 'productID', fieldType: 'int', location: 'body' },
-        { field: 'quantity', fieldType: 'float', location: 'body' },
-        { field: 'dateImported', fieldType: 'date', location: 'body' }
-      ]),
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.createOrUpdateItemByPk
     )
 
     this.router.post(
-      '/createOrUpdate/:productID',
-      validationRules([
-        { field: 'productID', fieldType: 'int', location: 'params' },
-        { field: 'quantity', fieldType: 'float', location: 'body' },
-        { field: 'dateImported', fieldType: 'date', location: 'body' }
-      ]),
+      '/createOrUpdate/productID/:productID',
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.createOrUpdateItemByProductID
     )
 
