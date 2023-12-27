@@ -5,7 +5,7 @@ const { INTEGER, STRING } = DataType
 
 export type SewingLine = {
   id?: number
-  sewingLineName?: string
+  name?: string
   status?: ItemStatusType
 }
 
@@ -18,8 +18,8 @@ export default class SewingLineSchema extends Model<SewingLine> {
   @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
   declare id: number
 
-  @Column({ type: STRING, field: 'sewing_line_name' })
-  declare sewingLineName: string
+  @Column({ type: STRING, field: 'name' })
+  declare name: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: string

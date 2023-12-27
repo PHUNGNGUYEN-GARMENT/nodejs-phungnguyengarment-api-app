@@ -14,7 +14,7 @@ class SewingLineRoute {
     // Create new item
     this.router.post(
       '/',
-      validationRules([{ field: 'sewingLineName', fieldType: 'string', location: 'body' }]),
+      validationRules([{ field: 'name', fieldType: 'string', location: 'body' }]),
       this.controller.createNewItem
     )
 
@@ -27,9 +27,9 @@ class SewingLineRoute {
 
     // Get item
     this.router.get(
-      '/sewingLineName/:sewingLineName',
-      validationRules([{ field: 'sewingLineName', fieldType: 'string', location: 'params' }]),
-      this.controller.getItemBySewingLineName
+      '/name/:name',
+      validationRules([{ field: 'name', fieldType: 'string', location: 'params' }]),
+      this.controller.getItemByName
     )
 
     // Get all items

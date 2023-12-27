@@ -17,18 +17,16 @@ export const createNewItem = async (item: SewingLine): Promise<SewingLineSchema>
 // Get by id
 export const getItemByPk = async (id: number): Promise<SewingLineSchema | null> => {
   try {
-    const item = await SewingLineSchema.findByPk(id)
-    return item
+    return await SewingLineSchema.findByPk(id)
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
   }
 }
 
-export const getItemBy = async (sewingLineDelivery: SewingLine): Promise<SewingLineSchema | null> => {
+export const getItemBy = async (item: SewingLine): Promise<SewingLineSchema | null> => {
   try {
-    const item = await SewingLineSchema.findOne({ where: { ...sewingLineDelivery } })
-    return item
+    return await SewingLineSchema.findOne({ where: { ...item } })
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
     throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
@@ -38,7 +36,6 @@ export const getItemBy = async (sewingLineDelivery: SewingLine): Promise<SewingL
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: SewingLineSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<SewingLine>(body))
     const items = await SewingLineSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -88,7 +85,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: SewingLine): Prom
         }
       }
     )
-    return affectedRows[0] === 1 ? itemToUpdate : undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
@@ -98,8 +95,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: SewingLine): Prom
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
-    const affectedRows = await SewingLineSchema.destroy({ where: { id: id } })
-    return affectedRows
+    return await SewingLineSchema.destroy({ where: { id: id } })
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
