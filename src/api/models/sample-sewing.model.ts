@@ -7,8 +7,14 @@ const { INTEGER, STRING, DATE } = DataType
 export type SampleSewing = {
   id?: number
   productID?: number
-  dateSubmissionNPL?: Date
-  dateApprovalSO?: Date
+  dateSubmissionNPL?: string
+  dateApprovalSO?: string
+  dateApprovalPP?: string
+  dateSubmissionFirstTime?: string
+  dateSubmissionSecondTime?: string
+  dateSubmissionThirdTime?: string
+  dateSubmissionForthTime?: string
+  dateSubmissionFifthTime?: string
   status?: ItemStatusType
 }
 
@@ -26,10 +32,28 @@ export default class SampleSewingSchema extends Model<SampleSewing> {
   declare productID: string
 
   @Column({ type: DATE, field: 'date_submission_npl' })
-  declare dateSubmissionNPL: Date
+  declare dateSubmissionNPL: string
 
   @Column({ type: DATE, field: 'date_approval_so' })
-  declare dateApprovalSO: Date
+  declare dateApprovalSO: string
+
+  @Column({ type: DATE, field: 'date_approval_pp' })
+  declare dateApprovalPP: string
+
+  @Column({ type: DATE, field: 'date_submission_first_time' })
+  declare dateSubmissionFirstTime: string
+
+  @Column({ type: DATE, field: 'date_submission_second_time' })
+  declare dateSubmissionSecondTime: string
+
+  @Column({ type: DATE, field: 'date_submission_third_time' })
+  declare dateSubmissionThirdTime: string
+
+  @Column({ type: DATE, field: 'date_submission_forth_time' })
+  declare dateSubmissionForthTime: string
+
+  @Column({ type: DATE, field: 'date_submission_fifth_time' })
+  declare dateSubmissionFifthTime: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: string

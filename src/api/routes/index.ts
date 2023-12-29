@@ -12,6 +12,7 @@ import printRoute from './print.route'
 import printablePlaceRoute from './printable-place.route'
 import productColorRoute from './product-color.route'
 import productGroupRoute from './product-group.route'
+import sampleSewingRoute from './sample-sewing.route'
 import sewingLineDeliveryRoute from './sewing-line-delivery.route'
 import sewingLineRoute from './sewing-line.route'
 
@@ -22,6 +23,7 @@ export default class AppRoutes {
     app.use('/api/groups', groupRoute) // Done (Checked)
     app.use('/api/prints', printRoute) // Done (Checked)
     app.use('/api/products', productRoute) // Done (Checked)
+    app.use('/api/sample-sewings', sampleSewingRoute) // Done (Checked)
     app.use('/api/sewing-lines', sewingLineRoute) // Done (Checked)
     app.use('/api/importations', importationRoute) // Done (Checked)
     app.use('/api/product-groups', productGroupRoute) // Done (Checked)

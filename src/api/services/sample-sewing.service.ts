@@ -42,7 +42,6 @@ export const getItemBy = async (data: SampleSewing): Promise<SampleSewingSchema 
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: SampleSewingSchema[] }> => {
   try {
-    console.log(buildDynamicQuery<SampleSewing>(body))
     const items = await SampleSewingSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,
@@ -82,15 +81,20 @@ export const getItemsCount = async (): Promise<number> => {
 }
 
 // Update by productID
-export const updateItemByPk = async (id: number, item: SampleSewing): Promise<SampleSewing | undefined> => {
+export const updateItemByPk = async (id: number, itemToUpdate: SampleSewing): Promise<SampleSewing | undefined> => {
   try {
     const affectedRows = await SampleSewingSchema.update(
       {
-        productID: item.productID,
-        dateSends: item.dateSends,
-        approvalDateSO: item.approvalDateSO,
-        sampleSewingDate: item.sampleSewingDate,
-        status: item.status
+        productID: itemToUpdate.productID,
+        dateSubmissionNPL: itemToUpdate.dateSubmissionNPL,
+        dateApprovalPP: itemToUpdate.dateApprovalPP,
+        dateApprovalSO: itemToUpdate.dateApprovalSO,
+        dateSubmissionFirstTime: itemToUpdate.dateSubmissionFirstTime,
+        dateSubmissionSecondTime: itemToUpdate.dateSubmissionSecondTime,
+        dateSubmissionThirdTime: itemToUpdate.dateSubmissionThirdTime,
+        dateSubmissionForthTime: itemToUpdate.dateSubmissionForthTime,
+        dateSubmissionFifthTime: itemToUpdate.dateSubmissionFifthTime,
+        status: itemToUpdate.status
       },
       {
         where: {
@@ -98,7 +102,7 @@ export const updateItemByPk = async (id: number, item: SampleSewing): Promise<Sa
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
@@ -107,15 +111,21 @@ export const updateItemByPk = async (id: number, item: SampleSewing): Promise<Sa
 
 export const updateItemByProductID = async (
   productID: number,
-  item: SampleSewing
+  itemToUpdate: SampleSewing
 ): Promise<SampleSewing | undefined> => {
   try {
     const affectedRows = await SampleSewingSchema.update(
       {
-        dateSends: item.dateSends,
-        approvalDateSO: item.approvalDateSO,
-        sampleSewingDate: item.sampleSewingDate,
-        status: item.status
+        productID: itemToUpdate.productID,
+        dateSubmissionNPL: itemToUpdate.dateSubmissionNPL,
+        dateApprovalPP: itemToUpdate.dateApprovalPP,
+        dateApprovalSO: itemToUpdate.dateApprovalSO,
+        dateSubmissionFirstTime: itemToUpdate.dateSubmissionFirstTime,
+        dateSubmissionSecondTime: itemToUpdate.dateSubmissionSecondTime,
+        dateSubmissionThirdTime: itemToUpdate.dateSubmissionThirdTime,
+        dateSubmissionForthTime: itemToUpdate.dateSubmissionForthTime,
+        dateSubmissionFifthTime: itemToUpdate.dateSubmissionFifthTime,
+        status: itemToUpdate.status
       },
       {
         where: {
@@ -123,7 +133,7 @@ export const updateItemByProductID = async (
         }
       }
     )
-    return affectedRows[0] === 1 ? item : undefined
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
     throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { SampleSewing } from '~/models/sample-sewing.model'
 import * as service from '~/services/sample-sewing.service'
 import { RequestBodyType } from '~/type'
+import { message } from '../utils/constant'
 
 const NAMESPACE = 'controllers/sample-sewing'
 
@@ -11,20 +12,25 @@ export default class SewingLineController {
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: SampleSewing = {
       productID: req.body.productID,
-      dateSends: req.body.dateSends,
-      approvalDateSO: req.body.approvalDateSO,
-      sampleSewingDate: req.body.sampleSewingDate,
-      status: req.body.status
+      dateSubmissionNPL: req.body.dateSubmissionNPL,
+      dateApprovalPP: req.body.dateApprovalPP,
+      dateApprovalSO: req.body.dateApprovalSO,
+      dateSubmissionFirstTime: req.body.dateSubmissionFirstTime,
+      dateSubmissionSecondTime: req.body.dateSubmissionSecondTime,
+      dateSubmissionThirdTime: req.body.dateSubmissionThirdTime,
+      dateSubmissionForthTime: req.body.dateSubmissionForthTime,
+      dateSubmissionFifthTime: req.body.dateSubmissionFifthTime,
+      status: req.body.status ?? 'active'
     }
     try {
       const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
-        return res.formatter.created({ data: itemNew })
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
-      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `>>> ${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -33,11 +39,11 @@ export default class SewingLineController {
     try {
       const item = await service.getItemByPk(id)
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -46,11 +52,11 @@ export default class SewingLineController {
     try {
       const item = await service.getItemBy({ productID: productID })
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -65,10 +71,11 @@ export default class SewingLineController {
         data: items.rows,
         length: items.rows.length,
         page: Number(bodyRequest.paginator.page),
-        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length,
+        message: message.SUCCESS
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
+      return res.formatter.badRequest({ message: message.ERROR })
     }
   }
 
@@ -76,9 +83,14 @@ export default class SewingLineController {
     const id = Number(req.params.id)
     const itemRequest: SampleSewing = {
       productID: req.body.productID,
-      dateSends: req.body.dateSends,
-      approvalDateSO: req.body.approvalDateSO,
-      sampleSewingDate: req.body.sampleSewingDate,
+      dateSubmissionNPL: req.body.dateSubmissionNPL,
+      dateApprovalPP: req.body.dateApprovalPP,
+      dateApprovalSO: req.body.dateApprovalSO,
+      dateSubmissionFirstTime: req.body.dateSubmissionFirstTime,
+      dateSubmissionSecondTime: req.body.dateSubmissionSecondTime,
+      dateSubmissionThirdTime: req.body.dateSubmissionThirdTime,
+      dateSubmissionForthTime: req.body.dateSubmissionForthTime,
+      dateSubmissionFifthTime: req.body.dateSubmissionFifthTime,
       status: req.body.status
     }
     try {
@@ -95,9 +107,14 @@ export default class SewingLineController {
   updateItemByProductID = async (req: Request, res: Response) => {
     const productID = Number(req.params.productID)
     const itemRequest: SampleSewing = {
-      dateSends: req.body.dateSends,
-      approvalDateSO: req.body.approvalDateSO,
-      sampleSewingDate: req.body.sampleSewingDate,
+      dateSubmissionNPL: req.body.dateSubmissionNPL,
+      dateApprovalPP: req.body.dateApprovalPP,
+      dateApprovalSO: req.body.dateApprovalSO,
+      dateSubmissionFirstTime: req.body.dateSubmissionFirstTime,
+      dateSubmissionSecondTime: req.body.dateSubmissionSecondTime,
+      dateSubmissionThirdTime: req.body.dateSubmissionThirdTime,
+      dateSubmissionForthTime: req.body.dateSubmissionForthTime,
+      dateSubmissionFifthTime: req.body.dateSubmissionFifthTime,
       status: req.body.status
     }
     try {

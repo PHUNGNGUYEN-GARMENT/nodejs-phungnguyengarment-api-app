@@ -14,10 +14,7 @@ class SampleSewingRoute {
     // Create new item
     this.router.post(
       '/',
-      validationRules([
-        { field: 'productID', fieldType: 'int', location: 'body' },
-        { field: 'sampleSewingData', fieldType: 'string', location: 'body' }
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'body' }]),
       this.controller.createNewItem
     )
 
