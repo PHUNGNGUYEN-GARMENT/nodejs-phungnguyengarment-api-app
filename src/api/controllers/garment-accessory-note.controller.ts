@@ -12,6 +12,7 @@ export default class GarmentAccessoryNoteController {
   createNewItem = async (req: Request, res: Response) => {
     try {
       const itemRequest: GarmentAccessoryNote = {
+        productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
         status: req.body.status ?? 'active'
@@ -31,6 +32,19 @@ export default class GarmentAccessoryNoteController {
     try {
       const id = Number(req.params.id)
       const item = await service.getItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
+      }
+      return res.formatter.notFound({ message: message.NOT_FOUND })
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
+  getItemByProductID = async (req: Request, res: Response) => {
+    try {
+      const productID = Number(req.params.productID)
+      const item = await service.getItemBy({ field: 'productID', id: productID })
       if (item) {
         return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
@@ -89,6 +103,7 @@ export default class GarmentAccessoryNoteController {
     try {
       const id = Number(req.params.id)
       const itemRequest: GarmentAccessoryNote = {
+        productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
         status: req.body.status ?? 'active'
@@ -103,10 +118,29 @@ export default class GarmentAccessoryNoteController {
     }
   }
 
+  updateItemByProductID = async (req: Request, res: Response) => {
+    try {
+      const productID = Number(req.params.productID)
+      const itemRequest: GarmentAccessoryNote = {
+        productID: req.body.productID,
+        garmentAccessoryID: req.body.garmentAccessoryID,
+        status: req.body.status ?? 'active'
+      }
+      const itemUpdated = await service.updateItemBy({ field: 'productID', id: productID }, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+      }
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
   updateItemByAccessoryNoteID = async (req: Request, res: Response) => {
     try {
       const accessoryNoteID = Number(req.params.accessoryNoteID)
       const itemRequest: GarmentAccessoryNote = {
+        productID: req.body.productID,
         garmentAccessoryID: req.body.garmentAccessoryID,
         status: req.body.status ?? 'active'
       }
@@ -124,6 +158,7 @@ export default class GarmentAccessoryNoteController {
     try {
       const garmentAccessoryID = Number(req.params.garmentAccessoryID)
       const itemRequest: GarmentAccessoryNote = {
+        productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         status: req.body.status ?? 'active'
       }
@@ -146,6 +181,19 @@ export default class GarmentAccessoryNoteController {
       const itemUpdated = await service.deleteItemByPk(id)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated, message: message.DELETED })
+      }
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
+  deleteItemByProductID = async (req: Request, res: Response) => {
+    const productID = Number(req.params.productID)
+    try {
+      const itemDeleted = await service.deleteItemBy({ field: 'productID', id: productID })
+      if (itemDeleted) {
+        return res.formatter.ok({ data: itemDeleted, message: message.DELETED })
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {

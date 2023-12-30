@@ -32,6 +32,6 @@ export default class AppRoutes {
     app.use('/api/printable-places', printablePlaceRoute) // Done (Checked)
     app.use('/api/garment-accessories', garmentAccessoryRoute) // Done (Checked)
     app.use('/api/sewing-line-deliveries', sewingLineDeliveryRoute) // Done (Checked)
-    app.use('/api/garment-accessories-note', garmentAccessoryNoteRoute) // Done (Checked)
+    app.use('/api/garment-accessory-notes', garmentAccessoryNoteRoute) // Done (Checked)
   }
 }

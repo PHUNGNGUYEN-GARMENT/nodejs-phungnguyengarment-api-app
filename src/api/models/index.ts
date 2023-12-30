@@ -3,6 +3,7 @@ import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
 import AccessoryNoteSchema from './accessory-note.model'
 import ColorSchema from './color.model'
+import GarmentAccessoryNoteSchema from './garment-accessory-note.model'
 import GarmentAccessorySchema from './garment-accessory.model'
 import GroupSchema from './group.model'
 import ImportationSchema from './importation.model'
@@ -56,6 +57,7 @@ class DBConnection {
       AccessoryNoteSchema,
       PrintablePlaceSchema,
       GarmentAccessorySchema,
+      GarmentAccessoryNoteSchema,
       SewingLineDeliverySchema
     ])
 

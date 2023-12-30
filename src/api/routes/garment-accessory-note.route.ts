@@ -15,6 +15,7 @@ class GarmentAccessoryNoteRoute {
     this.router.post(
       '/',
       validationRules([
+        { field: 'productID', fieldType: 'int', location: 'body' },
         { field: 'accessoryNoteID', fieldType: 'int', location: 'body' },
         { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' }
       ]),
@@ -29,14 +30,20 @@ class GarmentAccessoryNoteRoute {
     )
 
     this.router.get(
+      '/productID/:productID',
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
+      this.controller.getItemByProductID
+    )
+
+    this.router.get(
       '/accessoryNoteID/:accessoryNoteID',
-      validationRules([{ field: 'accessoryNoteID', fieldType: 'int', location: 'body' }]),
+      validationRules([{ field: 'accessoryNoteID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByAccessoryNoteID
     )
 
     this.router.get(
       '/garmentAccessoryID/:garmentAccessoryID',
-      validationRules([{ field: 'garmentAccessoryID', fieldType: 'int', location: 'body' }]),
+      validationRules([{ field: 'garmentAccessoryID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByGarmentAccessoryID
     )
 
@@ -60,20 +67,20 @@ class GarmentAccessoryNoteRoute {
     )
 
     this.router.put(
+      '/productID/:productID',
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
+      this.controller.updateItemByProductID
+    )
+
+    this.router.put(
       '/accessoryNoteID/:accessoryNoteID',
-      validationRules([
-        { field: 'accessoryNoteID', fieldType: 'int', location: 'params' },
-        { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' }
-      ]),
+      validationRules([{ field: 'accessoryNoteID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByAccessoryNoteID
     )
 
     this.router.put(
       '/garmentAccessoryID/:garmentAccessoryID',
-      validationRules([
-        { field: 'garmentAccessoryID', fieldType: 'int', location: 'params' },
-        { field: 'accessoryNoteID', fieldType: 'int', location: 'body' }
-      ]),
+      validationRules([{ field: 'garmentAccessoryID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByGarmentAccessoryID
     )
 
@@ -82,6 +89,12 @@ class GarmentAccessoryNoteRoute {
       '/:id',
       validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
+    )
+
+    this.router.delete(
+      '/productID/:productID',
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
+      this.controller.deleteItemByProductID
     )
 
     this.router.delete(
