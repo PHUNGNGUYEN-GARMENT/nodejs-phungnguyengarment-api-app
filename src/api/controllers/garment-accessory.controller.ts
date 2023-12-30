@@ -12,8 +12,8 @@ export default class GarmentAccessoryController {
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: GarmentAccessory = {
       productID: req.body.productID,
-      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
-      amountCuttingAccessory: req.body.amountCuttingAccessory,
+      amountCutting: req.body.amountCutting,
+      passingDeliveryDate: req.body.passingDeliveryDate,
       status: req.body.status ?? 'active'
     }
     try {
@@ -77,8 +77,8 @@ export default class GarmentAccessoryController {
     const id = Number(req.params.id)
     const itemRequest: GarmentAccessory = {
       productID: req.body.productID,
-      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
-      amountCuttingAccessory: req.body.amountCuttingAccessory,
+      amountCutting: req.body.amountCutting,
+      passingDeliveryDate: req.body.passingDeliveryDate,
       status: req.body.status ?? 'active'
     }
     try {
@@ -95,9 +95,8 @@ export default class GarmentAccessoryController {
   updateItemByProductID = async (req: Request, res: Response) => {
     const productID = Number(req.params.productID)
     const itemRequest: GarmentAccessory = {
-      productID: req.body.productID,
-      cuttingAccessoryDate: req.body.cuttingAccessoryDate,
-      amountCuttingAccessory: req.body.amountCuttingAccessory,
+      amountCutting: req.body.amountCutting,
+      passingDeliveryDate: req.body.passingDeliveryDate,
       status: req.body.status ?? 'active'
     }
     try {

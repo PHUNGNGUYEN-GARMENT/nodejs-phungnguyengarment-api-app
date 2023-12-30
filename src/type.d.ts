@@ -1,5 +1,7 @@
 export type ItemStatusType = 'draft' | 'active' | 'closed' | 'archived' | 'deleted'
 
+export type NoteItemStatusType = 'lake' | 'enough' | 'arrived' | 'not_arrived'
+
 export type RequestBodyType = {
   filter: {
     status: ItemStatusType

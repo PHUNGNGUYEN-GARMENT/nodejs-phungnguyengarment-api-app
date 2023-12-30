@@ -45,7 +45,6 @@ export const getItemBy = async (item: GarmentAccessory): Promise<GarmentAccessor
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: GarmentAccessorySchema[] }> => {
   try {
-    // console.log(`${NAMESPACE}>>>`, buildDynamicQuery<ProductColor>(body))
     const items = await GarmentAccessorySchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
       limit: body.paginator.pageSize,

@@ -14,11 +14,7 @@ class GarmentAccessoryRoute {
     // Create new item
     this.router.post(
       '/',
-      validationRules([
-        { field: 'productID', fieldType: 'int', location: 'body' },
-        { field: 'cuttingAccessoryDate', fieldType: 'date', location: 'body' },
-        { field: 'amountCuttingAccessory', fieldType: 'float', location: 'body' }
-      ]),
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'body' }]),
       this.controller.createNewItem
     )
 

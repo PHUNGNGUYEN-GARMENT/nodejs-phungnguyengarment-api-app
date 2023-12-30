@@ -7,8 +7,8 @@ const { INTEGER, STRING, FLOAT, DATE } = DataType
 export type GarmentAccessory = {
   id?: number
   productID?: number
-  cuttingAccessoryDate?: Date
-  amountCuttingAccessory?: number
+  amountCutting?: number
+  passingDeliveryDate?: string
   status?: ItemStatusType
 }
 
@@ -25,11 +25,11 @@ export default class GarmentAccessorySchema extends Model<GarmentAccessory> {
   @ForeignKey(() => ProductSchema)
   declare productID: number
 
-  @Column({ type: DATE, field: 'cutting_accessory_date' })
-  declare cuttingAccessoryDate: Date
+  @Column({ type: FLOAT, field: 'amount_cutting' })
+  declare amountCutting: number
 
-  @Column({ type: FLOAT, field: 'amount_cutting_accessory' })
-  declare amountCuttingAccessory: number
+  @Column({ type: DATE, field: 'passing_delivery_date' })
+  declare passingDeliveryDate: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: string
