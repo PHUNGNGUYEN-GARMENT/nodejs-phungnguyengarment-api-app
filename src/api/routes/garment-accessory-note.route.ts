@@ -17,9 +17,35 @@ class GarmentAccessoryNoteRoute {
       validationRules([
         { field: 'productID', fieldType: 'int', location: 'body' },
         { field: 'accessoryNoteID', fieldType: 'int', location: 'body' },
-        { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' }
+        { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' },
+        { field: 'garmentNoteStatusID', fieldType: 'int', location: 'body' }
       ]),
       this.controller.createNewItem
+    )
+
+    this.router.post('/items', this.controller.createNewItems)
+
+    this.router.post(
+      '/createOrUpdate/:id',
+      validationRules([
+        { field: 'id', fieldType: 'int', location: 'params' },
+        { field: 'productID', fieldType: 'int', location: 'body' },
+        { field: 'accessoryNoteID', fieldType: 'int', location: 'body' },
+        { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' },
+        { field: 'garmentNoteStatusID', fieldType: 'int', location: 'body' }
+      ]),
+      this.controller.createOrUpdateItemByPk
+    )
+
+    this.router.post(
+      '/createOrUpdate/productID/:productID',
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'params' },
+        { field: 'accessoryNoteID', fieldType: 'int', location: 'body' },
+        { field: 'garmentAccessoryID', fieldType: 'int', location: 'body' },
+        { field: 'garmentNoteStatusID', fieldType: 'int', location: 'body' }
+      ]),
+      this.controller.createOrUpdateItemByProductID
     )
 
     // Get item

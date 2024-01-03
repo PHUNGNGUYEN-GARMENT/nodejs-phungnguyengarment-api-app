@@ -28,6 +28,36 @@ export default class GarmentAccessoryController {
     }
   }
 
+  createOrUpdateItemByPk = async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.params.id)
+      const dataRequest: GarmentAccessory = {
+        productID: req.body.productID,
+        amountCutting: req.body.amountCutting,
+        passingDeliveryDate: req.body.passingDeliveryDate,
+        status: req.body.status ?? 'active'
+      }
+      const getItem = await service.getItemByPk(id)
+      if (getItem) {
+        const itemUpdated = await service.updateItemByPk(id!, { ...dataRequest })
+        if (itemUpdated) {
+          return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+        } else {
+          return res.formatter.badRequest({ message: message.UPDATE_FAILED })
+        }
+      } else {
+        const itemCreated = await service.createNewItem({ ...dataRequest })
+        if (itemCreated) {
+          return res.formatter.created({ data: itemCreated, message: message.CREATED })
+        } else {
+          return res.formatter.badRequest({ message: message.CREATION_FAILED })
+        }
+      }
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
   getItemByPk = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id)

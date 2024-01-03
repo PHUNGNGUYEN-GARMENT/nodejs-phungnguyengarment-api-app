@@ -4,6 +4,7 @@ import authRoute from '~/routes/auth/auth.route'
 import productRoute from '~/routes/product.route'
 import accessoryNoteRoute from './accessory-note.route'
 import colorRoute from './color.route'
+import cuttingGroupRoute from './cutting-group.route'
 import garmentAccessoryNoteRoute from './garment-accessory-note.route'
 import garmentAccessoryRoute from './garment-accessory.route'
 import groupRoute from './group.route'
@@ -33,5 +34,6 @@ export default class AppRoutes {
     app.use('/api/garment-accessories', garmentAccessoryRoute) // Done (Checked)
     app.use('/api/sewing-line-deliveries', sewingLineDeliveryRoute) // Done (Checked)
     app.use('/api/garment-accessory-notes', garmentAccessoryNoteRoute) // Done (Checked)
+    app.use('/api/cutting-groups', cuttingGroupRoute) // Done (Checked)
   }
 }

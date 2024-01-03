@@ -14,7 +14,31 @@ export const createNewItem = async (item: GarmentAccessory): Promise<GarmentAcce
     throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
   }
 }
-
+export const createOrUpdateItemByPk = async (
+  id: number,
+  item: GarmentAccessory
+): Promise<GarmentAccessory | GarmentAccessorySchema | undefined> => {
+  try {
+    const affectedRows = await GarmentAccessorySchema.update(
+      {
+        ...item
+      },
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+    if (affectedRows[0] > 0) {
+      return item
+    } else {
+      return await GarmentAccessorySchema.create({ ...item })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+  }
+}
 // Get by id
 export const getItemByPk = async (id: number): Promise<GarmentAccessorySchema | null> => {
   try {

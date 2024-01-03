@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import GarmentAccessoryController from '~/controllers/garment-accessory.controller'
+import CuttingGroupController from '~/controllers/cutting-group.controller'
 import { validationRules } from '../middleware/request-validator'
 
-class GarmentAccessoryRoute {
+class CuttingGroupRoute {
   router = Router()
-  controller = new GarmentAccessoryController()
+  controller = new CuttingGroupController()
 
   constructor() {
     this.initialize()
@@ -14,7 +14,11 @@ class GarmentAccessoryRoute {
     // Create new item
     this.router.post(
       '/',
-      validationRules([{ field: 'productID', fieldType: 'int', location: 'body' }]),
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'body' },
+        { field: 'quantityRealCut', fieldType: 'float', location: 'body' },
+        { field: 'timeCut', fieldType: 'date', location: 'body' }
+      ]),
       this.controller.createNewItem
     )
 
@@ -22,12 +26,23 @@ class GarmentAccessoryRoute {
       '/createOrUpdate/:id',
       validationRules([
         { field: 'id', fieldType: 'int', location: 'params' },
-        { field: 'productID', fieldType: 'int', location: 'body' }
+        { field: 'quantityRealCut', fieldType: 'float', location: 'body' },
+        { field: 'timeCut', fieldType: 'date', location: 'body' }
       ]),
-      this.controller.createOrUpdateItemByPk
+      this.controller.createNewItem
     )
 
-    // Get item
+    this.router.post(
+      '/createOrUpdate/productID/:productID',
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'params' },
+        { field: 'quantityRealCut', fieldType: 'float', location: 'body' },
+        { field: 'timeCut', fieldType: 'date', location: 'body' }
+      ]),
+      this.controller.createNewItem
+    )
+
+    // Get item by productID and importedID
     this.router.get(
       '/:id',
       validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
@@ -35,12 +50,12 @@ class GarmentAccessoryRoute {
     )
 
     this.router.get(
-      '/productID/:productID',
+      '/productID/:id',
       validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.getItemByProductID
     )
 
-    // Get items
+    // Get all items
     this.router.post(
       '/find',
       validationRules([
@@ -52,32 +67,27 @@ class GarmentAccessoryRoute {
       this.controller.getItems
     )
 
-    // Update item by id
+    // Update item by productID and importedID
     this.router.put(
       '/:id',
       validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
     )
 
+    // Update item by productID and importedID
     this.router.put(
       '/productID/:productID',
       validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByProductID
     )
 
-    // Delete item
+    // Delete item by productID
     this.router.delete(
       '/:id',
       validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.deleteItemByPk
     )
-
-    this.router.delete(
-      '/productID/:productID',
-      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
-      this.controller.deleteItemByProductID
-    )
   }
 }
 
-export default new GarmentAccessoryRoute().router
+export default new CuttingGroupRoute().router

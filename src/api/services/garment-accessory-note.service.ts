@@ -16,6 +16,41 @@ export const createNewItem = async (item: GarmentAccessoryNote): Promise<Garment
   }
 }
 
+export const createNewItems = async (items: GarmentAccessoryNote[]): Promise<GarmentAccessoryNoteSchema[]> => {
+  try {
+    return await GarmentAccessoryNoteSchema.bulkCreate(items)
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
+    throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
+  }
+}
+
+export const createOrUpdateItemByPk = async (
+  id: number,
+  item: GarmentAccessoryNote
+): Promise<GarmentAccessoryNote | GarmentAccessoryNoteSchema | undefined> => {
+  try {
+    const affectedRows = await GarmentAccessoryNoteSchema.update(
+      {
+        ...item
+      },
+      {
+        where: {
+          id: id
+        }
+      }
+    )
+    if (affectedRows[0] > 0) {
+      return item
+    } else {
+      return await GarmentAccessoryNoteSchema.create({ ...item })
+    }
+  } catch (error) {
+    logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+  }
+}
+
 // Get by id
 export const getItemByPk = async (id: number): Promise<GarmentAccessoryNoteSchema | null> => {
   try {

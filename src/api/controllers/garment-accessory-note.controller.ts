@@ -15,6 +15,7 @@ export default class GarmentAccessoryNoteController {
         productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
+        garmentNoteStatusID: req.body.garmentNoteStatusID,
         status: req.body.status ?? 'active'
       }
       const itemNew = await service.createNewItem(itemRequest)
@@ -23,6 +24,81 @@ export default class GarmentAccessoryNoteController {
         return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
       return res.formatter.badRequest({ message: message.CREATION_FAILED })
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
+  createNewItems = async (req: Request, res: Response) => {
+    try {
+      const itemRequest: GarmentAccessoryNote[] = req.body
+      const itemNew = await service.createNewItems(itemRequest)
+      if (itemNew) {
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
+      }
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
+  createOrUpdateItemByPk = async (req: Request, res: Response) => {
+    try {
+      const id = Number(req.params.id)
+      const dataRequest: GarmentAccessoryNote = {
+        productID: req.body.productID,
+        accessoryNoteID: req.body.accessoryNoteID,
+        garmentAccessoryID: req.body.garmentAccessoryID,
+        garmentNoteStatusID: req.body.garmentNoteStatusID,
+        status: req.body.status ?? 'active'
+      }
+      const getItem = await service.getItemByPk(id)
+      if (getItem) {
+        const itemUpdated = await service.updateItemByPk(id!, { ...dataRequest })
+        if (itemUpdated) {
+          return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+        } else {
+          return res.formatter.badRequest({ message: message.UPDATE_FAILED })
+        }
+      } else {
+        const itemCreated = await service.createNewItem({ ...dataRequest })
+        if (itemCreated) {
+          return res.formatter.created({ data: itemCreated, message: message.CREATED })
+        } else {
+          return res.formatter.badRequest({ message: message.CREATION_FAILED })
+        }
+      }
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
+  createOrUpdateItemByProductID = async (req: Request, res: Response) => {
+    try {
+      const productID = Number(req.params.productID)
+      const dataRequest: GarmentAccessoryNote = {
+        productID: productID,
+        accessoryNoteID: req.body.accessoryNoteID,
+        garmentAccessoryID: req.body.garmentAccessoryID,
+        garmentNoteStatusID: req.body.garmentNoteStatusID,
+        status: req.body.status ?? 'active'
+      }
+      const getItem = await service.getItemBy({ field: 'productID', id: productID })
+      if (getItem) {
+        const itemUpdated = await service.updateItemBy({ field: 'productID', id: productID }, { ...dataRequest })
+        if (itemUpdated) {
+          return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+        } else {
+          return res.formatter.badRequest({ message: message.UPDATE_FAILED })
+        }
+      } else {
+        const itemCreated = await service.createNewItem({ ...dataRequest })
+        if (itemCreated) {
+          return res.formatter.created({ data: itemCreated, message: message.CREATED })
+        } else {
+          return res.formatter.badRequest({ message: message.CREATION_FAILED })
+        }
+      }
     } catch (error) {
       return res.formatter.badRequest({ message: message.ERROR })
     }
@@ -106,6 +182,7 @@ export default class GarmentAccessoryNoteController {
         productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
+        garmentNoteStatusID: req.body.garmentNoteStatusID,
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemByPk(id, itemRequest)
@@ -124,6 +201,7 @@ export default class GarmentAccessoryNoteController {
       const itemRequest: GarmentAccessoryNote = {
         productID: req.body.productID,
         garmentAccessoryID: req.body.garmentAccessoryID,
+        garmentNoteStatusID: req.body.garmentNoteStatusID,
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemBy({ field: 'productID', id: productID }, itemRequest)
@@ -142,6 +220,7 @@ export default class GarmentAccessoryNoteController {
       const itemRequest: GarmentAccessoryNote = {
         productID: req.body.productID,
         garmentAccessoryID: req.body.garmentAccessoryID,
+        garmentNoteStatusID: req.body.garmentNoteStatusID,
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemBy({ field: 'accessoryNoteID', id: accessoryNoteID }, itemRequest)
@@ -160,6 +239,7 @@ export default class GarmentAccessoryNoteController {
       const itemRequest: GarmentAccessoryNote = {
         productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
+        garmentNoteStatusID: req.body.garmentNoteStatusID,
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemBy(
