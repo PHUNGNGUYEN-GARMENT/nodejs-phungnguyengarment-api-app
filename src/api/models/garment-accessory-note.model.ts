@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
-import { ItemStatusType } from '~/type'
+import { ItemStatusType, NoteItemStatusType } from '~/type'
 import AccessoryNoteSchema from './accessory-note.model'
 import GarmentAccessorySchema from './garment-accessory.model'
 import ProductSchema from './product.model'
@@ -11,7 +11,7 @@ export type GarmentAccessoryNote = {
   productID?: number
   accessoryNoteID?: number
   garmentAccessoryID?: number
-  garmentNoteStatusID?: number
+  noteStatus?: NoteItemStatusType
   status?: ItemStatusType
 }
 
@@ -38,6 +38,9 @@ export default class GarmentAccessoryNoteSchema extends Model<GarmentAccessoryNo
 
   @Column({ type: STRING, field: 'status' })
   declare status: string
+
+  @Column({ type: STRING, field: 'note_status' })
+  declare noteStatus: NoteItemStatusType
 
   @BelongsTo(() => ProductSchema)
   declare product: ProductSchema
