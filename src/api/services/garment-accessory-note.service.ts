@@ -152,6 +152,23 @@ export const updateItemByPk = async (
   }
 }
 
+export const updateItemsByPk = async (
+  id: number,
+  itemToUpdate: GarmentAccessoryNote
+): Promise<GarmentAccessoryNote | undefined> => {
+  try {
+    const affectedRows = await GarmentAccessoryNoteSchema.update(itemToUpdate, {
+      where: {
+        id: id
+      }
+    })
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
+  } catch (error) {
+    logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
+    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
+  }
+}
+
 export const updateItemBy = async (
   query: { field: string; id: number },
   itemToUpdate: GarmentAccessoryNote
