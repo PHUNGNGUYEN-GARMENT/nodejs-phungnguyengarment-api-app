@@ -143,7 +143,7 @@ export default class GarmentAccessoryController {
   deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
-      const itemDeleted = await service.deleteItemByPk(id)
+      const itemDeleted = await service.deleteItemBy({ field: 'id', id: id })
       if (itemDeleted) {
         return res.formatter.ok({ data: itemDeleted, message: message.DELETED })
       }
@@ -156,7 +156,7 @@ export default class GarmentAccessoryController {
   deleteItemByProductID = async (req: Request, res: Response) => {
     const productID = Number(req.params.productID)
     try {
-      const itemDeleted = await service.deleteItemByProductID(productID)
+      const itemDeleted = await service.deleteItemBy({ field: 'productID', id: productID })
       if (itemDeleted) {
         return res.formatter.ok({ data: itemDeleted, message: message.DELETED })
       }

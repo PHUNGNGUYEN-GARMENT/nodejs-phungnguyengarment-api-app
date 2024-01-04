@@ -175,6 +175,20 @@ export default class GarmentAccessoryNoteController {
     }
   }
 
+  updateItemsByProductID = async (req: Request, res: Response) => {
+    try {
+      const productID = Number(req.params.productID)
+      const itemRequest: GarmentAccessoryNote[] = req.body
+      const itemUpdated = await service.updateItemsByProductID(productID, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+      }
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
+    } catch (error) {
+      return res.formatter.badRequest({ message: message.ERROR })
+    }
+  }
+
   updateItemByPk = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id)

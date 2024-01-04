@@ -45,6 +45,12 @@ class GarmentAccessoryNoteRoute {
       this.controller.createOrUpdateItemByProductID
     )
 
+    this.router.post(
+      '/updateItems/productID/:productID',
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
+      this.controller.updateItemsByProductID
+    )
+
     // Get item
     this.router.get(
       '/:id',

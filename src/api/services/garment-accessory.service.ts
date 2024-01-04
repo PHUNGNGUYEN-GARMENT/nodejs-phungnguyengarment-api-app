@@ -152,22 +152,11 @@ export const updateItemByProductID = async (
   }
 }
 
-// Delete
-export const deleteItemByPk = async (id: number): Promise<number> => {
+export const deleteItemBy = async (query: { field: string; id: number }): Promise<number> => {
   try {
-    const affectedRows = await GarmentAccessorySchema.destroy({ where: { id: id } })
-    return affectedRows
+    return await GarmentAccessorySchema.destroy({ where: { [query.field]: query.id } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
-  }
-}
-
-export const deleteItemByProductID = async (productID: number): Promise<number> => {
-  try {
-    return await GarmentAccessorySchema.destroy({ where: { productID: productID } })
-  } catch (error) {
-    logging.error(NAMESPACE, `Error deleteItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByProductID :: ${error}`)
+    logging.error(NAMESPACE, `Error deleteItemBy :: ${error}`)
+    throw new Error(`${NAMESPACE} Error deleteItemBy :: ${error}`)
   }
 }

@@ -129,6 +129,48 @@ export const getItemsCount = async (): Promise<number> => {
   }
 }
 
+export const updateItemsByProductID = async (
+  productID: number,
+  updatedRecords: GarmentAccessoryNote[]
+): Promise<GarmentAccessoryNote[] | undefined | any> => {
+  try {
+    const existingRecords = await GarmentAccessoryNoteSchema.findAll({
+      where: {
+        productID: productID
+      }
+    })
+
+    // Tìm các bản ghi cần xoá
+    const recordsToDelete = existingRecords.filter(
+      (existingRecord) =>
+        !updatedRecords.some((updatedRecord) => updatedRecord.accessoryNoteID === existingRecord.accessoryNoteID)
+    )
+
+    // Tìm các bản ghi cần thêm mới
+    const recordsToAdd = updatedRecords.filter(
+      (updatedRecord) =>
+        !existingRecords.some((existingRecord) => existingRecord.accessoryNoteID === updatedRecord.accessoryNoteID)
+    )
+
+    // Xoá các bản ghi không còn trong danh sách
+    await GarmentAccessoryNoteSchema.destroy({
+      where: {
+        accessoryNoteID: recordsToDelete.map((record) => record.accessoryNoteID)
+      }
+    })
+
+    // Thêm mới các bảng ghi mới
+    await GarmentAccessoryNoteSchema.bulkCreate(recordsToAdd)
+
+    // Trả về danh sách cập nhật sau xử lý
+    const updatedList = [...existingRecords.filter((record) => recordsToDelete.includes(record), ...recordsToAdd)]
+    return updatedList
+  } catch (error) {
+    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
+    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+  }
+}
+
 // Update
 export const updateItemByPk = async (
   id: number,
@@ -145,23 +187,6 @@ export const updateItemByPk = async (
         }
       }
     )
-    return affectedRows[0] > 0 ? itemToUpdate : undefined
-  } catch (error) {
-    logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
-  }
-}
-
-export const updateItemsByPk = async (
-  id: number,
-  itemToUpdate: GarmentAccessoryNote
-): Promise<GarmentAccessoryNote | undefined> => {
-  try {
-    const affectedRows = await GarmentAccessoryNoteSchema.update(itemToUpdate, {
-      where: {
-        id: id
-      }
-    })
     return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
