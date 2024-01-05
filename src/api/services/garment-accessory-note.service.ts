@@ -91,7 +91,7 @@ export const getItems = async (
   try {
     const items = await GarmentAccessoryNoteSchema.findAndCountAll({
       offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
-      limit: body.paginator.pageSize,
+      limit: body.paginator.pageSize === -1 ? undefined : body.paginator.pageSize,
       order: [[body.sorting.column, body.sorting.direction]],
       where: buildDynamicQuery<GarmentAccessoryNote>(body),
       include: [
