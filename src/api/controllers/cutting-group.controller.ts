@@ -12,12 +12,7 @@ export default class CuttingGroupController {
   createNewItem = async (req: Request, res: Response) => {
     try {
       const itemRequest: CuttingGroup = {
-        productID: req.body.productID,
-        quantityRealCut: req.body.quantityRealCut,
-        timeCut: req.body.timeCut,
-        dateSendEmbroidered: req.body.dateSendEmbroidered,
-        quantityArrivedEmbroidered: req.body.quantityArrivedEmbroidered,
-        quantityDeliveredBTP: req.body.quantityDeliveredBTP,
+        ...req.body,
         status: req.body.status ?? 'active'
       }
       const itemNew = await service.createNewItem(itemRequest)
@@ -79,12 +74,7 @@ export default class CuttingGroupController {
     try {
       const productID = Number(req.params.productID)
       const itemRequest: CuttingGroup = {
-        quantityRealCut: req.body.quantityRealCut,
-        timeCut: req.body.timeCut,
-        dateSendEmbroidered: req.body.dateSendEmbroidered,
-        quantityArrivedEmbroidered: req.body.quantityArrivedEmbroidered,
-        quantityDeliveredBTP: req.body.quantityDeliveredBTP,
-        status: req.body.status
+        ...req.body
       }
       const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
       if (itemUpdated) {
@@ -100,12 +90,7 @@ export default class CuttingGroupController {
     try {
       const id = Number(req.params.id)
       const itemRequest: CuttingGroup = {
-        quantityRealCut: req.body.quantityRealCut,
-        timeCut: req.body.timeCut,
-        dateSendEmbroidered: req.body.dateSendEmbroidered,
-        quantityArrivedEmbroidered: req.body.quantityArrivedEmbroidered,
-        quantityDeliveredBTP: req.body.quantityDeliveredBTP,
-        status: req.body.status
+        ...req.body
       }
       const itemUpdated = await service.updateItemByPk(id, itemRequest)
       if (itemUpdated) {
