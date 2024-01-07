@@ -14,6 +14,7 @@ export default class GarmentAccessoryController {
       productID: req.body.productID,
       amountCutting: req.body.amountCutting,
       passingDeliveryDate: req.body.passingDeliveryDate,
+      syncStatus: req.body.syncStatus,
       status: req.body.status ?? 'active'
     }
     try {
@@ -35,6 +36,7 @@ export default class GarmentAccessoryController {
         productID: req.body.productID,
         amountCutting: req.body.amountCutting,
         passingDeliveryDate: req.body.passingDeliveryDate,
+        syncStatus: req.body.syncStatus,
         status: req.body.status ?? 'active'
       }
       const getItem = await service.getItemByPk(id)
@@ -109,6 +111,7 @@ export default class GarmentAccessoryController {
       productID: req.body.productID,
       amountCutting: req.body.amountCutting,
       passingDeliveryDate: req.body.passingDeliveryDate,
+      syncStatus: req.body.syncStatus,
       status: req.body.status ?? 'active'
     }
     try {
@@ -127,6 +130,7 @@ export default class GarmentAccessoryController {
     const itemRequest: GarmentAccessory = {
       amountCutting: req.body.amountCutting,
       passingDeliveryDate: req.body.passingDeliveryDate,
+      syncStatus: req.body.syncStatus,
       status: req.body.status ?? 'active'
     }
     try {
