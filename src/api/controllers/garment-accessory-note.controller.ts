@@ -15,7 +15,7 @@ export default class GarmentAccessoryNoteController {
         productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
-        noteStatus: req.body.noteStatus,
+        noteStatus: req.body.noteStatus ?? 'enough',
         status: req.body.status ?? 'active'
       }
       const itemNew = await service.createNewItem(itemRequest)
@@ -49,7 +49,7 @@ export default class GarmentAccessoryNoteController {
         productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
-        noteStatus: req.body.noteStatus,
+        noteStatus: req.body.noteStatus ?? 'enough',
         status: req.body.status ?? 'active'
       }
       const getItem = await service.getItemByPk(id)
@@ -80,7 +80,7 @@ export default class GarmentAccessoryNoteController {
         productID: productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
-        noteStatus: req.body.noteStatus,
+        noteStatus: req.body.noteStatus ?? 'enough',
         status: req.body.status ?? 'active'
       }
       const getItem = await service.getItemBy({ field: 'productID', id: productID })
@@ -179,7 +179,12 @@ export default class GarmentAccessoryNoteController {
     try {
       const productID = Number(req.params.productID)
       const itemRequest: GarmentAccessoryNote[] = req.body
-      const itemUpdated = await service.updateItemsByProductID(productID, itemRequest)
+      const itemUpdated = await service.updateItemsBy(
+        { field: 'productID', id: productID },
+        itemRequest.map((item) => {
+          return { ...item, status: 'active' }
+        })
+      )
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }
@@ -196,7 +201,7 @@ export default class GarmentAccessoryNoteController {
         productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
         garmentAccessoryID: req.body.garmentAccessoryID,
-        noteStatus: req.body.noteStatus,
+        noteStatus: req.body.noteStatus ?? 'enough',
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemByPk(id, itemRequest)
@@ -215,7 +220,7 @@ export default class GarmentAccessoryNoteController {
       const itemRequest: GarmentAccessoryNote = {
         productID: req.body.productID,
         garmentAccessoryID: req.body.garmentAccessoryID,
-        noteStatus: req.body.noteStatus,
+        noteStatus: req.body.noteStatus ?? 'enough',
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemBy({ field: 'productID', id: productID }, itemRequest)
@@ -234,7 +239,7 @@ export default class GarmentAccessoryNoteController {
       const itemRequest: GarmentAccessoryNote = {
         productID: req.body.productID,
         garmentAccessoryID: req.body.garmentAccessoryID,
-        noteStatus: req.body.noteStatus,
+        noteStatus: req.body.noteStatus ?? 'enough',
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemBy({ field: 'accessoryNoteID', id: accessoryNoteID }, itemRequest)
@@ -253,7 +258,7 @@ export default class GarmentAccessoryNoteController {
       const itemRequest: GarmentAccessoryNote = {
         productID: req.body.productID,
         accessoryNoteID: req.body.accessoryNoteID,
-        noteStatus: req.body.noteStatus,
+        noteStatus: req.body.noteStatus ?? 'enough',
         status: req.body.status ?? 'active'
       }
       const itemUpdated = await service.updateItemBy(

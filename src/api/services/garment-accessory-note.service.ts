@@ -129,14 +129,14 @@ export const getItemsCount = async (): Promise<number> => {
   }
 }
 
-export const updateItemsByProductID = async (
-  productID: number,
+export const updateItemsBy = async (
+  query: { field: string; id: number },
   updatedRecords: GarmentAccessoryNote[]
 ): Promise<GarmentAccessoryNote[] | undefined | any> => {
   try {
     const existingRecords = await GarmentAccessoryNoteSchema.findAll({
       where: {
-        productID: productID
+        [query.field]: query.id
       }
     })
 

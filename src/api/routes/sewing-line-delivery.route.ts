@@ -17,12 +17,13 @@ class SewingLineDeliveryRoute {
       validationRules([
         { field: 'sewingLineID', fieldType: 'int', location: 'body' },
         { field: 'productID', fieldType: 'int', location: 'body' },
-        { field: 'quantityOrigin', fieldType: 'float', location: 'body' },
-        { field: 'quantitySewed', fieldType: 'float', location: 'body' },
+        { field: 'quantityOriginal', fieldType: 'float', location: 'body' },
         { field: 'expiredDate', fieldType: 'date', location: 'body' }
       ]),
       this.controller.createNewItem
     )
+
+    this.router.post('/items', this.controller.createNewItems)
 
     // Get item
     this.router.get(
@@ -57,6 +58,24 @@ class SewingLineDeliveryRoute {
       this.controller.getItems
     )
 
+    this.router.post(
+      '/updateItems/:id',
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
+      this.controller.updateItemsBySewingLineID
+    )
+
+    this.router.post(
+      '/updateItems/sewingLineID/:sewingLineID',
+      validationRules([{ field: 'sewingLineID', fieldType: 'int', location: 'params' }]),
+      this.controller.updateItemsBySewingLineID
+    )
+
+    this.router.post(
+      '/updateItems/productID/:productID',
+      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
+      this.controller.updateItemsByProductID
+    )
+
     // Update item by productID and importedID
     this.router.put(
       '/:id',
@@ -65,7 +84,7 @@ class SewingLineDeliveryRoute {
     )
 
     // Update item by productID and importedID
-    this.router.put(
+    this.router.post(
       '/sewingLineID/:sewingLineID',
       validationRules([{ field: 'sewingLineID', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemBySewingLineID
