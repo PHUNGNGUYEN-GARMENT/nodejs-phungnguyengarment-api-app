@@ -9,6 +9,7 @@ export interface ResponseStory {
   meta?: any
   length?: number
   page?: number
+  pageSize?: number
   total?: number
 }
 
@@ -43,6 +44,7 @@ const _generateFormatters = (res: Response) => {
         meta: response.meta,
         length: response.length,
         page: response.page,
+        pageSize: response.pageSize,
         total: response.total
       })
     }

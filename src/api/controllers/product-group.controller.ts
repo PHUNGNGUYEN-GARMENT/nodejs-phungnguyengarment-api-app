@@ -68,6 +68,7 @@ export default class ProductGroupController {
         data: items.rows,
         length: items.rows.length,
         page: Number(bodyRequest.paginator.page),
+        pageSize: Number(bodyRequest.paginator.pageSize),
         total: bodyRequest.search.term.length > 0 ? items.count : total.length,
         message: message.SUCCESS
       })
