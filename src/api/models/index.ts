@@ -37,10 +37,10 @@ class DBConnection {
       host: host,
       dialect: 'mysql',
       pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000
+        max: 10, //Số lượng kết nối tối đa trong pool.
+        min: 0, //Số lượng kết nối tối thiểu trong pool.
+        acquire: 10000, //Thời gian tối đa để một kết nối được thực hiện, tính bằng mili giây.
+        idle: 10000 //Thời gian tối đa một kết nối có thể ở trong pool mà không được sử dụng, tính bằng mili giây.
       }
     })
 
