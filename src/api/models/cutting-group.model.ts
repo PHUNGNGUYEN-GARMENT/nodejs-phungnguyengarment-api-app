@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize
 import { ItemStatusType } from '~/type'
 import ProductSchema from './product.model'
 
-const { INTEGER, STRING, DATE, FLOAT } = DataType
+const { INTEGER, STRING, DATE, FLOAT, BOOLEAN } = DataType
 
 export type CuttingGroup = {
   id?: number
@@ -12,6 +12,7 @@ export type CuttingGroup = {
   dateSendEmbroidered?: string
   quantityDeliveredBTP?: string
   status?: ItemStatusType
+  syncStatus?: boolean
   dateArrived1Th?: string
   quantityArrived1Th?: string
   dateArrived2Th?: string
@@ -61,6 +62,9 @@ export default class CuttingGroupSchema extends Model<CuttingGroup> {
 
   @Column({ type: STRING, field: 'status' })
   declare status: string
+
+  @Column({ type: BOOLEAN, field: 'sync_status' })
+  declare syncStatus: boolean
 
   @Column({ type: DATE, field: 'date_arrived_1th' })
   declare dateArrived1Th: string
