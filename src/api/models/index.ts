@@ -3,6 +3,7 @@ import configuration from '~/config/database.config'
 import logging from '~/utils/logging'
 import AccessoryNoteSchema from './accessory-note.model'
 import ColorSchema from './color.model'
+import CompletionSchema from './completion.model'
 import CuttingGroupSchema from './cutting-group.model'
 import GarmentAccessoryNoteSchema from './garment-accessory-note.model'
 import GarmentAccessorySchema from './garment-accessory.model'
@@ -60,7 +61,8 @@ class DBConnection {
       GarmentAccessorySchema,
       GarmentAccessoryNoteSchema,
       SewingLineDeliverySchema,
-      CuttingGroupSchema
+      CuttingGroupSchema,
+      CompletionSchema
     ])
 
     await this.sequelize
