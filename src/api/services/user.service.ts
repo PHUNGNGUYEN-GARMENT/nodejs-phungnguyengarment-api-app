@@ -1,88 +1,129 @@
 import UserSchema, { User } from '~/models/user.model'
+import { ItemStatusType, RequestBodyType } from '~/type'
 import logging from '~/utils/logging'
+import { buildDynamicQuery } from '../helpers/query'
 
-const PATH = 'services/users'
-const NAMESPACE = 'user'
+const NAMESPACE = 'services/user'
 
-export const createNew = async (user: User): Promise<UserSchema> => {
+export const login = async (username: string, password: string): Promise<UserSchema | null> => {
   try {
-    const users = await UserSchema.findAll()
-    return await UserSchema.create({ ...user, orderNumber: users.length })
+    const userFound = await UserSchema.findOne({
+      where: {
+        username: username
+      }
+    })
+    if (!userFound) throw new Error('username of user is not correct!')
+    // Check password
+    if (password !== userFound.password) throw new Error('Password is not correct!')
+    return userFound
   } catch (error) {
-    logging.error(PATH, `Error creating new ${NAMESPACE} :: ${error}`)
-    throw new Error(`Error creating new ${NAMESPACE} :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
+  }
+}
+
+export const register = async (item: User): Promise<UserSchema | null> => {
+  try {
+    // Check user
+    const userFound = await UserSchema.findOne({ where: { username: item.username } })
+    if (userFound) {
+      if (userFound.status === 'un_active') {
+        throw new Error('Please verify username address!')
+      } else {
+        throw new Error('User is already exist!')
+      }
+    }
+    const userCreated = await UserSchema.create({ ...item })
+    return userCreated
+  } catch (error) {
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
 // Get by id
-export const getByID = async (id: number): Promise<UserSchema | null> => {
+export const getItemByPk = async (id: number): Promise<UserSchema | null> => {
   try {
-    const user = await UserSchema.findOne({ where: { userID: id } })
-    return user
+    return await UserSchema.findByPk(id)
   } catch (error) {
-    logging.error(PATH, `Error get user by id :: ${error}`)
-    throw new Error(`Error get user by id :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
-// Get user by email
-export const getByEmail = async (email: string): Promise<UserSchema | null> => {
+export const getItemBy = async (item: User): Promise<UserSchema | null> => {
   try {
-    const user = await UserSchema.findOne({ where: { email: email } })
-    return user
+    return await UserSchema.findOne({ where: { ...item } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error get user by email :: ${error}`)
-    throw new Error(`Error get user by email :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
 // Get all
-export const getAll = async (): Promise<UserSchema[]> => {
+export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: UserSchema[] }> => {
   try {
-    const users = await UserSchema.findAll()
-    return users
+    const items = await UserSchema.findAndCountAll({
+      offset: (Number(body.paginator.page) - 1) * Number(body.paginator.pageSize),
+      limit: body.paginator.pageSize === -1 ? undefined : body.paginator.pageSize,
+      order: [[body.sorting.column, body.sorting.direction]],
+      where: buildDynamicQuery<User>(body)
+    })
+    return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all user :: ${error}`)
-    throw new Error(`Error get all user :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
-// Update
-export const updateByID = async (user: User): Promise<number> => {
+export const getItemsWithStatus = async (status: ItemStatusType): Promise<UserSchema[]> => {
+  try {
+    return await UserSchema.findAll({
+      where: {
+        status: status
+      }
+    })
+  } catch (error) {
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
+  }
+}
+
+export const getItemsCount = async (): Promise<number> => {
+  try {
+    return await UserSchema.count()
+  } catch (error) {
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
+  }
+}
+
+// Update by productID
+export const updateItemByPk = async (id: number, item: User): Promise<User | undefined> => {
   try {
     const affectedRows = await UserSchema.update(
       {
-        role: user.role,
-        fullName: user.fullName,
-        email: user.email,
-        hashPassword: user.hashPassword,
-        avatar: user.avatar,
-        phone: user.phone,
-        workLocation: user.workLocation,
-        birthday: user.birthday,
-        orderNumber: user.orderNumber,
-        isTemp: user.isTemp
+        ...item
       },
       {
         where: {
-          userID: user.userID
+          id: id
         }
       }
     )
-    return affectedRows[0]
+    return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error get all user :: ${error}`)
-    throw new Error(`Error get all user :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
-// Delete
-export const deleteByID = async (id: number): Promise<number> => {
+// Delete importedID
+export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
-    const affectedRows = await UserSchema.destroy({ where: { userID: id } })
-    return affectedRows
+    return await UserSchema.destroy({ where: { id: id } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error delete user by id :: ${error}`)
-    throw new Error(`Error delete user by id :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }

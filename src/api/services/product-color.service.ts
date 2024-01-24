@@ -19,8 +19,8 @@ export const createNewItem = async (item: ProductColor): Promise<ProductColorSch
       }
     )
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -35,8 +35,8 @@ export const getItemByPk = async (id: number): Promise<ProductColorSchema | null
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -52,8 +52,8 @@ export const getItemBy = async (product: ProductColor): Promise<ProductColorSche
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
-    throw new Error(`${NAMESPACE} getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -72,8 +72,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -86,8 +86,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Produc
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -95,8 +95,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ProductSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -120,7 +120,7 @@ export const updateItemByPk = async (
     return updatedCount[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
+    throw new Error(`updateItemByPk :: ${error}`)
   }
 }
 
@@ -143,7 +143,7 @@ export const updateItemBy = async (
     return updatedCount[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
+    throw new Error(`updateItemByProductID :: ${error}`)
   }
 }
 
@@ -172,7 +172,7 @@ export const createOrUpdateItemByPk = async (
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`createOrUpdateItemByPk :: ${error}`)
   }
 }
 
@@ -199,7 +199,7 @@ export const createOrUpdateItemBy = async (
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createOrUpdateItemByProductID :: ${error}`)
+    throw new Error(`createOrUpdateItemByProductID :: ${error}`)
   }
 }
 
@@ -210,7 +210,7 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+    throw new Error(`deleteItemByPk :: ${error}`)
   }
 }
 
@@ -220,6 +220,6 @@ export const deleteItemBy = async (query: { field: string; id: number }): Promis
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByColorID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByColorID :: ${error}`)
+    throw new Error(`deleteItemByColorID :: ${error}`)
   }
 }

@@ -19,8 +19,8 @@ export const createNewItem = async (item: PrintablePlace): Promise<PrintablePlac
       }
     )
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -48,7 +48,7 @@ export const createOrUpdateItemByPk = async (
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`createOrUpdateItemByPk :: ${error}`)
   }
 }
 
@@ -75,7 +75,7 @@ export const createOrUpdateItemByProductID = async (
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createOrUpdateItemByProductID :: ${error}`)
+    throw new Error(`createOrUpdateItemByProductID :: ${error}`)
   }
 }
 
@@ -102,7 +102,7 @@ export const createOrUpdateItemByPrintID = async (
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByPrintID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPrintID :: ${error}`)
+    throw new Error(`createOrUpdateItemByPrintID :: ${error}`)
   }
 }
 
@@ -117,8 +117,8 @@ export const getItemByPk = async (id: number): Promise<PrintablePlaceSchema | nu
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -134,8 +134,8 @@ export const getItemBy = async (product: PrintablePlace): Promise<PrintablePlace
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
-    throw new Error(`${NAMESPACE} getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -155,8 +155,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -169,8 +169,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Printa
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -178,8 +178,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ProductSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -199,7 +199,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: PrintablePlace): 
     return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
+    throw new Error(`updateItemByPk :: ${error}`)
   }
 }
 
@@ -221,7 +221,7 @@ export const updateItemByProductID = async (
     return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByProductID :: ${error}`)
+    throw new Error(`updateItemByProductID :: ${error}`)
   }
 }
 
@@ -243,7 +243,7 @@ export const updateItemByPrintID = async (
     return affectedRows[0] === 1 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByColorID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByColorID :: ${error}`)
+    throw new Error(`updateItemByColorID :: ${error}`)
   }
 }
 
@@ -254,7 +254,7 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+    throw new Error(`deleteItemByPk :: ${error}`)
   }
 }
 
@@ -264,7 +264,7 @@ export const deleteItemByPrintID = async (printID: number): Promise<number> => {
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPrintID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPrintID :: ${error}`)
+    throw new Error(`deleteItemByPrintID :: ${error}`)
   }
 }
 
@@ -274,6 +274,6 @@ export const deleteItemByProductID = async (productID: number): Promise<number> 
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByProductID :: ${error}`)
+    throw new Error(`deleteItemByProductID :: ${error}`)
   }
 }

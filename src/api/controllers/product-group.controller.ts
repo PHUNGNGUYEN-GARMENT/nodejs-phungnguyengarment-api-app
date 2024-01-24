@@ -23,7 +23,7 @@ export default class ProductGroupController {
       }
       return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -33,7 +33,7 @@ export default class ProductGroupController {
       const item = await service.getItemByPk(id)
       return res.formatter.ok({ data: item, message: message.SUCCESS })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -43,7 +43,7 @@ export default class ProductGroupController {
       const item = await service.getItemBy({ productID: productID })
       return res.formatter.ok({ data: item, message: message.SUCCESS })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -53,7 +53,7 @@ export default class ProductGroupController {
       const item = await service.getItemBy({ groupID: groupID })
       return res.formatter.ok({ data: item, message: message.SUCCESS })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -73,7 +73,7 @@ export default class ProductGroupController {
         message: message.SUCCESS
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -91,7 +91,7 @@ export default class ProductGroupController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -108,7 +108,7 @@ export default class ProductGroupController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -125,7 +125,7 @@ export default class ProductGroupController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -154,7 +154,7 @@ export default class ProductGroupController {
         }
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -185,7 +185,7 @@ export default class ProductGroupController {
         }
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -198,7 +198,7 @@ export default class ProductGroupController {
       }
       return res.formatter.notFound({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -211,7 +211,7 @@ export default class ProductGroupController {
       }
       return res.formatter.notFound({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -224,7 +224,7 @@ export default class ProductGroupController {
       }
       return res.formatter.notFound({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 }

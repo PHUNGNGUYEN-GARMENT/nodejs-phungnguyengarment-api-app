@@ -10,8 +10,8 @@ export const createNewItem = async (item: Importation): Promise<ImportationSchem
   try {
     return await ImportationSchema.create({ ...item })
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -22,8 +22,8 @@ export const getItemByPk = async (id: number): Promise<ImportationSchema | null>
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -37,7 +37,7 @@ export const getItemByProductID = async (productID: number): Promise<Importation
     return item
   } catch (error) {
     logging.error(NAMESPACE, `Error getItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByProductID :: ${error}`)
+    throw new Error(`getItemByProductID :: ${error}`)
   }
 }
 
@@ -53,8 +53,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -68,8 +68,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Import
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -77,8 +77,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ImportationSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -100,7 +100,7 @@ export const updateItemByPk = async (id: number, item: Importation): Promise<Imp
     return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
+    throw new Error(`updateItemByPk :: ${error}`)
   }
 }
 
@@ -121,7 +121,7 @@ export const updateItemByProductID = async (productID: number, item: Importation
     return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByProductID :: ${error}`)
+    throw new Error(`updateByProductID :: ${error}`)
   }
 }
 
@@ -132,7 +132,7 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+    throw new Error(`deleteItemByPk :: ${error}`)
   }
 }
 
@@ -142,6 +142,6 @@ export const deleteItemByProductID = async (productID: number): Promise<number> 
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+    throw new Error(`deleteItemByPk :: ${error}`)
   }
 }

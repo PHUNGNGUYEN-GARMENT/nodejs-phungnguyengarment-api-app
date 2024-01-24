@@ -9,8 +9,8 @@ export const createNewItem = async (item: Product): Promise<ProductSchema> => {
   try {
     return await ProductSchema.create({ ...item })
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -19,8 +19,8 @@ export const getItemByPk = async (id: number): Promise<ProductSchema | null> => 
   try {
     return await ProductSchema.findByPk(id)
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -30,8 +30,8 @@ export const getItemBy = async (item: Product): Promise<ProductSchema | null> =>
       where: { ...item }
     })
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -46,8 +46,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -59,8 +59,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Produc
       }
     })
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -68,8 +68,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await ProductSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -92,7 +92,7 @@ export const updateItemByPk = async (
     return updatedCount[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
+    throw new Error(`updateItemByPk :: ${error}`)
   }
 }
 
@@ -102,6 +102,6 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     return await ProductSchema.destroy({ where: { id: id } })
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+    throw new Error(`deleteItemByPk :: ${error}`)
   }
 }

@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { SewingLine } from '~/models/sewing-line.model'
 import * as service from '~/services/sewing-line.service'
 import { RequestBodyType } from '~/type'
+import { message } from '../utils/constant'
 
 const NAMESPACE = 'controllers/sewing-line'
 
@@ -17,11 +18,11 @@ export default class SewingLineController {
       const itemNew = await service.createNewItem(itemRequest)
 
       if (itemNew) {
-        return res.formatter.created({ data: itemNew })
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
       }
-      return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: `>>> ${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -30,9 +31,9 @@ export default class SewingLineController {
     try {
       const item = await service.getItemByPk(id)
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -43,9 +44,9 @@ export default class SewingLineController {
     try {
       const item = await service.getItemBy({ name: name })
       if (item) {
-        return res.formatter.ok({ data: item })
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -63,7 +64,8 @@ export default class SewingLineController {
         length: items.rows.length,
         page: Number(bodyRequest.paginator.page),
         pageSize: Number(bodyRequest.paginator.pageSize),
-        total: bodyRequest.search.term.length > 0 ? items.count : total.length
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length,
+        message: message.SUCCESS
       })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
@@ -79,9 +81,9 @@ export default class SewingLineController {
     try {
       const printUpdated = await service.updateItemByPk(id, itemRequest)
       if (printUpdated) {
-        return res.formatter.ok({ data: printUpdated })
+        return res.formatter.ok({ data: printUpdated, message: message.UPDATED })
       }
-      return res.formatter.badRequest({})
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -92,9 +94,9 @@ export default class SewingLineController {
     try {
       const item = await service.deleteItemByPk(id)
       if (item) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
+        return res.formatter.ok({ message: message.DELETED })
       }
-      return res.formatter.notFound({})
+      return res.formatter.notFound({ message: message.DELETE_FAILED })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

@@ -30,7 +30,7 @@ export default class SewingLineController {
       }
       return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -43,7 +43,7 @@ export default class SewingLineController {
       }
       return res.formatter.notFound({ message: message.FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -56,7 +56,7 @@ export default class SewingLineController {
       }
       return res.formatter.notFound({ message: message.FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -76,7 +76,7 @@ export default class SewingLineController {
         message: message.SUCCESS
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 

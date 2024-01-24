@@ -25,7 +25,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -38,7 +38,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -69,7 +69,7 @@ export default class GarmentAccessoryNoteController {
         }
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -100,7 +100,7 @@ export default class GarmentAccessoryNoteController {
         }
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -113,7 +113,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -126,7 +126,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -139,7 +139,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -152,7 +152,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -172,7 +172,7 @@ export default class GarmentAccessoryNoteController {
         message: message.SUCCESS
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -191,7 +191,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -211,7 +211,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -230,7 +230,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -249,7 +249,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -271,7 +271,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -284,7 +284,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -297,7 +297,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -310,7 +310,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -323,7 +323,7 @@ export default class GarmentAccessoryNoteController {
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 }

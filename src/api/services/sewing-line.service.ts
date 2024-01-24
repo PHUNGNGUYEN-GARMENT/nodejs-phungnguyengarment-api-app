@@ -9,8 +9,8 @@ export const createNewItem = async (item: SewingLine): Promise<SewingLineSchema>
   try {
     return await SewingLineSchema.create({ ...item })
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -19,8 +19,8 @@ export const getItemByPk = async (id: number): Promise<SewingLineSchema | null> 
   try {
     return await SewingLineSchema.findByPk(id)
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -28,8 +28,8 @@ export const getItemBy = async (item: SewingLine): Promise<SewingLineSchema | nu
   try {
     return await SewingLineSchema.findOne({ where: { ...item } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -44,8 +44,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -58,8 +58,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Sewing
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -67,8 +67,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await SewingLineSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -87,8 +87,8 @@ export const updateItemByPk = async (id: number, itemToUpdate: SewingLine): Prom
     )
     return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -97,7 +97,7 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
     return await SewingLineSchema.destroy({ where: { id: id } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }

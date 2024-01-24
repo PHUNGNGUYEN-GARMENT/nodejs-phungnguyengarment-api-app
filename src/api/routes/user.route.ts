@@ -1,57 +1,73 @@
 import { Router } from 'express'
-import { body, param } from 'express-validator'
 import UserController from '~/controllers/user.controller'
-import { requestValidationRules } from '../middleware/response-validator'
+import { validationRules } from '../middleware/request-validator'
 
 class UserRoute {
   router = Router()
   controller = new UserController()
-
   constructor() {
     this.initialize()
   }
 
   private initialize() {
-    // Get user by userID
+    // Create new item
+    this.router.post(
+      '/register',
+      validationRules([
+        { field: 'username', fieldType: 'string', location: 'body' },
+        { field: 'password', fieldType: 'string', location: 'body' },
+        { field: 'role', fieldType: 'string', location: 'body' }
+      ]),
+      this.controller.register
+    )
+
+    this.router.post(
+      '/login',
+      validationRules([
+        { field: 'username', fieldType: 'string', location: 'body' },
+        { field: 'password', fieldType: 'string', location: 'body' }
+      ]),
+      this.controller.login
+    )
+
+    // Get item
     this.router.get(
-      '/find/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be string type!')
-      ]),
-      this.controller.getUserByID
+      '/:id',
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
+      this.controller.getUserByPk
     )
 
-    // Get all users
-    this.router.get('/find', this.controller.getAllUsers)
+    // Get item
+    this.router.get(
+      '/username/:username',
+      validationRules([{ field: 'username', fieldType: 'string', location: 'params' }]),
+      this.controller.getItemByusername
+    )
 
-    // Update user by userID
+    // Get all items
+    this.router.post(
+      '/find',
+      validationRules([
+        { field: 'filter', fieldType: 'object', location: 'body' },
+        { field: 'paginator', fieldType: 'object', location: 'body' },
+        { field: 'search', fieldType: 'object', location: 'body' },
+        { field: 'sorting', fieldType: 'object', location: 'body' }
+      ]),
+      this.controller.getAllUsers
+    )
+
+    // Update item by productID and importedID
     this.router.put(
-      '/',
-      requestValidationRules([
-        body('userID')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be string type!')
-      ]),
-      this.controller.updateUserByID
+      '/:id',
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
+      this.controller.updateUserByPk
     )
 
-    // Delete user by userID
+    // Delete item by productID
     this.router.delete(
       '/:id',
-      requestValidationRules([
-        param('id')
-          .exists()
-          .withMessage('This field can not empty!')
-          .isString()
-          .withMessage('This field must be string type!')
-      ]),
-      this.controller.deleteUserByID
+      validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
+      this.controller.deleteItemByPk
     )
   }
 }

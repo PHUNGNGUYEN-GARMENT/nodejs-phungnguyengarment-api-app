@@ -1,6 +1,16 @@
-export type ItemStatusType = 'draft' | 'active' | 'closed' | 'archived' | 'deleted'
+export type ItemStatusType = 'draft' | 'active' | 'closed' | 'archived' | 'deleted' | 'un_active'
 
 export type NoteItemStatusType = 'lake' | 'enough' | 'arrived' | 'not_arrived'
+
+export type UserRole =
+  | 'admin'
+  | 'product_manager'
+  | 'importation_manager'
+  | 'sample_sewing_manager'
+  | 'accessory_manager'
+  | 'cutting_group_manager'
+  | 'completion_manager'
+  | 'staff'
 
 export type RequestBodyType = {
   filter: {

@@ -11,8 +11,8 @@ export const createNewItem = async (item: GarmentAccessoryNote): Promise<Garment
   try {
     return await GarmentAccessoryNoteSchema.create({ ...item })
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -20,8 +20,8 @@ export const createNewItems = async (items: GarmentAccessoryNote[]): Promise<Gar
   try {
     return await GarmentAccessoryNoteSchema.bulkCreate(items)
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -47,7 +47,7 @@ export const createOrUpdateItemByPk = async (
     }
   } catch (error) {
     logging.error(NAMESPACE, `Error createOrUpdateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createOrUpdateItemByPk :: ${error}`)
+    throw new Error(`createOrUpdateItemByPk :: ${error}`)
   }
 }
 
@@ -62,8 +62,8 @@ export const getItemByPk = async (id: number): Promise<GarmentAccessoryNoteSchem
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -79,8 +79,8 @@ export const getItemBy = async (query: { field: string; id: number }): Promise<G
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
-    throw new Error(`${NAMESPACE} getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -101,8 +101,8 @@ export const getItems = async (
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -115,8 +115,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Garmen
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -124,8 +124,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await GarmentAccessoryNoteSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${NAMESPACE} ${error}`)
   }
 }
 
@@ -166,8 +166,8 @@ export const updateItemsBy = async (
     const updatedList = [...existingRecords.filter((record) => recordsToDelete.includes(record), ...recordsToAdd)]
     return updatedList
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -190,7 +190,7 @@ export const updateItemByPk = async (
     return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByPk :: ${error}`)
+    throw new Error(`updateItemByPk :: ${error}`)
   }
 }
 
@@ -212,7 +212,7 @@ export const updateItemBy = async (
     return affectedRows[0] > 0 ? itemToUpdate : undefined
   } catch (error) {
     logging.error(NAMESPACE, `Error updateItemByGarmentAccessoryID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateItemByGarmentAccessoryID :: ${error}`)
+    throw new Error(`updateItemByGarmentAccessoryID :: ${error}`)
   }
 }
 
@@ -223,7 +223,7 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByPk :: ${error}`)
+    throw new Error(`deleteItemByPk :: ${error}`)
   }
 }
 
@@ -232,6 +232,6 @@ export const deleteItemBy = async (query: { field: string; id: number }): Promis
     return await GarmentAccessoryNoteSchema.destroy({ where: { [query.field]: query.id } })
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByAccessoryNoteID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByAccessoryNoteID :: ${error}`)
+    throw new Error(`deleteItemByAccessoryNoteID :: ${error}`)
   }
 }

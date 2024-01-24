@@ -14,13 +14,13 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
      * If user is already existing => send request "User already exists"
      * If user not found => Create new user
      */
-    const userFind = await services.getByEmail(user.email)
+    const userFind = await services.getByusername(user.username)
     if (userFind) {
       return null
     } else {
       const salt = bcrypt.genSaltSync(10)
-      const hashedPassword = bcrypt.hashSync(user.hashPassword!, salt)
-      const newUser = await services.createNew({ ...user, hashPassword: hashedPassword })
+      const hashedPassword = bcrypt.hashSync(user.password!, salt)
+      const newUser = await services.createNew({ ...user, password: hashedPassword })
 
       if (newUser) {
         return newUser
@@ -34,15 +34,15 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
   }
 }
 
-export const loginUser = async (email: string, password: string): Promise<UserSchema | null | any> => {
+export const loginUser = async (username: string, password: string): Promise<UserSchema | null | any> => {
   try {
-    const userFind = await services.getByEmail(email)
+    const userFind = await services.getByusername(username)
     if (userFind) {
-      const passwordCompare = bcrypt.compareSync(password, userFind.hashPassword)
+      const passwordCompare = bcrypt.compareSync(password, userFind.password)
       if (passwordCompare) {
         // Generate token
         const userReturned = { ...userFind.toJSON() }
-        delete userReturned.hashPassword
+        delete userReturned.password
         return {
           user: userReturned
         }

@@ -23,7 +23,7 @@ export default class ProductColorController {
       }
       return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -52,7 +52,7 @@ export default class ProductColorController {
         }
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -80,7 +80,7 @@ export default class ProductColorController {
         }
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -108,7 +108,7 @@ export default class ProductColorController {
         }
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -122,7 +122,7 @@ export default class ProductColorController {
         return res.formatter.notFound({ data: item, message: message.NOT_FOUND })
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -136,7 +136,7 @@ export default class ProductColorController {
         return res.formatter.notFound({ data: item, message: message.NOT_FOUND })
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -150,7 +150,7 @@ export default class ProductColorController {
         return res.formatter.notFound({ data: item, message: message.NOT_FOUND })
       }
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -169,7 +169,7 @@ export default class ProductColorController {
         total: bodyRequest.search.term.length > 0 ? items.count : total.length
       })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -187,7 +187,7 @@ export default class ProductColorController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -204,7 +204,7 @@ export default class ProductColorController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -221,7 +221,7 @@ export default class ProductColorController {
       }
       return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -234,7 +234,7 @@ export default class ProductColorController {
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -247,7 +247,7 @@ export default class ProductColorController {
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
@@ -260,7 +260,7 @@ export default class ProductColorController {
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
-      return res.formatter.badRequest({ message: message.ERROR })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 }

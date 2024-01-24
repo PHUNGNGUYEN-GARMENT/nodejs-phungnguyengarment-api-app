@@ -15,11 +15,11 @@ class AuthRoute {
     // Login chanel
     this.router.post(
       '/login',
-      check('email')
+      check('username')
         .exists()
-        .withMessage(validators.EMAIL_IS_EMPTY)
-        .isEmail()
-        .withMessage(validators.EMAIL_IS_IN_WRONG_FORMAT),
+        .withMessage(validators.username_IS_EMPTY)
+        .isusername()
+        .withMessage(validators.username_IS_IN_WRONG_FORMAT),
       check('password')
         .exists()
         .withMessage(validators.PASSWORD_IS_EMPTY)
@@ -31,11 +31,11 @@ class AuthRoute {
     // Register chanel
     this.router.post(
       '/register',
-      check('email')
+      check('username')
         .exists()
-        .withMessage(validators.EMAIL_IS_EMPTY)
-        .isEmail()
-        .withMessage(validators.EMAIL_IS_IN_WRONG_FORMAT),
+        .withMessage(validators.username_IS_EMPTY)
+        .isusername()
+        .withMessage(validators.username_IS_IN_WRONG_FORMAT),
       check('password')
         .exists()
         .withMessage(validators.PASSWORD_IS_EMPTY)

@@ -1,42 +1,73 @@
 import { Request, Response } from 'express'
 import { User } from '~/models/user.model'
 import * as service from '~/services/user.service'
+import { RequestBodyType } from '~/type'
+import { message } from '../utils/constant'
 
 const PATH = 'controllers/user'
 const NAMESPACE = 'User'
 
 export default class UserController {
   constructor() {}
-  createNewUser = async (req: Request, res: Response) => {
+
+  register = async (req: Request, res: Response) => {
     const userRequest: User = {
-      fullName: req.body.fullName,
-      email: req.body.email,
-      hashPassword: req.body.password,
-      workLocation: req.body.workLocation,
-      role: req.body.role
+      username: req.body.username,
+      password: req.body.password,
+      status: req.body.status ?? 'active',
+      role: req.body.role ?? 'staff'
     }
     try {
-      const newUser = await service.createNew(userRequest)
-
+      const newUser = await service.register(userRequest)
       if (newUser) {
-        return res.formatter.created({ data: newUser })
+        // Send verify username of user...
+        return res.formatter.created({ data: newUser, message: message.REGISTER_SUCCESS })
       } else {
-        return res.formatter.badRequest({ message: `${NAMESPACE} already exists` })
+        return res.formatter.badRequest({ message: message.REGISTER_FAILED })
       }
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  getUserByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+  login = async (req: Request, res: Response) => {
+    const itemRequest = {
+      username: req.body.username,
+      password: req.body.password
+    }
     try {
-      const user = await service.getByID(parseInt(id))
-      if (user) {
-        return res.formatter.ok({ data: user })
+      const userFound = await service.login(itemRequest.username, itemRequest.password)
+      if (userFound) {
+        return res.formatter.ok({ data: userFound, message: message.LOGIN_SUCCESS })
       } else {
-        return res.formatter.badRequest({})
+        return res.formatter.badRequest({ message: message.LOGIN_FAILED })
       }
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getUserByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    try {
+      const item = await service.getItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
+      }
+      return res.formatter.notFound({ message: message.NOT_FOUND })
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  getItemByusername = async (req: Request, res: Response) => {
+    const username = String(req.params.username)
+    try {
+      const item = await service.getItemBy({ username: username })
+      if (item) {
+        return res.formatter.ok({ data: item, message: message.SUCCESS })
+      }
+      return res.formatter.notFound({ message: message.NOT_FOUND })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
@@ -44,47 +75,48 @@ export default class UserController {
 
   getAllUsers = async (req: Request, res: Response) => {
     try {
-      const users = await service.getAll()
-      return res.formatter.ok({ data: users })
+      const bodyRequest: RequestBodyType = {
+        ...req.body
+      }
+      const items = await service.getItems(bodyRequest)
+      const total = await service.getItemsWithStatus(bodyRequest.filter.status)
+      return res.formatter.ok({
+        data: items.rows,
+        length: items.rows.length,
+        page: Number(bodyRequest.paginator.page),
+        pageSize: Number(bodyRequest.paginator.pageSize),
+        total: bodyRequest.search.term.length > 0 ? items.count : total.length,
+        message: message.SUCCESS
+      })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  updateUserByID = async (req: Request, res: Response) => {
-    const userRequest: User = {
-      userID: req.body.userID,
-      fullName: req.body.fullName,
-      email: req.body.email,
-      hashPassword: req.body.password,
-      avatar: req.body.avatar,
-      phone: req.body.phone,
-      workLocation: req.body.workLocation,
-      birthday: req.body.birthday,
-      role: req.body.role,
-      orderNumber: req.body.orderNumber
+  updateUserByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
+    const itemRequest: User = {
+      ...req.body
     }
     try {
-      const userUpdated = await service.updateByID(userRequest)
-      if (userUpdated) {
-        return res.formatter.ok({ data: userUpdated })
-      } else {
-        return res.formatter.badRequest({})
+      const itemUpdated = await service.updateItemByPk(id, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  deleteUserByID = async (req: Request, res: Response) => {
-    const { id } = req.params
+  deleteItemByPk = async (req: Request, res: Response) => {
+    const id = Number(req.params.id)
     try {
-      const user = await service.deleteByID(parseInt(id))
-      if (user) {
-        return res.formatter.ok({ message: `${NAMESPACE} has been deleted` })
-      } else {
-        return res.formatter.badRequest({})
+      const item = await service.deleteItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ message: message.DELETED })
       }
+      return res.formatter.badRequest({ message: message.DELETE_FAILED })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

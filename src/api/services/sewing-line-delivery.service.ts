@@ -11,8 +11,8 @@ export const createNewItem = async (item: SewingLineDelivery): Promise<SewingLin
   try {
     return await SewingLineDeliverySchema.create({ ...item })
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -36,8 +36,8 @@ export const getItemByPk = async (id: number): Promise<SewingLineDeliverySchema 
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -52,8 +52,8 @@ export const getItemBy = async (sewingLineDelivery: SewingLineDelivery): Promise
     })
     return item
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -72,8 +72,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -86,8 +86,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<Sewing
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -95,8 +95,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await SewingLineDeliverySchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -173,8 +173,8 @@ export const updateItemsBy = async (
     // Trả về danh sách cập nhật sau xử lý
     return [...recordsToUpdate, ...recordsToAdd]
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -196,8 +196,8 @@ export const updateItemByPk = async (
     )
     return affectedRows[0] > 0 ? recordToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -218,8 +218,8 @@ export const updateItemBySewingLineID = async (
     )
     return affectedRows[0] > 0 ? recordToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -240,8 +240,8 @@ export const updateItemByProductID = async (
     )
     return affectedRows[0] > 0 ? recordToUpdate : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -251,8 +251,8 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
     const affectedRows = await SewingLineDeliverySchema.destroy({ where: { id: id } })
     return affectedRows
   } catch (error) {
-    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -262,7 +262,7 @@ export const deleteItemBySewingLineID = async (sewingLineID: number): Promise<nu
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemBySewingLineID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemBySewingLineID :: ${error}`)
+    throw new Error(`deleteItemBySewingLineID :: ${error}`)
   }
 }
 
@@ -272,6 +272,6 @@ export const deleteItemByProductID = async (productID: number): Promise<number> 
     return affectedRows
   } catch (error) {
     logging.error(NAMESPACE, `Error deleteItemByProductID :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteItemByProductID :: ${error}`)
+    throw new Error(`deleteItemByProductID :: ${error}`)
   }
 }

@@ -9,8 +9,8 @@ export const createNewItem = async (item: Group): Promise<GroupSchema> => {
   try {
     return await GroupSchema.create({ ...item })
   } catch (error) {
-    logging.error(NAMESPACE, `Error createNewItem :: ${error}`)
-    throw new Error(`${NAMESPACE} Error createNewItem :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -19,8 +19,8 @@ export const getItemByPk = async (id: number): Promise<GroupSchema | null> => {
   try {
     return await GroupSchema.findByPk(id)
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -28,8 +28,8 @@ export const getItemBy = async (item: Group): Promise<GroupSchema | null> => {
   try {
     return await GroupSchema.findOne({ where: { ...item } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemBy :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemBy :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -45,8 +45,8 @@ export const getItems = async (body: RequestBodyType): Promise<{ count: number; 
     })
     return items
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItems :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItems :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -58,8 +58,8 @@ export const getItemsWithStatus = async (status: ItemStatusType): Promise<GroupS
       }
     })
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsWithStatus :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsWithStatus :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -67,8 +67,8 @@ export const getItemsCount = async (): Promise<number> => {
   try {
     return await GroupSchema.count()
   } catch (error) {
-    logging.error(NAMESPACE, `Error getItemsCount :: ${error}`)
-    throw new Error(`${NAMESPACE} Error getItemsCount :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -88,8 +88,8 @@ export const updateItemByPk = async (id: number, item: Group): Promise<Group | u
     )
     return affectedRows[0] > 0 ? item : undefined
   } catch (error) {
-    logging.error(NAMESPACE, `Error updateByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error updateByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
 
@@ -98,7 +98,7 @@ export const deleteItemByPk = async (id: number): Promise<number> => {
   try {
     return await GroupSchema.destroy({ where: { id: id } })
   } catch (error) {
-    logging.error(NAMESPACE, `Error deleteByPk :: ${error}`)
-    throw new Error(`${NAMESPACE} Error deleteByPk :: ${error}`)
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
   }
 }
