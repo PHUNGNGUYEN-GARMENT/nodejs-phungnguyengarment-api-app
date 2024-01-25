@@ -12,14 +12,18 @@ import printRoute from './print.route'
 import printablePlaceRoute from './printable-place.route'
 import productColorRoute from './product-color.route'
 import productGroupRoute from './product-group.route'
+import roleRoute from './role.route'
 import sampleSewingRoute from './sample-sewing.route'
 import sewingLineDeliveryRoute from './sewing-line-delivery.route'
 import sewingLineRoute from './sewing-line.route'
+import userRoleRoute from './user-role.route'
 import userRoute from './user.route'
 
 export default class AppRoutes {
   constructor(app: Application) {
     app.use('/api/users', userRoute)
+    app.use('/api/roles', roleRoute)
+    app.use('/api/user-roles', userRoleRoute)
     app.use('/api/colors', colorRoute)
     app.use('/api/groups', groupRoute)
     app.use('/api/prints', printRoute)

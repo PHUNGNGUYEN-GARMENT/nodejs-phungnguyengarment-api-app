@@ -1,10 +1,11 @@
 import { Router } from 'express'
-import UserController from '~/controllers/user.controller'
+import UserRoleController from '../controllers/user-role.controller'
 import { validationRules } from '../middleware/request-validator'
 
-class UserRoute {
+class UserRoleRoute {
   router = Router()
-  controller = new UserController()
+  controller = new UserRoleController()
+
   constructor() {
     this.initialize()
   }
@@ -12,35 +13,18 @@ class UserRoute {
   private initialize() {
     // Create new item
     this.router.post(
-      '/register',
-      validationRules([
-        { field: 'username', fieldType: 'string', location: 'body' },
-        { field: 'password', fieldType: 'string', location: 'body' }
-      ]),
-      this.controller.register
+      '/',
+      validationRules([{ field: 'name', fieldType: 'string', location: 'body' }]),
+      this.controller.createNewItem
     )
 
-    this.router.post(
-      '/login',
-      validationRules([
-        { field: 'username', fieldType: 'string', location: 'body' },
-        { field: 'password', fieldType: 'string', location: 'body' }
-      ]),
-      this.controller.login
-    )
+    this.router.post('/items', this.controller.createNewItems)
 
     // Get item
     this.router.get(
       '/:id',
       validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
-      this.controller.getUserByPk
-    )
-
-    // Get item
-    this.router.get(
-      '/username/:username',
-      validationRules([{ field: 'username', fieldType: 'string', location: 'params' }]),
-      this.controller.getItemByUsername
+      this.controller.getItemByPk
     )
 
     // Get all items
@@ -52,14 +36,20 @@ class UserRoute {
         { field: 'search', fieldType: 'object', location: 'body' },
         { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
-      this.controller.getAllUsers
+      this.controller.getItems
     )
 
     // Update item by productID and importedID
     this.router.put(
       '/:id',
       validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
-      this.controller.updateUserByPk
+      this.controller.updateItemByPk
+    )
+
+    this.router.post(
+      '/updateItems/userID/:userID',
+      validationRules([{ field: 'userID', fieldType: 'int', location: 'params' }]),
+      this.controller.updateItemsByUserID
     )
 
     // Delete item by productID
@@ -71,4 +61,4 @@ class UserRoute {
   }
 }
 
-export default new UserRoute().router
+export default new UserRoleRoute().router

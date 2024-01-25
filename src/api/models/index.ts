@@ -14,9 +14,11 @@ import PrintablePlaceSchema from './printable-place.model'
 import ProductColorSchema from './product-color.model'
 import ProductGroupSchema from './product-group.model'
 import ProductSchema from './product.model'
+import RoleSchema from './role.model'
 import SampleSewingSchema from './sample-sewing.model'
 import SewingLineDeliverySchema from './sewing-line-delivery.model'
 import SewingLineSchema from './sewing-line.model'
+import UserRoleSchema from './user-role.model'
 import UserSchema from './user.model'
 
 const PATH = 'model/index'
@@ -47,6 +49,8 @@ class DBConnection {
 
     this.sequelize?.addModels([
       UserSchema,
+      RoleSchema,
+      UserRoleSchema,
       ColorSchema,
       GroupSchema,
       PrintSchema,

@@ -1,11 +1,10 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript'
-import { ItemStatusType, UserRole } from '~/type'
+import { ItemStatusType } from '~/type'
 
-const { INTEGER, STRING } = DataType
+const { INTEGER, STRING, BOOLEAN } = DataType
 
 export interface User {
   id?: number
-  role?: UserRole
   fullName?: string
   username: string
   password?: string
@@ -13,6 +12,7 @@ export interface User {
   phone?: string
   workDescription?: string
   birthday?: string
+  isAdmin?: boolean
   status?: ItemStatusType
 }
 
@@ -24,9 +24,6 @@ export interface User {
 export default class UserSchema extends Model<User> {
   @Column({ type: INTEGER, primaryKey: true, autoIncrement: true, field: 'id' })
   declare id: number
-
-  @Column({ type: STRING, field: 'role' })
-  declare role: UserRole
 
   @Column({ type: STRING, field: 'full_name' })
   declare fullName: string
@@ -43,7 +40,10 @@ export default class UserSchema extends Model<User> {
   @Column({ type: STRING, field: 'phone' })
   declare phone: string
 
-  @Column({ type: STRING, field: 'workDescription' })
+  @Column({ type: BOOLEAN, field: 'is_admin' })
+  declare isAdmin: boolean
+
+  @Column({ type: STRING, field: 'work_description' })
   declare workDescription: string
 
   @Column({ type: STRING, field: 'birthday' })
