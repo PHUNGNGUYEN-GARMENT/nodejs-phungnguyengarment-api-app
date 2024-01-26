@@ -115,20 +115,9 @@ class ProductController {
       }
       const items = await service.getItems(bodyRequest)
       const total = await service.getItemsWithStatus(bodyRequest.filter.status)
-      const convertData = items.rows.map((item) => {
-        return {
-          ...item.dataValues,
-          progress: {
-            sewing: 1500,
-            iron: 1000,
-            check: 500,
-            pack: 200
-          }
-        }
-      })
       return res.formatter.ok({
-        data: convertData,
-        length: convertData.length,
+        data: items.rows,
+        length: items.count,
         page: Number(bodyRequest.paginator.page),
         pageSize: Number(bodyRequest.paginator.pageSize),
         total: bodyRequest.search.term.length > 0 ? items.count : total.length,
