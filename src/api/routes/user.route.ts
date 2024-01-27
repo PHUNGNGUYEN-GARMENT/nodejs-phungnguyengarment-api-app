@@ -1,10 +1,12 @@
 import { Router } from 'express'
 import UserController from '~/controllers/user.controller'
+import AuthController from '~/controllers/auth/auth.controller'
 import { validationRules } from '../middleware/request-validator'
 
 class UserRoute {
   router = Router()
   controller = new UserController()
+  authController = new AuthController()
   constructor() {
     this.initialize()
   }
@@ -17,7 +19,7 @@ class UserRoute {
         { field: 'username', fieldType: 'string', location: 'body' },
         { field: 'password', fieldType: 'string', location: 'body' }
       ]),
-      this.controller.register
+      this.authController.register
     )
 
     this.router.post(
@@ -26,7 +28,16 @@ class UserRoute {
         { field: 'username', fieldType: 'string', location: 'body' },
         { field: 'password', fieldType: 'string', location: 'body' }
       ]),
-      this.controller.login
+      this.authController.login
+    )
+
+    this.router.post(
+      '/refresh',
+      validationRules([
+        { field: 'username', fieldType: 'string', location: 'body' },
+        { field: 'password', fieldType: 'string', location: 'body' }
+      ]),
+      this.authController.login
     )
 
     // Get item

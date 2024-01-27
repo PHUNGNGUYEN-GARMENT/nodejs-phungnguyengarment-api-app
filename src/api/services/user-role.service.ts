@@ -55,6 +55,21 @@ export const getItemBy = async (item: UserRole): Promise<UserRoleSchema | null> 
   }
 }
 
+export const getItemsBy = async (item: UserRole): Promise<UserRoleSchema[] | null> => {
+  try {
+    return await UserRoleSchema.findAll({
+      where: { ...item },
+      include: [
+        { model: UserSchema, as: 'user' },
+        { model: RoleSchema, as: 'role' }
+      ]
+    })
+  } catch (error) {
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
+  }
+}
+
 // Get all
 export const getItems = async (body: RequestBodyType): Promise<{ count: number; rows: UserRoleSchema[] }> => {
   try {

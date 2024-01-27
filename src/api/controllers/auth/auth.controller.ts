@@ -1,7 +1,8 @@
 import { Request, Response } from 'express'
+import { message } from '~/api/utils/constant'
+import { tokenGenerator } from '~/api/utils/token-generation'
 import { User } from '~/models/user.model'
-import * as services from '~/services/auth/auth.service'
-import logging from '~/utils/logging'
+import * as service from '~/services/user.service'
 
 const PATH = 'Auth'
 const NAMESPACE = 'controllers/auth'
@@ -9,48 +10,50 @@ const NAMESPACE = 'controllers/auth'
 export default class AuthController {
   constructor() {}
 
-  // Get by id
-  login = async (req: Request, res: Response) => {
-    const { username, password } = req.body
+  register = async (req: Request, res: Response) => {
+    const userRequest: User = {
+      username: req.body.username.toLowerCase(),
+      password: req.body.password,
+      status: req.body.status ?? 'active'
+    }
     try {
-      const user = await services.loginUser(username, password)
-      if (user) {
-        return res.formatter.ok({ message: `${NAMESPACE} login successfully!`, data: user })
+      const userFound = await service.getItemBy({ username: userRequest.username })
+      if (userFound) {
+        return res.formatter.badRequest({ message: 'User is already exist!' })
       } else {
-        return res.formatter.badRequest({ message: `Invalid username and password!` })
+        const newUser = await service.createNewItem({ username: userRequest.username, password: userRequest.password! })
+        if (newUser) {
+          // Send verify username of user...
+          return res.formatter.created({ data: newUser, message: message.REGISTER_SUCCESS })
+        } else {
+          return res.formatter.badRequest({ message: message.REGISTER_FAILED })
+        }
       }
     } catch (error) {
-      logging.error(PATH, `${NAMESPACE} login failed with error: ${error}`)
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
 
-  // Get all
-  register = async (req: Request, res: Response) => {
-    const userRequest: User = {
-      fullName: req.body.fullName,
-      username: req.body.username,
-      password: req.body.password,
-      avatar: req.body.avatar,
-      phone: req.body.phone,
-      workLocation: req.body.workLocation,
-      birthday: req.body.birthday,
-      role: req.body.role,
-      orderNumber: req.body.orderNumber
+  login = async (req: Request, res: Response) => {
+    const itemRequest = {
+      username: req.body.username.toLowerCase(),
+      password: req.body.password
     }
     try {
-      const userRegistered = await services.registerUser(userRequest)
-      if (userRegistered) {
-        return res.formatter.created({
-          message: `${NAMESPACE} registered successfully!`,
-          data: userRegistered
-        })
-      } else {
-        return res.formatter.badRequest({ message: `${NAMESPACE} already exist` })
-      }
+      const userFound = await service.getItemBy({ username: itemRequest.username })
+      // Check password
+      if (userFound && itemRequest.password !== userFound?.password)
+        return res.formatter.unauthorized({ message: 'Password is not correct!' })
+      if (!userFound) return res.formatter.badRequest({ message: 'User not found!' })
+      const accessToken = tokenGenerator({ username: userFound.username, password: userFound.password })
+      if (!accessToken) return res.formatter.unauthorized({ message: message.LOGIN_FAILED })
+      await service.updateItemByPk(userFound.id, { accessToken: accessToken }) // Update refresh token if token is not existing database
+      return res.formatter.ok({
+        data: { ...userFound.dataValues, accessToken: accessToken },
+        message: message.LOGIN_SUCCESS
+      })
     } catch (error) {
-      logging.error(PATH, `${NAMESPACE} register failed with error: ${error}`)
-      return res.formatter.badRequest({ message: `${NAMESPACE} register failed with error: ${error}` })
+      return res.formatter.badRequest({ message: `${error}` })
     }
   }
 }

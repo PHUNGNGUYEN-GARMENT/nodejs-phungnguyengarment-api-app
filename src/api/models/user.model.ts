@@ -14,7 +14,7 @@ export interface User {
   birthday?: string
   isAdmin?: boolean
   status?: ItemStatusType
-  refreshToken?: string
+  accessToken?: string
 }
 
 @Table({
@@ -50,8 +50,8 @@ export default class UserSchema extends Model<User> {
   @Column({ type: STRING, field: 'birthday' })
   declare birthday: string
 
-  @Column({ type: STRING, field: 'refresh_token' })
-  declare refreshToken: string
+  @Column({ type: STRING, field: 'access_token' })
+  declare accessToken: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: ItemStatusType
