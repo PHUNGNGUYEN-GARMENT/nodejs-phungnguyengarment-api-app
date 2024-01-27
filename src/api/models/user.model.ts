@@ -6,7 +6,7 @@ const { INTEGER, STRING, BOOLEAN } = DataType
 export interface User {
   id?: number
   fullName?: string
-  username: string
+  username?: string
   password?: string
   avatar?: string
   phone?: string
@@ -14,6 +14,7 @@ export interface User {
   birthday?: string
   isAdmin?: boolean
   status?: ItemStatusType
+  refreshToken?: string
 }
 
 @Table({
@@ -48,6 +49,9 @@ export default class UserSchema extends Model<User> {
 
   @Column({ type: STRING, field: 'birthday' })
   declare birthday: string
+
+  @Column({ type: STRING, field: 'refresh_token' })
+  declare refreshToken: string
 
   @Column({ type: STRING, field: 'status' })
   declare status: ItemStatusType

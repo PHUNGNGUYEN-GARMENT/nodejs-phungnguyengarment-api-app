@@ -5,34 +5,8 @@ import { buildDynamicQuery } from '../helpers/query'
 
 const NAMESPACE = 'services/user'
 
-export const login = async (username: string, password: string): Promise<UserSchema | null> => {
+export const createNewItem = async (item: User): Promise<UserSchema | null> => {
   try {
-    const userFound = await UserSchema.findOne({
-      where: {
-        username: username
-      }
-    })
-    if (!userFound) throw new Error('username of user is not correct!')
-    // Check password
-    if (password !== userFound.password) throw new Error('Password is not correct!')
-    return userFound
-  } catch (error) {
-    logging.error(NAMESPACE, `${error}`)
-    throw new Error(`${error}`)
-  }
-}
-
-export const register = async (item: User): Promise<UserSchema | null> => {
-  try {
-    // Check user
-    const userFound = await UserSchema.findOne({ where: { username: item.username } })
-    if (userFound) {
-      if (userFound.status === 'un_active') {
-        throw new Error('Please verify username address!')
-      } else {
-        throw new Error('User is already exist!')
-      }
-    }
     const userCreated = await UserSchema.create({ ...item })
     return userCreated
   } catch (error) {

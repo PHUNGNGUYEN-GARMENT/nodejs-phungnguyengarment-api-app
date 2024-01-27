@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import appConfig from '~/config/app.config'
 
 export const tokenGenerator = (user: { username: string; password: string }): string => {
-  const token = jwt.sign(user, appConfig.secretKey, { expiresIn: '7d' })
+  const token = jwt.sign(user, appConfig.secretKey, { expiresIn: '7d', algorithm: 'HS256' })
   return token
 }
 

@@ -1,5 +1,5 @@
 Arguments: 
-  /opt/homebrew/Cellar/node/21.1.0/bin/node /opt/homebrew/Cellar/yarn/1.22.19/libexec/bin/yarn.js add @type/jsonwebtoken
+  /opt/homebrew/Cellar/node/21.1.0/bin/node /opt/homebrew/Cellar/yarn/1.22.19/libexec/bin/yarn.js add @types/rand-token
 
 PATH: 
   /Users/soyoong/.pyenv/shims:/Users/soyoong/.pyenv/shims:/Users/soyoong/.pyenv/shims:/Users/soyoong/.pyenv/bin:/Users/soyoong/.pyenv/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/Users/soyoong/.docker/bin
@@ -14,7 +14,7 @@ Platform:
   darwin arm64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@type%2fjsonwebtoken: Not found
+  Error: https://registry.yarnpkg.com/@types%2frand-token: Not found
       at params.callback [as _callback] (/opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:66145:18)
       at self.callback (/opt/homebrew/Cellar/yarn/1.22.19/libexec/lib/cli.js:140890:22)
       at Request.emit (node:events:515:28)
@@ -48,12 +48,14 @@ npm manifest:
     "license": "ISC",
     "private": true,
     "dependencies": {
+      "@types/jsonwebtoken": "^9.0.5",
       "bcrypt": "^5.1.1",
       "cors": "^2.8.5",
       "express": "^4.18.2",
       "helmet": "^7.0.0",
       "morgan": "^1.10.0",
       "mysql2": "^3.6.3",
+      "rand-token": "^1.0.1",
       "reflect-metadata": "^0.1.13",
       "sequelize": "^6.34.0",
       "sequelize-typescript": "^2.1.5"
@@ -344,6 +346,13 @@ Lockfile:
     version "7.0.13"
     resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.13.tgz"
     integrity sha512-RbSSoHliUbnXj3ny0CNFOoxrIDV6SUGyStHsvDqosw6CkdPV8TtWGlfecuK4ToyMEAql6pzNxgCFKanovUzlgQ==
+  
+  "@types/jsonwebtoken@^9.0.5":
+    version "9.0.5"
+    resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-9.0.5.tgz#0bd9b841c9e6c5a937c17656e2368f65da025588"
+    integrity sha512-VRLSGzik+Unrup6BsouBeHsf4d1hOEgYWTm/7Nmw1sXoN1+tRly/Gy/po3yeahnP4jfnQWWAhQAqcNfH7ngOkA==
+    dependencies:
+      "@types/node" "*"
   
   "@types/lodash@*":
     version "4.14.198"
@@ -2248,6 +2257,11 @@ Lockfile:
     version "1.2.3"
     resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
     integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
+  
+  rand-token@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/rand-token/-/rand-token-1.0.1.tgz#a47fdfd94894cc349d74234403c4b24624733c58"
+    integrity sha512-Zri5SfJmEzBJ3IexFdigvPSCamslJ7UjLkUn0tlgH7COJvaUr5V7FyUYgKifEMTw7gFO8ZLcWjcU+kq8akipzg==
   
   range-parser@~1.2.1:
     version "1.2.1"

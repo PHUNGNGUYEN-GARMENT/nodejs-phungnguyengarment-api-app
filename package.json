@@ -26,6 +26,7 @@
     "helmet": "^7.0.0",
     "morgan": "^1.10.0",
     "mysql2": "^3.6.3",
+    "rand-token": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.34.0",
     "sequelize-typescript": "^2.1.5"
