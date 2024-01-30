@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
+import * as jwt from 'jsonwebtoken'
 import { message } from '~/api/utils/constant'
-import { tokenGenerator } from '~/api/utils/token-generation'
+import { tokenGenerator, verifyToken } from '~/api/utils/token-generation'
+import appConfig from '~/config/app.config'
 import { User } from '~/models/user.model'
+import * as userRoleService from '~/services/user-role.service'
 import * as service from '~/services/user.service'
 
 const PATH = 'Auth'
@@ -14,6 +17,7 @@ export default class AuthController {
     const userRequest: User = {
       username: req.body.username.toLowerCase(),
       password: req.body.password,
+      isAdmin: req.body.isAdmin,
       status: req.body.status ?? 'active'
     }
     try {
@@ -21,7 +25,7 @@ export default class AuthController {
       if (userFound) {
         return res.formatter.badRequest({ message: 'User is already exist!' })
       } else {
-        const newUser = await service.createNewItem({ username: userRequest.username, password: userRequest.password! })
+        const newUser = await service.createNewItem({ ...userRequest })
         if (newUser) {
           // Send verify username of user...
           return res.formatter.created({ data: newUser, message: message.REGISTER_SUCCESS })
@@ -54,6 +58,38 @@ export default class AuthController {
       })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  checkAdmin = async (req: Request, res: Response) => {
+    const accessTokenFromHeaders = String(req.headers.authorization)
+    let jwtPayload
+    const jwtVerified = verifyToken(accessTokenFromHeaders)
+    if (!jwtVerified) res.formatter.unauthorized({ message: '123' })
+
+    try {
+      const userFound = await service.getItemBy({ accessToken: accessTokenFromHeaders })
+      if (!userFound) return res.formatter.unauthorized({ message: 'Access key is not valid!' })
+      jwtPayload = <any>jwt.verify(accessTokenFromHeaders, appConfig.secretKey)
+      res.locals.jwtPayload = jwtPayload
+    } catch (error: any) {
+      return res.formatter.unauthorized({ message: `${error.message}` })
+    }
+
+    const { username, password } = jwtPayload
+
+    try {
+      const userFound = await service.getItemBy({ username: username, password: password })
+      if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
+      const userRoles = await userRoleService.getItemsBy({ userID: userFound.id })
+      if (!userRoles) return res.formatter.notFound({ message: 'User role not found!' })
+      return res.formatter.ok({
+        data: {
+          isAdmin: userRoles.map((userRole) => userRole.role.role).includes('admin')
+        }
+      })
+    } catch (error) {
+      return res.formatter.unauthorized({ message: `${error}` })
     }
   }
 }

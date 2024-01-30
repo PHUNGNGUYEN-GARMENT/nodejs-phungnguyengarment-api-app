@@ -31,6 +31,8 @@ class UserRoute {
       this.authController.login
     )
 
+    this.router.get('/check-admin', this.authController.checkAdmin)
+
     this.router.post(
       '/refresh',
       validationRules([
@@ -38,6 +40,15 @@ class UserRoute {
         { field: 'password', fieldType: 'string', location: 'body' }
       ]),
       this.authController.login
+    )
+
+    this.router.post(
+      '/',
+      validationRules([
+        { field: 'username', fieldType: 'string', location: 'body' },
+        { field: 'password', fieldType: 'string', location: 'body' }
+      ]),
+      this.controller.createNewItem
     )
 
     // Get item

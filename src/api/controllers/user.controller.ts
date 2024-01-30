@@ -10,6 +10,25 @@ const NAMESPACE = 'User'
 export default class UserController {
   constructor() {}
 
+  createNewItem = async (req: Request, res: Response) => {
+    const itemRequest: User = {
+      username: req.body.username,
+      password: req.body.password,
+      isAdmin: req.body.isAdmin,
+      status: req.body.status ?? 'active'
+    }
+    try {
+      const itemNew = await service.createNewItem(itemRequest)
+
+      if (itemNew) {
+        return res.formatter.created({ data: itemNew, message: message.CREATED })
+      }
+      return res.formatter.badRequest({ message: message.CREATION_FAILED })
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
   getUserByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
