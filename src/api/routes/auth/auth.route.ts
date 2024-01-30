@@ -18,7 +18,7 @@ class AuthRoute {
       check('username')
         .exists()
         .withMessage(validators.username_IS_EMPTY)
-        .isusername()
+        .isString()
         .withMessage(validators.username_IS_IN_WRONG_FORMAT),
       check('password')
         .exists()
@@ -34,7 +34,7 @@ class AuthRoute {
       check('username')
         .exists()
         .withMessage(validators.username_IS_EMPTY)
-        .isusername()
+        .isString()
         .withMessage(validators.username_IS_IN_WRONG_FORMAT),
       check('password')
         .exists()

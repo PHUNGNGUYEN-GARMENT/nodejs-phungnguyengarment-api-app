@@ -17,6 +17,7 @@
   "repository": "https://github.com/soyoongdev/shopair-api.git",
   "author": "soyoong <huuhau.hh47@gmail.com>",
   "license": "ISC",
+  "homepage": "http://phungnguyen.management.api.com/",
   "private": true,
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.5",

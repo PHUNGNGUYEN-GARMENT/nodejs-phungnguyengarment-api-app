@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import UserController from '~/controllers/user.controller'
 import AuthController from '~/controllers/auth/auth.controller'
+import UserController from '~/controllers/user.controller'
 import { validationRules } from '../middleware/request-validator'
 
 class UserRoute {

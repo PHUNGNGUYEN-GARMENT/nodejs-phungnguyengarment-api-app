@@ -14,13 +14,13 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
      * If user is already existing => send request "User already exists"
      * If user not found => Create new user
      */
-    const userFind = await services.getByusername(user.username)
+    const userFind = await services.getItemBy({ username: user.username })
     if (userFind) {
       return null
     } else {
       const salt = bcrypt.genSaltSync(10)
       const hashedPassword = bcrypt.hashSync(user.password!, salt)
-      const newUser = await services.createNew({ ...user, password: hashedPassword })
+      const newUser = await services.createNewItem({ ...user, password: hashedPassword })
 
       if (newUser) {
         return newUser
@@ -36,7 +36,7 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
 
 export const loginUser = async (username: string, password: string): Promise<UserSchema | null | any> => {
   try {
-    const userFind = await services.getByusername(username)
+    const userFind = await services.getItemBy({ username: username })
     if (userFind) {
       const passwordCompare = bcrypt.compareSync(password, userFind.password)
       if (passwordCompare) {
