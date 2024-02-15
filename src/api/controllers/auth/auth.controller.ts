@@ -92,4 +92,25 @@ export default class AuthController {
       return res.formatter.unauthorized({ message: `${error}` })
     }
   }
+
+  userRolesFromAccessToken = async (req: Request, res: Response) => {
+    try {
+      const accessTokenFromHeaders = String(req.headers.authorization)
+
+      if (!accessTokenFromHeaders) return res.formatter.notFound({ message: 'Access token is not found!' })
+      const userFromAccessToken = await service.getItemBy({ accessToken: accessTokenFromHeaders })
+      if (!userFromAccessToken) return res.formatter.notFound({ message: 'Can not found user from access token!' })
+      const jwtVerified = <any>jwt.verify(userFromAccessToken.accessToken, appConfig.secretKey)
+      if (!jwtVerified) res.formatter.unauthorized({ message: 'Can not verify access token, please login again!' })
+      const { username, password } = jwtVerified
+      const userFound = await service.getItemBy({ username: username })
+      if (!userFound)
+        return res.formatter.notFound({ message: `Can not find user on database with username: ${username}` })
+      const userRoles = await userRoleService.getItemsBy({ userID: userFound.id })
+      if (!userRoles) return res.formatter.notFound({ message: 'Can not get user roles!' })
+      return res.formatter.ok({ data: userRoles })
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
 }

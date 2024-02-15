@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import AuthController from '~/controllers/auth/auth.controller'
 import UserController from '~/controllers/user.controller'
+import { isAuthentication } from '../middleware/auth.middleware'
 import { validationRules } from '../middleware/request-validator'
 
 class UserRoute {
@@ -32,6 +33,8 @@ class UserRoute {
     )
 
     this.router.get('/check-admin', this.authController.checkAdmin)
+
+    this.router.get('/user-roles', [isAuthentication], this.authController.userRolesFromAccessToken)
 
     this.router.post(
       '/refresh',
