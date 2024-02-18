@@ -173,6 +173,27 @@ export const updateItemsBy = async (
   }
 }
 
+export const deleteItemsByUserID = async (userID: number): Promise<undefined | UserRoleSchema[]> => {
+  try {
+    const recordsToDelete = await UserRoleSchema.findAll({
+      where: {
+        userID: userID
+      }
+    })
+    // Xoá các bản ghi không còn trong danh sách
+    await UserRoleSchema.destroy({
+      where: {
+        roleID: recordsToDelete.map((record) => record.roleID)
+      }
+    })
+    // Trả về danh sách cập nhật sau xử lý
+    return recordsToDelete
+  } catch (error) {
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
+  }
+}
+
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {

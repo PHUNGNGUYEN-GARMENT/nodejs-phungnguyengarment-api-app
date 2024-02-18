@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { User } from '~/models/user.model'
+import * as userRoleService from '~/services/user-role.service'
 import * as service from '~/services/user.service'
 import { RequestBodyType } from '~/type'
 import { message } from '../utils/constant'
@@ -12,9 +13,7 @@ export default class UserController {
 
   createNewItem = async (req: Request, res: Response) => {
     const itemRequest: User = {
-      username: req.body.username,
-      password: req.body.password,
-      isAdmin: req.body.isAdmin,
+      ...req.body,
       status: req.body.status ?? 'active'
     }
     try {
@@ -96,6 +95,8 @@ export default class UserController {
     try {
       const item = await service.deleteItemByPk(id)
       if (item) {
+        const roleItemsToDelete = await userRoleService.deleteItemsByUserID(id)
+        if (!roleItemsToDelete) return res.formatter.badRequest({ message: 'Can not delete user roles!' })
         return res.formatter.ok({ message: message.DELETED })
       }
       return res.formatter.badRequest({ message: message.DELETE_FAILED })

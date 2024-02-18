@@ -1,6 +1,8 @@
 import { Application } from 'express'
 import productRoute from '~/routes/product.route'
+import { isAuthentication } from '../middleware/auth.middleware'
 import accessoryNoteRoute from './accessory-note.route'
+import authRoute from './auth/auth.route'
 import colorRoute from './color.route'
 import completionRoute from './completion.route'
 import cuttingGroupRoute from './cutting-group.route'
@@ -21,24 +23,25 @@ import userRoute from './user.route'
 
 export default class AppRoutes {
   constructor(app: Application) {
-    app.use('/api/users', userRoute)
-    app.use('/api/roles', roleRoute)
-    app.use('/api/user-roles', userRoleRoute)
-    app.use('/api/colors', colorRoute)
-    app.use('/api/groups', groupRoute)
-    app.use('/api/prints', printRoute)
-    app.use('/api/products', productRoute)
-    app.use('/api/sample-sewings', sampleSewingRoute)
-    app.use('/api/sewing-lines', sewingLineRoute)
-    app.use('/api/importations', importationRoute)
-    app.use('/api/product-groups', productGroupRoute)
-    app.use('/api/product-colors', productColorRoute)
-    app.use('/api/accessory-notes', accessoryNoteRoute)
-    app.use('/api/printable-places', printablePlaceRoute)
-    app.use('/api/garment-accessories', garmentAccessoryRoute)
-    app.use('/api/sewing-line-deliveries', sewingLineDeliveryRoute)
-    app.use('/api/garment-accessory-notes', garmentAccessoryNoteRoute)
-    app.use('/api/cutting-groups', cuttingGroupRoute)
-    app.use('/api/completions', completionRoute)
+    app.use('/api/users/auth', authRoute)
+    app.use('/api/users', [isAuthentication], userRoute)
+    app.use('/api/roles', [isAuthentication], roleRoute)
+    app.use('/api/user-roles', [isAuthentication], userRoleRoute)
+    app.use('/api/colors', [isAuthentication], colorRoute)
+    app.use('/api/groups', [isAuthentication], groupRoute)
+    app.use('/api/prints', [isAuthentication], printRoute)
+    app.use('/api/products', [isAuthentication], productRoute)
+    app.use('/api/sample-sewings', [isAuthentication], sampleSewingRoute)
+    app.use('/api/sewing-lines', [isAuthentication], sewingLineRoute)
+    app.use('/api/importations', [isAuthentication], importationRoute)
+    app.use('/api/product-groups', [isAuthentication], productGroupRoute)
+    app.use('/api/product-colors', [isAuthentication], productColorRoute)
+    app.use('/api/accessory-notes', [isAuthentication], accessoryNoteRoute)
+    app.use('/api/printable-places', [isAuthentication], printablePlaceRoute)
+    app.use('/api/garment-accessories', [isAuthentication], garmentAccessoryRoute)
+    app.use('/api/sewing-line-deliveries', [isAuthentication], sewingLineDeliveryRoute)
+    app.use('/api/garment-accessory-notes', [isAuthentication], garmentAccessoryNoteRoute)
+    app.use('/api/cutting-groups', [isAuthentication], cuttingGroupRoute)
+    app.use('/api/completions', [isAuthentication], completionRoute)
   }
 }

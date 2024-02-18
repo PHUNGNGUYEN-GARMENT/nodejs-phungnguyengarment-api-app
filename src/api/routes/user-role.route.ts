@@ -48,7 +48,10 @@ class UserRoleRoute {
 
     this.router.post(
       '/updateItems/userID/:userID',
-      validationRules([{ field: 'userID', fieldType: 'int', location: 'params' }]),
+      validationRules([
+        { field: 'userID', fieldType: 'int', location: 'params' },
+        { field: 'roleIDs', fieldType: 'array', location: 'body' }
+      ]),
       this.controller.updateItemsByUserID
     )
 

@@ -10,6 +10,7 @@ export type UserRole =
   | 'accessory_manager'
   | 'cutting_group_manager'
   | 'completion_manager'
+  | 'sewing_line_manager'
   | 'staff'
 
 export type RequestBodyType = {

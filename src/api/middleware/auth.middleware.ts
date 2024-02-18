@@ -33,12 +33,12 @@ export const isAuthentication = async (req: Request, res: Response, next: NextFu
   // if (!jwtVerified) res.formatter.unauthorized({ message: '123' })
 
   try {
-    const userFound = await userService.getItemBy({ accessToken: accessTokenFromHeaders })
-    if (!userFound) return res.formatter.unauthorized({ message: 'Access key is not valid!' })
+    // const userFound = await userService.getItemBy({ accessToken: accessTokenFromHeaders })
+    if (!accessTokenFromHeaders) return res.formatter.unauthorized({})
     jwtPayload = <any>jwt.verify(accessTokenFromHeaders, appConfig.secretKey)
     res.locals.jwtPayload = jwtPayload
   } catch (error: any) {
-    return res.formatter.unauthorized({ message: `${error.message}` })
+    return res.formatter.unauthorized({})
   }
 
   const { username, password } = jwtPayload

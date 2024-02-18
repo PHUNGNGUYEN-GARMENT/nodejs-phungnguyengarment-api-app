@@ -91,13 +91,11 @@ export default class UserRoleController {
   updateItemsByUserID = async (req: Request, res: Response) => {
     try {
       const userID = Number(req.params.userID)
-      const itemRequest: UserRole[] = req.body
-      const itemUpdated = await service.updateItemsBy(
-        { field: 'userID', id: userID },
-        itemRequest.map((item) => {
-          return { ...item, status: 'active' }
-        })
-      )
+      const roleIDs: number[] = req.body.roleIDs
+      const itemRequest: UserRole[] = roleIDs.map((roleID) => {
+        return { userID: userID, roleID: roleID, status: 'active' } as UserRole
+      })
+      const itemUpdated = await service.updateItemsBy({ field: 'userID', id: userID }, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }
@@ -106,11 +104,22 @@ export default class UserRoleController {
       return res.formatter.badRequest({ message: `${error}` })
     }
   }
-
   deleteItemByPk = async (req: Request, res: Response) => {
     const id = Number(req.params.id)
     try {
       const item = await service.deleteItemByPk(id)
+      if (item) {
+        return res.formatter.ok({ message: message.DELETED })
+      }
+      return res.formatter.notFound({ message: message.DELETE_FAILED })
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+  deleteItemsByUserID = async (req: Request, res: Response) => {
+    const userID = Number(req.params.userID)
+    try {
+      const item = await service.deleteItemsByUserID(userID)
       if (item) {
         return res.formatter.ok({ message: message.DELETED })
       }

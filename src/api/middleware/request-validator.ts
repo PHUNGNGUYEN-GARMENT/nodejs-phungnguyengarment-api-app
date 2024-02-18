@@ -5,7 +5,7 @@ import { validators } from '../utils/constant'
 type RuleType = {
   location: Location
   field: string
-  fieldType: 'string' | 'int' | 'float' | 'date' | 'boolean' | 'object'
+  fieldType: 'string' | 'int' | 'float' | 'date' | 'boolean' | 'object' | 'array'
   required?: boolean
 }
 
@@ -67,6 +67,14 @@ export const validationRules = (rules: RuleType[]) => {
           .withMessage(validators.ROLE_IS_EMPTY)
           .isString()
           .withMessage(validators.ROLE_MUST_BE_DATE_TYPE)
+      case 'array':
+        return validationChain
+          .exists()
+          .withMessage(validators.ROLE_DOES_NOT_EXIST)
+          .notEmpty()
+          .withMessage(validators.ROLE_IS_EMPTY)
+          .isArray()
+          .withMessage(validators.ROLE_MUST_BE_ARRAY_TYPE)
       default:
         return validationChain
           .exists()
