@@ -76,8 +76,7 @@ export const updateItemByPk = async (id: number, item: Print): Promise<Print | u
   try {
     const affectedRows = await PrintSchema.update(
       {
-        name: item.name,
-        status: item.status
+        ...item
       },
       {
         where: {

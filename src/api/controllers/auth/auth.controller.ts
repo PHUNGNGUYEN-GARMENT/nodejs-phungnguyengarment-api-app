@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { message } from '~/api/utils/constant'
-import { tokenGenerator, verifyToken } from '~/api/utils/token-generation'
+import { otpGenerator, tokenGenerator, verifyToken } from '~/api/utils/token-generation'
 import appConfig from '~/config/app.config'
+import { mailOptions, transporter } from '~/config/nodemailer.config'
 import { User } from '~/models/user.model'
 import * as userRoleService from '~/services/user-role.service'
 import * as service from '~/services/user.service'
@@ -14,14 +15,14 @@ export default class AuthController {
   constructor() {}
 
   register = async (req: Request, res: Response) => {
-    const userRequest: User = {
-      username: req.body.username.toLowerCase(),
-      password: req.body.password,
-      isAdmin: req.body.isAdmin,
-      status: req.body.status ?? 'active'
-    }
     try {
-      const userFound = await service.getItemBy({ username: userRequest.username })
+      const userRequest: User = {
+        email: req.body.email.toLowerCase(),
+        password: req.body.password,
+        isAdmin: req.body.isAdmin,
+        status: req.body.status ?? 'active'
+      }
+      const userFound = await service.getItemBy({ email: userRequest.email })
       if (userFound) {
         return res.formatter.badRequest({ message: 'User is already exist!' })
       } else {
@@ -40,16 +41,16 @@ export default class AuthController {
 
   login = async (req: Request, res: Response) => {
     const itemRequest = {
-      username: req.body.username.toLowerCase(),
+      email: req.body.email.toLowerCase(),
       password: req.body.password
     }
     try {
-      const userFound = await service.getItemBy({ username: itemRequest.username })
+      const userFound = await service.getItemBy({ email: itemRequest.email })
       // Check password
       if (userFound && itemRequest.password !== userFound?.password)
         return res.formatter.unauthorized({ message: 'Password is not correct!' })
       if (!userFound) return res.formatter.badRequest({ message: 'User not found!' })
-      const accessToken = tokenGenerator({ username: userFound.username, password: userFound.password })
+      const accessToken = tokenGenerator({ email: userFound.email, password: userFound.password })
       if (!accessToken) return res.formatter.unauthorized({ message: message.LOGIN_FAILED })
       await service.updateItemByPk(userFound.id, { accessToken: accessToken }) // Update refresh token if token is not existing database
       return res.formatter.ok({
@@ -61,12 +62,54 @@ export default class AuthController {
     }
   }
 
+  sendEmailOTPCode = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.params
+      const otp = otpGenerator(6)
+      await transporter
+        .sendMail(mailOptions(email, otp))
+        .then(async () => {
+          const itemUpdated = await service.updateItemByEmail(email, { otp: otp })
+          if (!itemUpdated) return res.formatter.badGateway({})
+          return res.formatter.ok({
+            message: `We have sent an authentication otp code to your email address, please check your email!`
+          })
+        })
+        .catch((err) => {
+          return res.formatter.badGateway(`${err}`)
+        })
+    } catch (err) {
+      return res.formatter.badRequest({ message: `${err}` })
+    }
+  }
+
+  verifyOTP = async (req: Request, res: Response) => {
+    const { email } = req.params
+    const { otp } = req.body
+    try {
+      const userFound = await service.getItemBy({ email: email })
+      if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
+      if (otp === userFound.otp) {
+        await service
+          .updateItemByEmail(userFound.email, { otp: null })
+          .then((user) => {
+            return res.formatter.ok({ data: user })
+          })
+          .catch((err) => {
+            return res.formatter.badRequest({ message: `${err}` })
+          })
+      }
+      return res.formatter.badGateway({ message: 'OTP code is incorrect!!!' })
+    } catch (err) {
+      return res.formatter.badRequest({ message: `${err}` })
+    }
+  }
+
   checkAdmin = async (req: Request, res: Response) => {
     const accessTokenFromHeaders = String(req.headers.authorization)
     let jwtPayload
     const jwtVerified = verifyToken(accessTokenFromHeaders)
     if (!jwtVerified) res.formatter.unauthorized({ message: '123' })
-
     try {
       const userFound = await service.getItemBy({ accessToken: accessTokenFromHeaders })
       if (!userFound) return res.formatter.unauthorized({ message: 'Access key is not valid!' })
@@ -79,7 +122,7 @@ export default class AuthController {
     const { username, password } = jwtPayload
 
     try {
-      const userFound = await service.getItemBy({ username: username, password: password })
+      const userFound = await service.getItemBy({ email: username, password: password })
       if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
       const userRoles = await userRoleService.getItemsBy({ userID: userFound.id })
       if (!userRoles) return res.formatter.notFound({ message: 'User role not found!' })
@@ -102,10 +145,9 @@ export default class AuthController {
       if (!userFromAccessToken) return res.formatter.notFound({ message: 'Can not found user from access token!' })
       const jwtVerified = <any>jwt.verify(userFromAccessToken.accessToken, appConfig.secretKey)
       if (!jwtVerified) res.formatter.unauthorized({ message: 'Can not verify access token, please login again!' })
-      const { username, password } = jwtVerified
-      const userFound = await service.getItemBy({ username: username })
-      if (!userFound)
-        return res.formatter.notFound({ message: `Can not find user on database with username: ${username}` })
+      const { email, password } = jwtVerified
+      const userFound = await service.getItemBy({ email: email })
+      if (!userFound) return res.formatter.notFound({ message: `Can not find user on database with email: ${email}` })
       const userRoles = await userRoleService.getItemsBy({ userID: userFound.id })
       if (!userRoles) return res.formatter.notFound({ message: 'Can not get user roles!' })
       return res.formatter.ok({ data: userRoles, meta: userFound })
@@ -123,10 +165,9 @@ export default class AuthController {
       if (!userFromAccessToken) return res.formatter.notFound({ message: 'Can not found user from access token!' })
       const jwtVerified = <any>jwt.verify(userFromAccessToken.accessToken, appConfig.secretKey)
       if (!jwtVerified) res.formatter.unauthorized({ message: 'Can not verify access token, please login again!' })
-      const { username, password } = jwtVerified
-      const userFound = await service.getItemBy({ username: username })
-      if (!userFound)
-        return res.formatter.notFound({ message: `Can not find user on database with username: ${username}` })
+      const { email, password } = jwtVerified
+      const userFound = await service.getItemBy({ email: email })
+      if (!userFound) return res.formatter.notFound({ message: `Can not find user on database with email: ${email}` })
       return res.formatter.ok({ data: userFound })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })

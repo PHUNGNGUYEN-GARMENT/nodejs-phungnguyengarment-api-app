@@ -6,10 +6,12 @@ const { INTEGER, STRING, BOOLEAN } = DataType
 export interface User {
   id?: number
   fullName?: string
-  username?: string
+  email?: string
   password?: string
   avatar?: string
   phone?: string
+  otp?: string | null
+  appPassword?: string
   workDescription?: string
   birthday?: string
   isAdmin?: boolean
@@ -29,8 +31,8 @@ export default class UserSchema extends Model<User> {
   @Column({ type: STRING, field: 'full_name' })
   declare fullName: string
 
-  @Column({ type: STRING, field: 'username' })
-  declare username: string
+  @Column({ type: STRING, field: 'email' })
+  declare email: string
 
   @Column({ type: STRING, field: 'password' })
   declare password: string
@@ -40,6 +42,12 @@ export default class UserSchema extends Model<User> {
 
   @Column({ type: STRING, field: 'phone' })
   declare phone: string
+
+  @Column({ type: STRING, field: 'otp' })
+  declare otp: string
+
+  @Column({ type: STRING, field: 'app_password' })
+  declare appPassword: string
 
   @Column({ type: BOOLEAN, field: 'is_admin' })
   declare isAdmin: boolean

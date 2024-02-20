@@ -76,9 +76,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: AccessoryNote): P
   try {
     const affectedRows = await AccessoryNoteSchema.update(
       {
-        title: itemToUpdate.title,
-        summary: itemToUpdate.summary,
-        status: itemToUpdate.status
+        ...itemToUpdate
       },
       {
         where: {

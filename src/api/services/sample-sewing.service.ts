@@ -85,16 +85,7 @@ export const updateItemByPk = async (id: number, itemToUpdate: SampleSewing): Pr
   try {
     const affectedRows = await SampleSewingSchema.update(
       {
-        productID: itemToUpdate.productID,
-        dateSubmissionNPL: itemToUpdate.dateSubmissionNPL,
-        dateApprovalPP: itemToUpdate.dateApprovalPP,
-        dateApprovalSO: itemToUpdate.dateApprovalSO,
-        dateSubmissionFirstTime: itemToUpdate.dateSubmissionFirstTime,
-        dateSubmissionSecondTime: itemToUpdate.dateSubmissionSecondTime,
-        dateSubmissionThirdTime: itemToUpdate.dateSubmissionThirdTime,
-        dateSubmissionForthTime: itemToUpdate.dateSubmissionForthTime,
-        dateSubmissionFifthTime: itemToUpdate.dateSubmissionFifthTime,
-        status: itemToUpdate.status
+        ...itemToUpdate
       },
       {
         where: {
@@ -116,16 +107,7 @@ export const updateItemByProductID = async (
   try {
     const affectedRows = await SampleSewingSchema.update(
       {
-        productID: itemToUpdate.productID,
-        dateSubmissionNPL: itemToUpdate.dateSubmissionNPL,
-        dateApprovalPP: itemToUpdate.dateApprovalPP,
-        dateApprovalSO: itemToUpdate.dateApprovalSO,
-        dateSubmissionFirstTime: itemToUpdate.dateSubmissionFirstTime,
-        dateSubmissionSecondTime: itemToUpdate.dateSubmissionSecondTime,
-        dateSubmissionThirdTime: itemToUpdate.dateSubmissionThirdTime,
-        dateSubmissionForthTime: itemToUpdate.dateSubmissionForthTime,
-        dateSubmissionFifthTime: itemToUpdate.dateSubmissionFifthTime,
-        status: itemToUpdate.status
+        ...itemToUpdate
       },
       {
         where: {

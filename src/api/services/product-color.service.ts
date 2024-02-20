@@ -108,8 +108,7 @@ export const updateItemByPk = async (
   try {
     const updatedCount = await ProductColorSchema.update(
       {
-        colorID: itemToUpdate.colorID,
-        status: itemToUpdate.status
+        ...itemToUpdate
       },
       {
         where: {
@@ -131,8 +130,7 @@ export const updateItemBy = async (
   try {
     const updatedCount = await ProductColorSchema.update(
       {
-        colorID: itemToUpdate.colorID,
-        status: itemToUpdate.status
+        ...itemToUpdate
       },
       {
         where: {
@@ -156,9 +154,7 @@ export const createOrUpdateItemByPk = async (
     if (getItem) {
       const updatedCount = await ProductColorSchema.update(
         {
-          colorID: item.colorID,
-          productID: item.productID,
-          status: item.status
+          ...item
         },
         {
           where: {
@@ -183,8 +179,7 @@ export const createOrUpdateItemBy = async (
   try {
     const affectedRows = await ProductColorSchema.update(
       {
-        colorID: item.colorID,
-        status: item.status
+        ...item
       },
       {
         where: {

@@ -77,8 +77,7 @@ export const updateItemByPk = async (id: number, item: Group): Promise<Group | u
   try {
     const affectedRows = await GroupSchema.update(
       {
-        name: item.name,
-        status: item.status
+        ...item
       },
       {
         where: {

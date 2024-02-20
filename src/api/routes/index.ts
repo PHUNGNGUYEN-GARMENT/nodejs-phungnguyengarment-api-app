@@ -24,7 +24,7 @@ import userRoute from './user.route'
 export default class AppRoutes {
   constructor(app: Application) {
     app.use('/api/users/auth', authRoute)
-    app.use('/api/users', [isAuthentication], userRoute)
+    app.use('/api/users', userRoute)
     app.use('/api/roles', [isAuthentication], roleRoute)
     app.use('/api/user-roles', [isAuthentication], userRoleRoute)
     app.use('/api/colors', [isAuthentication], colorRoute)

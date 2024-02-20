@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { check } from 'express-validator'
+import { validationRules } from '~/api/middleware/request-validator'
 import { validators } from '~/api/utils/constant'
 import AuthController from '~/controllers/auth/auth.controller'
 
@@ -43,6 +44,21 @@ class AuthRoute {
         .withMessage(validators.PASSWORD_LENGTH_MUST_BE_MORE_THAN_8),
       check('role').exists().withMessage(validators.ROLE_IS_EMPTY).isString().withMessage(validators.ROLE_IS_NOT_VALID),
       this.controller.register
+    )
+
+    this.router.post(
+      '/send-email/:email',
+      validationRules([{ field: 'email', fieldType: 'string', location: 'params' }]),
+      this.controller.sendEmailOTPCode
+    )
+
+    this.router.post(
+      '/verify-otp/:email',
+      validationRules([
+        { field: 'email', fieldType: 'string', location: 'params' },
+        { field: 'otp', fieldType: 'string', location: 'body' }
+      ]),
+      this.controller.verifyOTP
     )
   }
 }

@@ -168,9 +168,7 @@ export const createOrUpdateItemByPk = async (
   try {
     const affectedRows = await ProductGroupSchema.update(
       {
-        groupID: item.groupID,
-        productID: item.productID,
-        status: item.status
+        ...item
       },
       {
         where: {
@@ -196,8 +194,7 @@ export const createOrUpdateItemBy = async (
   try {
     const affectedRows = await ProductGroupSchema.update(
       {
-        groupID: item.groupID,
-        status: item.status
+        ...item
       },
       {
         where: {

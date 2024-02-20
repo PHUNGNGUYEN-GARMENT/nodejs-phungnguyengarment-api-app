@@ -41,10 +41,10 @@ export default class UserController {
     }
   }
 
-  getItemByUsername = async (req: Request, res: Response) => {
-    const username = String(req.params.username)
+  getItemByEmail = async (req: Request, res: Response) => {
+    const email = String(req.params.email)
     try {
-      const item = await service.getItemBy({ username: username })
+      const item = await service.getItemBy({ email: email })
       if (item) {
         return res.formatter.ok({ data: item, message: message.SUCCESS })
       }
@@ -69,6 +69,22 @@ export default class UserController {
         total: bodyRequest.search.term.length > 0 ? items.count : total.length,
         message: message.SUCCESS
       })
+    } catch (error) {
+      return res.formatter.badRequest({ message: `${error}` })
+    }
+  }
+
+  updateUserByEmail = async (req: Request, res: Response) => {
+    const email = req.params.email
+    const itemRequest: User = {
+      ...req.body
+    }
+    try {
+      const itemUpdated = await service.updateItemByEmail(email, itemRequest)
+      if (itemUpdated) {
+        return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
+      }
+      return res.formatter.badRequest({ message: message.UPDATE_FAILED })
     } catch (error) {
       return res.formatter.badRequest({ message: `${error}` })
     }

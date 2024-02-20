@@ -76,9 +76,7 @@ export const updateItemByPk = async (id: number, item: Color): Promise<Color | u
   try {
     const affectedRows = await ColorSchema.update(
       {
-        name: item.name,
-        hexColor: item.hexColor,
-        status: item.status
+        ...item
       },
       {
         where: {

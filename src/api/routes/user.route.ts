@@ -64,9 +64,9 @@ class UserRoute {
 
     // Get item
     this.router.get(
-      '/username/:username',
-      validationRules([{ field: 'username', fieldType: 'string', location: 'params' }]),
-      this.controller.getItemByUsername
+      '/email/:email',
+      validationRules([{ field: 'email', fieldType: 'string', location: 'params' }]),
+      this.controller.getItemByEmail
     )
 
     // Get all items
@@ -79,6 +79,13 @@ class UserRoute {
         { field: 'sorting', fieldType: 'object', location: 'body' }
       ]),
       this.controller.getAllUsers
+    )
+
+    // Update item by productID and importedID
+    this.router.put(
+      '/email/:email',
+      validationRules([{ field: 'email', fieldType: 'string', location: 'params' }]),
+      this.controller.updateUserByEmail
     )
 
     // Update item by productID and importedID

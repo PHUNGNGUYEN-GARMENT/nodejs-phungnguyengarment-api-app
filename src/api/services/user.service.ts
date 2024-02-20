@@ -92,6 +92,24 @@ export const updateItemByPk = async (id: number, item: User): Promise<User | und
   }
 }
 
+// Update by productID
+export const updateItemByEmail = async (email: string, itemToUpdate: User): Promise<User | undefined> => {
+  try {
+    const affectedRows = await UserSchema.update(
+      { ...itemToUpdate },
+      {
+        where: {
+          email: email
+        }
+      }
+    )
+    return affectedRows[0] > 0 ? itemToUpdate : undefined
+  } catch (error) {
+    logging.error(NAMESPACE, `${error}`)
+    throw new Error(`${error}`)
+  }
+}
+
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {

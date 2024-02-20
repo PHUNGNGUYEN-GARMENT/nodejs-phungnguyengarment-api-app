@@ -8,10 +8,10 @@ import { UserRole } from '~/type'
 export const checkRole = (roles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     //Get the user ID from previous midleware
-    const username = res.locals.jwtPayload.username
+    const username = res.locals.jwtPayload.email
     //Get user role from the database
     try {
-      const userFound = await userService.getItemBy({ username: username })
+      const userFound = await userService.getItemBy({ email: username })
       if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
       const userRolesFound = await userRoleService.getItemsBy({ userID: userFound.id })
       if (!userRolesFound) return res.formatter.notFound({ message: 'User not found' })
@@ -44,7 +44,7 @@ export const isAuthentication = async (req: Request, res: Response, next: NextFu
   const { username, password } = jwtPayload
 
   try {
-    const userFound = await userService.getItemBy({ username: username, password: password })
+    const userFound = await userService.getItemBy({ email: username, password: password })
     if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
   } catch (error) {
     return res.formatter.unauthorized({ message: `${error}` })

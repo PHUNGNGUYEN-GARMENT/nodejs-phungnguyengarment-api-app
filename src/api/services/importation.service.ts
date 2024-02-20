@@ -87,9 +87,7 @@ export const updateItemByPk = async (id: number, item: Importation): Promise<Imp
   try {
     const affectedRows = await ImportationSchema.update(
       {
-        quantity: item.quantity,
-        dateImported: item.dateImported,
-        status: item.status
+        ...item
       },
       {
         where: {
@@ -108,9 +106,7 @@ export const updateItemByProductID = async (productID: number, item: Importation
   try {
     const affectedRows = await ImportationSchema.update(
       {
-        quantity: item.quantity,
-        dateImported: item.dateImported,
-        status: item.status
+        ...item
       },
       {
         where: {

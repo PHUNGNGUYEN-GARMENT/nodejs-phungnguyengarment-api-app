@@ -14,7 +14,7 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
      * If user is already existing => send request "User already exists"
      * If user not found => Create new user
      */
-    const userFind = await services.getItemBy({ username: user.username })
+    const userFind = await services.getItemBy({ email: user.email })
     if (userFind) {
       return null
     } else {
@@ -34,9 +34,9 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
   }
 }
 
-export const loginUser = async (username: string, password: string): Promise<UserSchema | null | any> => {
+export const loginUser = async (email: string, password: string): Promise<UserSchema | null | any> => {
   try {
-    const userFind = await services.getItemBy({ username: username })
+    const userFind = await services.getItemBy({ email: username })
     if (userFind) {
       const passwordCompare = bcrypt.compareSync(password, userFind.password)
       if (passwordCompare) {

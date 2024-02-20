@@ -31,9 +31,7 @@ export const createOrUpdateItemByPk = async (
   try {
     const affectedRows = await PrintablePlaceSchema.update(
       {
-        printID: item.printID,
-        productID: item.productID,
-        status: item.status
+        ...item
       },
       {
         where: {
@@ -59,8 +57,7 @@ export const createOrUpdateItemByProductID = async (
   try {
     const affectedRows = await PrintablePlaceSchema.update(
       {
-        printID: item.printID,
-        status: item.status
+        ...item
       },
       {
         where: {
@@ -86,8 +83,7 @@ export const createOrUpdateItemByPrintID = async (
   try {
     const affectedRows = await PrintablePlaceSchema.update(
       {
-        productID: item.productID,
-        status: item.status
+        ...item
       },
       {
         where: {
