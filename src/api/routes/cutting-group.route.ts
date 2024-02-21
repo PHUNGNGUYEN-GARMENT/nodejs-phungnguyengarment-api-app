@@ -15,9 +15,9 @@ class CuttingGroupRoute {
     this.router.post(
       '/',
       validationRules([
-        { field: 'productID', fieldType: 'int', location: 'body' },
-        { field: 'quantityRealCut', fieldType: 'float', location: 'body' },
-        { field: 'timeCut', fieldType: 'date', location: 'body' }
+        { field: 'productID', fieldType: 'int', location: 'body' }
+        // { field: 'quantityRealCut', fieldType: 'float', location: 'body' },
+        // { field: 'timeCut', fieldType: 'date', location: 'body' }
       ]),
       this.controller.createNewItem
     )
