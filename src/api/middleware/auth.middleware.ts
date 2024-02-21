@@ -41,10 +41,10 @@ export const isAuthentication = async (req: Request, res: Response, next: NextFu
     return res.formatter.unauthorized({})
   }
 
-  const { username, password } = jwtPayload
+  const { email, password } = jwtPayload
 
   try {
-    const userFound = await userService.getItemBy({ email: username, password: password })
+    const userFound = await userService.getItemBy({ email: email, password: password })
     if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
   } catch (error) {
     return res.formatter.unauthorized({ message: `${error}` })
