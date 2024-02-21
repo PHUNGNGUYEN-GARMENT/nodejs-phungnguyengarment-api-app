@@ -89,17 +89,15 @@ export default class AuthController {
     try {
       const userFound = await service.getItemBy({ email: email })
       if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
-      if (otp === userFound.otp) {
-        await service
-          .updateItemByEmail(userFound.email, { otp: null })
-          .then((user) => {
-            return res.formatter.ok({ data: user })
-          })
-          .catch((err) => {
-            return res.formatter.badRequest({ message: `${err}` })
-          })
-      }
-      return res.formatter.badGateway({ message: 'OTP code is incorrect!!!' })
+      if (otp !== userFound.otp) return res.formatter.badGateway({ message: 'OTP code is incorrect!!!' })
+      await service
+        .updateItemByPk(userFound.id, { otp: null })
+        .then((user) => {
+          return res.formatter.ok({ data: user })
+        })
+        .catch((err) => {
+          throw new Error(`${err}`)
+        })
     } catch (err) {
       return res.formatter.badRequest({ message: `${err}` })
     }

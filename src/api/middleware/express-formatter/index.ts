@@ -37,7 +37,7 @@ const _generateFormatters = (res: Response) => {
 
   methods.map((method: Method) => {
     formatter[method.type] = (response: ResponseStory) => {
-      res.status(method.status).json({
+      return res.status(method.status).json({
         success: method.status < 400,
         message: response.message ? response.message : method.message,
         data: response.data,
