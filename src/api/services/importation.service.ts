@@ -102,25 +102,6 @@ export const updateItemByPk = async (id: number, item: Importation): Promise<Imp
   }
 }
 
-export const updateItemByProductID = async (productID: number, item: Importation): Promise<Importation | undefined> => {
-  try {
-    const affectedRows = await ImportationSchema.update(
-      {
-        ...item
-      },
-      {
-        where: {
-          productID: productID
-        }
-      }
-    )
-    return affectedRows[0] > 0 ? item : undefined
-  } catch (error) {
-    logging.error(NAMESPACE, `Error updateByProductID :: ${error}`)
-    throw new Error(`updateByProductID :: ${error}`)
-  }
-}
-
 // Delete importedID
 export const deleteItemByPk = async (id: number): Promise<number> => {
   try {

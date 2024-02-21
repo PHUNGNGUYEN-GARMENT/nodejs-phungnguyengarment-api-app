@@ -93,25 +93,6 @@ export default class ImportationController {
     }
   }
 
-  updateItemByProductID = async (req: Request, res: Response) => {
-    try {
-      const productID = Number(req.params.productID)
-      const itemRequest: Importation = {
-        dateImported: req.body.dateImported,
-        status: req.body.status ?? 'active',
-        quantity: req.body.quantity
-      }
-      const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
-      if (itemUpdated) {
-        return res.formatter.ok({ data: itemUpdated, message: message.UPDATE_FAILED })
-      } else {
-        return res.formatter.badRequest({ message: message.UPDATE_FAILED })
-      }
-    } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
-    }
-  }
-
   createOrUpdateItemByPk = async (req: Request, res: Response) => {
     try {
       const id = Number(req.params.id)
@@ -141,34 +122,34 @@ export default class ImportationController {
     }
   }
 
-  createOrUpdateItemByProductID = async (req: Request, res: Response) => {
-    try {
-      const productID = Number(req.params.productID)
-      const itemRequest: Importation = {
-        dateImported: req.body.dateImported,
-        status: req.body.status ?? 'active',
-        quantity: req.body.quantity
-      }
-      const itemFound = await service.getItemByProductID(productID)
-      if (itemFound) {
-        const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
-        if (itemUpdated) {
-          return res.formatter.ok({ data: itemUpdated, message: message.UPDATE_FAILED })
-        } else {
-          return res.formatter.badRequest({ message: message.UPDATE_FAILED })
-        }
-      } else {
-        const itemCreated = await service.createNewItem(itemRequest)
-        if (itemCreated) {
-          return res.formatter.created({ data: itemCreated, message: message.CREATED })
-        } else {
-          return res.formatter.badRequest({ message: message.CREATION_FAILED })
-        }
-      }
-    } catch (error) {
-      return res.formatter.badRequest({ message: `${error}` })
-    }
-  }
+  // createOrUpdateItemByProductID = async (req: Request, res: Response) => {
+  //   try {
+  //     const productID = Number(req.params.productID)
+  //     const itemRequest: Importation = {
+  //       dateImported: req.body.dateImported,
+  //       status: req.body.status ?? 'active',
+  //       quantity: req.body.quantity
+  //     }
+  //     const itemFound = await service.getItemByProductID(productID)
+  //     if (itemFound) {
+  //       const itemUpdated = await service.updateItemByProductID(productID, itemRequest)
+  //       if (itemUpdated) {
+  //         return res.formatter.ok({ data: itemUpdated, message: message.UPDATE_FAILED })
+  //       } else {
+  //         return res.formatter.badRequest({ message: message.UPDATE_FAILED })
+  //       }
+  //     } else {
+  //       const itemCreated = await service.createNewItem(itemRequest)
+  //       if (itemCreated) {
+  //         return res.formatter.created({ data: itemCreated, message: message.CREATED })
+  //       } else {
+  //         return res.formatter.badRequest({ message: message.CREATION_FAILED })
+  //       }
+  //     }
+  //   } catch (error) {
+  //     return res.formatter.badRequest({ message: `${error}` })
+  //   }
+  // }
 
   deleteItemByPk = async (req: Request, res: Response) => {
     try {

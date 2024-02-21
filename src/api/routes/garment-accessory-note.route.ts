@@ -113,6 +113,15 @@ class GarmentAccessoryNoteRoute {
       this.controller.updateItemByGarmentAccessoryID
     )
 
+    this.router.post(
+      '/updateItems/productID/:productID',
+      validationRules([
+        { field: 'productID', fieldType: 'int', location: 'params' },
+        { field: 'garmentAccessoryNotes', fieldType: 'array', location: 'body' }
+      ]),
+      this.controller.updateItemsByProductID
+    )
+
     // Delete item
     this.router.delete(
       '/:id',

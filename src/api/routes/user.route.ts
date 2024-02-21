@@ -12,26 +12,23 @@ class UserRoute {
   }
 
   private initialize() {
-    // Create new item
     this.router.post(
-      '/register',
+      '/',
       validationRules([
-        { field: 'username', fieldType: 'string', location: 'body' },
+        { field: 'email', fieldType: 'string', location: 'body' },
         { field: 'password', fieldType: 'string', location: 'body' }
       ]),
-      this.authController.register
+      this.controller.createNewItem
     )
 
     this.router.post(
       '/login',
       validationRules([
-        { field: 'username', fieldType: 'string', location: 'body' },
+        { field: 'email', fieldType: 'string', location: 'body' },
         { field: 'password', fieldType: 'string', location: 'body' }
       ]),
       this.authController.login
     )
-
-    this.router.get('/check-admin', this.authController.checkAdmin)
 
     this.router.get('/user-roles', this.authController.userRolesFromAccessToken)
 
@@ -40,19 +37,10 @@ class UserRoute {
     this.router.post(
       '/refresh',
       validationRules([
-        { field: 'username', fieldType: 'string', location: 'body' },
+        { field: 'email', fieldType: 'string', location: 'body' },
         { field: 'password', fieldType: 'string', location: 'body' }
       ]),
       this.authController.login
-    )
-
-    this.router.post(
-      '/',
-      validationRules([
-        { field: 'username', fieldType: 'string', location: 'body' },
-        { field: 'password', fieldType: 'string', location: 'body' }
-      ]),
-      this.controller.createNewItem
     )
 
     // Get item

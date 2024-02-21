@@ -15,7 +15,7 @@ export const checkRole = (roles: UserRole[]) => {
       if (!userFound) return res.formatter.notFound({ message: 'User not found!' })
       const userRolesFound = await userRoleService.getItemsBy({ userID: userFound.id })
       if (!userRolesFound) return res.formatter.notFound({ message: 'User not found' })
-      if (!userRolesFound.some((userRole) => roles.includes(userRole.role.role as UserRole)) && !userFound.isAdmin)
+      if (!userRolesFound.some((userRole) => roles.includes(userRole.role.role as UserRole)))
         return res.formatter.unauthorized({})
     } catch (error) {
       return res.formatter.unauthorized({ message: `${error}` })

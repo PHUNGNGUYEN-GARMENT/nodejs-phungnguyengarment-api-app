@@ -29,23 +29,6 @@ class AuthRoute {
       this.controller.login
     )
 
-    // Register chanel
-    this.router.post(
-      '/register',
-      check('username')
-        .exists()
-        .withMessage(validators.username_IS_EMPTY)
-        .isString()
-        .withMessage(validators.username_IS_IN_WRONG_FORMAT),
-      check('password')
-        .exists()
-        .withMessage(validators.PASSWORD_IS_EMPTY)
-        .isLength({ min: 8 })
-        .withMessage(validators.PASSWORD_LENGTH_MUST_BE_MORE_THAN_8),
-      check('role').exists().withMessage(validators.ROLE_IS_EMPTY).isString().withMessage(validators.ROLE_IS_NOT_VALID),
-      this.controller.register
-    )
-
     this.router.post(
       '/send-email/:email',
       validationRules([{ field: 'email', fieldType: 'string', location: 'params' }]),

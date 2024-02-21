@@ -28,12 +28,6 @@ class ImportationRoute {
       this.controller.createOrUpdateItemByPk
     )
 
-    this.router.post(
-      '/createOrUpdate/productID/:productID',
-      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
-      this.controller.createOrUpdateItemByProductID
-    )
-
     // Get item
     this.router.get(
       '/:id',
@@ -65,13 +59,6 @@ class ImportationRoute {
       '/:id',
       validationRules([{ field: 'id', fieldType: 'int', location: 'params' }]),
       this.controller.updateItemByPk
-    )
-
-    // Update item by productID and importedID
-    this.router.put(
-      '/productID/:productID',
-      validationRules([{ field: 'productID', fieldType: 'int', location: 'params' }]),
-      this.controller.updateItemByProductID
     )
 
     // Delete item by productID

@@ -179,13 +179,12 @@ export default class GarmentAccessoryNoteController {
   updateItemsByProductID = async (req: Request, res: Response) => {
     try {
       const productID = Number(req.params.productID)
-      const itemRequest: GarmentAccessoryNote[] = req.body
-      const itemUpdated = await service.updateItemsBy(
-        { field: 'productID', id: productID },
-        itemRequest.map((item) => {
-          return { ...item, status: 'active' }
-        })
-      )
+      const garmentAccessoryNotes: GarmentAccessoryNote[] = req.body.garmentAccessoryNotes
+      const itemRequest: GarmentAccessoryNote[] = garmentAccessoryNotes.map((garmentAccessoryNote) => {
+        return { ...garmentAccessoryNote, status: 'active', noteStatus: 'enough' }
+      })
+      // return res.formatter.ok({ data: itemRequest, message: message.UPDATED })
+      const itemUpdated = await service.updateItemsBy({ field: 'productID', id: productID }, itemRequest)
       if (itemUpdated) {
         return res.formatter.ok({ data: itemUpdated, message: message.UPDATED })
       }

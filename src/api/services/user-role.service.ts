@@ -183,7 +183,7 @@ export const deleteItemsByUserID = async (userID: number): Promise<undefined | U
     // Xoá các bản ghi không còn trong danh sách
     await UserRoleSchema.destroy({
       where: {
-        roleID: recordsToDelete.map((record) => record.roleID)
+        userID: recordsToDelete.map((record) => record.userID)
       }
     })
     // Trả về danh sách cập nhật sau xử lý
