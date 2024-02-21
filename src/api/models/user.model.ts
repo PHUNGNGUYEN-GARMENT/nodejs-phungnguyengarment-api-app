@@ -14,7 +14,6 @@ export interface User {
   appPassword?: string
   workDescription?: string
   birthday?: string
-  isAdmin?: boolean
   status?: ItemStatusType
   accessToken?: string
 }
@@ -48,9 +47,6 @@ export default class UserSchema extends Model<User> {
 
   @Column({ type: STRING, field: 'app_password' })
   declare appPassword: string
-
-  @Column({ type: BOOLEAN, field: 'is_admin' })
-  declare isAdmin: boolean
 
   @Column({ type: STRING, field: 'work_description' })
   declare workDescription: string
