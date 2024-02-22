@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
 import * as jwt from 'jsonwebtoken'
 import { message } from '~/api/utils/constant'
-import { otpGenerator, tokenGenerator, verifyToken } from '~/api/utils/token-generation'
+import { otpGenerator, tokenGenerator } from '~/api/utils/token-generation'
 import appConfig from '~/config/app.config'
 import { mailOptions, transporter } from '~/config/nodemailer.config'
-import { User } from '~/models/user.model'
 import * as userRoleService from '~/services/user-role.service'
 import * as service from '~/services/user.service'
 
@@ -41,20 +40,27 @@ export default class AuthController {
     try {
       const { email } = req.params
       const otp = otpGenerator(6)
-      await transporter
-        .sendMail(mailOptions(email, otp))
-        .then(async () => {
-          const itemUpdated = await service.updateItemByEmail(email, { otp: otp })
-          if (!itemUpdated) return res.formatter.badGateway({})
-          return res.formatter.ok({
-            message: `We have sent an authentication otp code to your email address, please check your email!`
+      // Test connection
+      const userFound = await service.getItemBy({ email: email })
+      if (!userFound) return res.formatter.notFound({ message: `Can not find user with email: ${email}` })
+      transporter.verify(async (err, success) => {
+        if (err) throw new Error(`${err}`)
+        await transporter
+          .sendMail(mailOptions(email, otp))
+          .then(async (sendInfo) => {
+            const itemUpdated = await service.updateItemByPk(userFound.id, { otp: otp })
+            if (!itemUpdated) return res.formatter.badRequest({ message: `Can not update otp for user!` })
+            return res.formatter.ok({
+              data: { messageId: sendInfo.messageId, otp },
+              message: `We have sent an authentication otp code to your email address, please check your email!`
+            })
           })
-        })
-        .catch((err) => {
-          return res.formatter.badGateway(`${err}`)
-        })
+          .catch((err) => {
+            return res.formatter.badRequest({ message: `${err}` })
+          })
+      })
     } catch (err) {
-      return res.formatter.badRequest({ message: `${err}` })
+      return res.formatter.badGateway({ message: `${err}` })
     }
   }
 
