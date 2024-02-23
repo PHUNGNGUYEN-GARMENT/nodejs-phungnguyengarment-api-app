@@ -46,8 +46,8 @@ const appServer: App = new App()
 appServer.initialize(app)
 
 app
-  .listen(appConfig.port, 'localhost', function () {
-    console.log(`Server is running on port: ${appConfig.port} :: http://localhost:${appConfig.port}`)
+  .listen(appConfig.port, appConfig.host!, function () {
+    console.log(`Server is running on port: ${appConfig.port} :: ${appConfig.appURL}`)
   })
   .on('error', (err: any) => {
     if (err.code === 'EADDRINUSE') {
