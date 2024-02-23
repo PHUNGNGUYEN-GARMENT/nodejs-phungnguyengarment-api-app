@@ -1,9 +1,10 @@
 import 'dotenv/config'
 import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
+import { User } from '~/api/models/user.model'
 import appConfig from './app.config'
 
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
   service: 'gmail',
   // host: 'smtp.gmail.com',
   // port: 465,
@@ -14,7 +15,7 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-const mailOptions = (sendToEmails: string[] | string, otpCode: string): Mail.Options => {
+export const mailOptionVerifyOTPCode = (sendToEmails: string[] | string, otpCode: string): Mail.Options => {
   return {
     from: {
       name: appConfig.companyName ?? 'PHUNG NGUYEN GARMENT',
@@ -47,4 +48,74 @@ const mailOptions = (sendToEmails: string[] | string, otpCode: string): Mail.Opt
   }
 }
 
-export { mailOptions, transporter }
+export const mailOptionToSendUserInfo = (sendToEmails: string[] | string, userInfo: User): Mail.Options => {
+  return {
+    from: {
+      name: appConfig.companyName ?? 'PHUNG NGUYEN GARMENT',
+      address: appConfig.auth.user ?? ''
+    },
+    to: sendToEmails,
+    subject: 'User Information',
+    html: `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Email Notification</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #ffffff;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            h2 {
+                color: #333333;
+            }
+            p {
+                color: #666666;
+                line-height: 1.5;
+            }
+            ul {
+                padding-left: 20px;
+            }
+            li {
+                color: #666666;
+                list-style-type: none;
+                margin-bottom: 5px;
+            }
+            .footer {
+                margin-top: 20px;
+                text-align: center;
+                color: #999999;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>User login information</h2>
+            <p>Hello,</p>
+            <p>Below is your application login information:</p>
+            <ul>
+                <li><strong>Email:</strong> ${userInfo.email}</li>
+                <li><strong>Password:</strong> ${userInfo.password}</li>
+            </ul>
+            <p>Link: ${appConfig.appURL}</p>
+            <p>Thank you!</p>
+            <div class="footer">
+                <p>Best regards,</p>
+                <p>Phung Nguyen Garment Team</p>
+            </div>
+        </div>
+    </body>
+    </html>`
+  }
+}

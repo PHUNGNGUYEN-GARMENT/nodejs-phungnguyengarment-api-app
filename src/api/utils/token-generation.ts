@@ -19,3 +19,8 @@ export const otpGenerator = (length: number): string => {
   const numbers = '0123456789'
   return Array.from({ length }, () => numbers.charAt(Math.floor(Math.random() * numbers.length))).join('')
 }
+
+export const passwordGenerator = (length: number): string => {
+  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  return Array.from({ length }, () => characters.charAt(Math.floor(Math.random() * characters.length))).join('')
+}

@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken'
 import { message } from '~/api/utils/constant'
 import { otpGenerator, tokenGenerator } from '~/api/utils/token-generation'
 import appConfig from '~/config/app.config'
-import { mailOptions, transporter } from '~/config/nodemailer.config'
+import { mailOptionVerifyOTPCode, transporter } from '~/config/nodemailer.config'
 import * as userRoleService from '~/services/user-role.service'
 import * as service from '~/services/user.service'
 
@@ -46,7 +46,7 @@ export default class AuthController {
       transporter.verify(async (err, success) => {
         if (err) throw new Error(`${err}`)
         await transporter
-          .sendMail(mailOptions(email, otp))
+          .sendMail(mailOptionVerifyOTPCode(email, otp))
           .then(async (sendInfo) => {
             const itemUpdated = await service.updateItemByPk(userFound.id, { otp: otp })
             if (!itemUpdated) return res.formatter.badRequest({ message: `Can not update otp for user!` })

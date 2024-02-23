@@ -36,7 +36,7 @@ export const registerUser = async (user: User): Promise<UserSchema | null> => {
 
 export const loginUser = async (email: string, password: string): Promise<UserSchema | null | any> => {
   try {
-    const userFind = await services.getItemBy({ email: username })
+    const userFind = await services.getItemBy({ email: email })
     if (userFind) {
       const passwordCompare = bcrypt.compareSync(password, userFind.password)
       if (passwordCompare) {

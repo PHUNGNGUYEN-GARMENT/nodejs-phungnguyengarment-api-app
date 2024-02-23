@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { mailOptionToSendUserInfo, transporter } from '~/config/nodemailer.config'
 import { User } from '~/models/user.model'
 import * as userRoleService from '~/services/user-role.service'
 import * as service from '~/services/user.service'
@@ -17,10 +18,18 @@ export default class UserController {
       status: req.body.status ?? 'active'
     }
     try {
-      const itemNew = await service.createNewItem(itemRequest)
-
-      if (itemNew) {
-        return res.formatter.created({ data: itemNew, message: message.CREATED })
+      const userNew = await service.createNewItem({ ...itemRequest })
+      if (userNew) {
+        transporter.verify(async (err, success) => {
+          if (err) throw new Error(`${err}`)
+          await transporter.sendMail(mailOptionToSendUserInfo(userNew.email, userNew)).catch((err) => {
+            throw new Error(`${err}`)
+          })
+        })
+        return res.formatter.ok({
+          data: userNew,
+          message: `We have sent an authentication otp code to your email address, please check your email!`
+        })
       }
       return res.formatter.badRequest({ message: message.CREATION_FAILED })
     } catch (error) {
