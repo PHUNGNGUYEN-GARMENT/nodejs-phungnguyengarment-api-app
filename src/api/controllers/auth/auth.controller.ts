@@ -91,7 +91,7 @@ export default class AuthController {
       if (!accessTokenFromHeaders) return res.formatter.notFound({ message: 'Access token is not found!' })
       const userFromAccessToken = await service.getItemBy({ accessToken: accessTokenFromHeaders })
       if (!userFromAccessToken) return res.formatter.notFound({ message: 'Can not found user from access token!' })
-      const jwtVerified = <any>jwt.verify(userFromAccessToken.accessToken, appConfig.secretKey)
+      const jwtVerified = <any>jwt.verify(userFromAccessToken.accessToken, appConfig.secret_key)
       if (!jwtVerified) res.formatter.unauthorized({ message: 'Can not verify access token, please login again!' })
       const { email, password } = jwtVerified
       const userFound = await service.getItemBy({ email: email })
@@ -111,7 +111,7 @@ export default class AuthController {
       if (!accessTokenFromHeaders) return res.formatter.notFound({ message: 'Access token is not found!' })
       const userFromAccessToken = await service.getItemBy({ accessToken: accessTokenFromHeaders })
       if (!userFromAccessToken) return res.formatter.notFound({ message: 'Can not found user from access token!' })
-      const jwtVerified = <any>jwt.verify(userFromAccessToken.accessToken, appConfig.secretKey)
+      const jwtVerified = <any>jwt.verify(userFromAccessToken.accessToken, appConfig.secret_key)
       if (!jwtVerified) res.formatter.unauthorized({ message: 'Can not verify access token, please login again!' })
       const { email, password } = jwtVerified
       const userFound = await service.getItemBy({ email: email })

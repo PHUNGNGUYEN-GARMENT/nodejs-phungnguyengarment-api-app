@@ -35,7 +35,7 @@ export const isAuthentication = async (req: Request, res: Response, next: NextFu
   try {
     // const userFound = await userService.getItemBy({ accessToken: accessTokenFromHeaders })
     if (!accessTokenFromHeaders) return res.formatter.unauthorized({})
-    jwtPayload = <any>jwt.verify(accessTokenFromHeaders, appConfig.secretKey)
+    jwtPayload = <any>jwt.verify(accessTokenFromHeaders, appConfig.secret_key)
     res.locals.jwtPayload = jwtPayload
   } catch (error: any) {
     return res.formatter.unauthorized({})

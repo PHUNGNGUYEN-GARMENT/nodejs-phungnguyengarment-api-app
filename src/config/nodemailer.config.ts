@@ -10,16 +10,16 @@ export const transporter = nodemailer.createTransport({
   // port: 465,
   // secure: true,
   auth: {
-    user: appConfig.auth.user, // Sender email address
-    pass: appConfig.auth.appPassword // App password from gmail account
+    user: appConfig.nodemailer.admin_user, // Sender email address
+    pass: appConfig.nodemailer.admin_password // App password from gmail account
   }
 })
 
 export const mailOptionVerifyOTPCode = (sendToEmails: string[] | string, otpCode: string): Mail.Options => {
   return {
     from: {
-      name: appConfig.companyName ?? 'PHUNG NGUYEN GARMENT',
-      address: appConfig.auth.user ?? ''
+      name: appConfig.company_name,
+      address: appConfig.nodemailer.admin_user
     },
     to: sendToEmails,
     subject: 'OTP for Authentication',
@@ -51,8 +51,8 @@ export const mailOptionVerifyOTPCode = (sendToEmails: string[] | string, otpCode
 export const mailOptionToSendUserInfo = (sendToEmails: string[] | string, userInfo: User): Mail.Options => {
   return {
     from: {
-      name: appConfig.companyName ?? 'PHUNG NGUYEN GARMENT',
-      address: appConfig.auth.user ?? ''
+      name: appConfig.company_name,
+      address: appConfig.nodemailer.admin_user
     },
     to: sendToEmails,
     subject: 'User Information',
@@ -108,7 +108,7 @@ export const mailOptionToSendUserInfo = (sendToEmails: string[] | string, userIn
                 <li><strong>Email:</strong> ${userInfo.email}</li>
                 <li><strong>Password:</strong> ${userInfo.password}</li>
             </ul>
-            <p>Link: ${appConfig.appURL}</p>
+            <p>Link: ${appConfig.server.server_url}</p>
             <p>Thank you!</p>
             <div class="footer">
                 <p>Best regards,</p>

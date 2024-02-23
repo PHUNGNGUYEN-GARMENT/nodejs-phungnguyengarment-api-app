@@ -4,7 +4,7 @@ import appConfig from '~/config/app.config'
 import { User } from '../models/user.model'
 
 export const tokenGenerator = (payload: User): string => {
-  const token = jwt.sign({ email: payload.email, password: payload.password }, appConfig.secretKey, {
+  const token = jwt.sign({ email: payload.email, password: payload.password }, appConfig.secret_key, {
     expiresIn: '7d',
     algorithm: 'HS256'
   })
@@ -12,7 +12,7 @@ export const tokenGenerator = (payload: User): string => {
 }
 
 export const verifyToken = (token: string): string | jwt.Jwt | jwt.JwtPayload => {
-  return jwt.verify(token, appConfig.secretKey)
+  return jwt.verify(token, appConfig.secret_key)
 }
 
 export const otpGenerator = (length: number): string => {

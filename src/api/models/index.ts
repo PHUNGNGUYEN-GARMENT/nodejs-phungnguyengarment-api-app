@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript'
-import configuration from '~/config/database.config'
+import databaseConfig from '~/config/database.config'
 import logging from '~/utils/logging'
 import AccessoryNoteSchema from './accessory-note.model'
 import ColorSchema from './color.model'
@@ -23,8 +23,6 @@ import UserSchema from './user.model'
 
 const PATH = 'model/index'
 
-const { database, host, username, password } = configuration.development
-
 class DBConnection {
   public sequelize: Sequelize | undefined
 
@@ -33,19 +31,7 @@ class DBConnection {
   }
 
   async createConnection() {
-    this.sequelize = new Sequelize({
-      database: database,
-      username: username,
-      password: password,
-      host: host,
-      dialect: 'mysql',
-      pool: {
-        max: 5, //Số lượng kết nối tối đa trong pool.
-        min: 0, //Số lượng kết nối tối thiểu trong pool.
-        acquire: 30000, //Thời gian tối đa để một kết nối được thực hiện, tính bằng mili giây.
-        idle: 10000 //Thời gian tối đa một kết nối có thể ở trong pool mà không được sử dụng, tính bằng mili giây.
-      }
-    })
+    this.sequelize = new Sequelize(databaseConfig)
 
     this.sequelize?.addModels([
       UserSchema,
